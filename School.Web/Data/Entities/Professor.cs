@@ -8,10 +8,10 @@ namespace School.Web.Data.Entities
 {
     public class Professor : Person
     {
-        public Professor(int id, string fullName, string gender, DateTime dateOfBirth, string address, string zipCode, string city,
+        public Professor(int id, /*string photoURL, */string fullName, string gender, DateTime dateOfBirth, string address, string zipCode, string city,
             string identificationNumber, string taxNumber, string sSNumber, string nHSNumber, string maritalStatus, string nationality,
             string telephone, string email)
-            : base(id, fullName, gender, dateOfBirth, address, zipCode, city, identificationNumber, taxNumber, sSNumber, nHSNumber, maritalStatus,
+            : base(id,  /*photoURL, */fullName, gender, dateOfBirth, address, zipCode, city, identificationNumber, taxNumber, sSNumber, nHSNumber, maritalStatus,
                   nationality, telephone, email)
         {
         }

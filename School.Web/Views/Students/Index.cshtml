@@ -1,5 +1,125 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<School.Web.Data.Entities.Student>
+
 @{
+    ViewData["Title"] = "Index";
 }
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a> |
+</p>
+<table class="table">
+    <tr>
+        @*<th>
+            @Html.DisplayNameFor(model => model.PhotoUrl)
+        </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.FullName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Gender)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateOfBirth)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ZipCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.City)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IdentificationNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TaxNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SSNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NHSNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MaritalStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Nationality)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Telephone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.CourseId)
+        </th>*@
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+<tr>
+    @*<td>
+        @Html.DisplayFor(modelItem => item.PhotoUrl)
+    </td>*@
+    <td>
+        @Html.DisplayFor(modelItem => item.FullName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Gender)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.DateOfBirth)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Address)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.ZipCode)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.City)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.IdentificationNumber)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.TaxNumber)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.SSNumber)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.NHSNumber)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.MaritalStatus)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Nationality)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Telephone)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Email)
+    </td>
+    @*<td>
+            @Html.DisplayFor(modelItem => item.Course.Name)
+        </td>*@
+<td>
+    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+</td>
+</tr>
+    }
+
+</table>
+
