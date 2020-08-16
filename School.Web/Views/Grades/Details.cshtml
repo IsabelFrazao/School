@@ -1,0 +1,138 @@
+﻿@model School.Web.Models.GradeViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<!-- ##### Breadcumb Area Start ##### -->
+<div class="breadcumb-area bg-img" style="background-image: url(../img/bg-img/breadcumb.jpg);">
+    <div class="bradcumbContent">
+        <h2>Grades</h2>
+    </div>
+</div>
+<!-- ##### Breadcumb Area End ##### -->
+<!-- ##### About Us Area Start ##### -->
+<section class="about-us-area mt-50 section-padding-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="section-heading text-center mx-auto wow fadeInUp" data-wow-delay="300ms">
+                    <h3>Grades</h3>
+                </div>
+            </div>
+        </div>
+        <section class="contact-area">
+            <div class="contact-content">
+                <div class="row">
+                    <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
+                        <!--BANNER START-->
+                        <div class="panel single-accordion">
+                            <h6>
+                                <a class="collapsed" style="text-align:center;">
+                                    General Information
+                                </a>
+                            </h6>
+                        </div>
+                        <!--BANNER END-->
+                        <br />
+                        <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:850px;">
+                            <form action="#" method="post" style="height:850px;">
+                                <label class="form-label"><b>Area:</b></label>
+                                <ejs-combobox id="areas" cssClass="e-filled" placeholder="Select an Area" index="2" popupHeight="230px" change="valueChange">
+                                    <e-combobox-fields text="Area" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
+                                </ejs-combobox>
+                                <label class="form-label"><b>Course:</b></label>
+                                <ejs-combobox id="courses" cssClass="e-filled" placeholder="Select a Course" index="2" popupHeight="230px" change="valueChange">
+                                    <e-combobox-fields text="Course" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
+                                </ejs-combobox>
+                                <label class="form-label"><b>Class:</b></label>
+                                <ejs-combobox id="classes" cssClass="e-filled" placeholder="Select a Class" index="2" popupHeight="230px" change="valueChange">
+                                    <e-combobox-fields text="Class" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
+                                </ejs-combobox>
+                                <div style="height:48px;"></div>
+                                <label class="form-label"><b>Grades:</b></label>
+                                <table class="table" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.FinalGrade)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.FinalGrade)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.FinalGrade)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.FinalGrade)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.FinalGrade)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.FinalGrade)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.FinalGrade)
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @*@foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Name)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Price)
+                                                    </td>
+                                                    <td>
+                                                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                                        {
+                                                            <img src="@Url.Content(item.ImageUrl)" alt="image" style="width:100px; height:150px; max-width:100%; height:auto" />
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.LastPurchase)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.LastSale)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.IsAvailable)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Stock)
+                                                    </td>
+                                                    <td>
+                                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
+                                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>
+                                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                                                    </td>
+                                                </tr>
+                                            }*@
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- ##### About Us Area End ##### -->
+                    <button class="btn academy-btn mt-30" type="submit" style="margin-left:30%">Create</button>
+                    <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:5%">Back</a>
+                </div>
+            </div>
+        </section>
+    </div>
+</section>
+
+<script>
+    function valueChange() {
+        var courses = document.getElementById('courses').ej2_instances[0];
+        var value = document.getElementById('value');
+        var text = document.getElementById('text');
+        value.innerHTML = courses.value === null ? 'null' : courses.value.toString();
+        text.innerHTML = courses.text === null ? 'null' : courses.text.toString();
+    }
+</script>

@@ -129,7 +129,7 @@ namespace School.Web.Controllers
         }
 
         // POST: StudentsController/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

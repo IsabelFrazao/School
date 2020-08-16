@@ -1,4 +1,4 @@
-﻿@model School.Web.Models.StudentViewModel
+﻿@model School.Web.Models.TeacherViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -7,7 +7,7 @@
 <!-- ##### Breadcumb Area Start ##### -->
 <div class="breadcumb-area bg-img" style="background-image: url(../img/bg-img/breadcumb.jpg);">
     <div class="bradcumbContent">
-        <h2>Create Student</h2>
+        <h2>Create Teacher</h2>
     </div>
 </div>
 <!-- ##### Breadcumb Area End ##### -->
@@ -17,7 +17,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="section-heading text-center mx-auto wow fadeInUp" data-wow-delay="300ms">
-                    <h3>Create Student</h3>
+                    <h3>Create Teacher</h3>
                 </div>
             </div>
         </div>
@@ -74,7 +74,7 @@
                                 <label class="form-label"><b>Zip-Code:</b></label>
                                 <input type="text" class="form-control" id="zip-code" placeholder="Zip-Code">
                                 <label class="form-label"><b>City:</b></label>
-                                <input type="text" class="form-control" id="city" placeholder="City">                                
+                                <input type="text" class="form-control" id="city" placeholder="City">
                             </form>
                         </div>
                     </div>
@@ -147,105 +147,19 @@
                         <br />
                         <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
                             <form action="#" method="post">
-                                <label class="form-label"><b>Course:</b></label>
-                                <ejs-combobox id="courses" cssClass="e-filled" placeholder="Select a Course" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="Course" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
-                                </ejs-combobox>
-                                <label class="form-label"><b>Schedule:</b></label>
-                                <ejs-combobox id="schedules" cssClass="e-filled" placeholder="Select a Schedule" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="Schedule" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
-                                </ejs-combobox>
-                                <label class="form-label"><b>Class:</b></label>
-                                <ejs-combobox id="classes" cssClass="e-filled" placeholder="Select a Class" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="Class" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
-                                </ejs-combobox>
-                                <label class="form-label"><b>School Year:</b></label>
-                                <ejs-combobox id="schoolyears" cssClass="e-filled" placeholder="Select a School Year" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="School Year" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
-                                </ejs-combobox>
+                                <label class="form-label"><b>Subjects:</b></label>
+                                <ejs-listbox id="subjects-select-listbox">
+                                    <e-listbox-selectionsettings showCheckbox="true"></e-listbox-selectionsettings>
+                                </ejs-listbox> @*dataSource="ViewBag.data"*@
+                                <label class="form-label"><b>Classes:</b></label>
+                                <ejs-listbox id="classes-select-listbox">
+                                    <e-listbox-selectionsettings showCheckbox="true"></e-listbox-selectionsettings>
+                                </ejs-listbox> @*dataSource="ViewBag.data"*@
+                                <label class="form-label"><b>Courses:</b></label>
+                                <ejs-listbox id="courses-select-listbox">
+                                    <e-listbox-selectionsettings showCheckbox="true"></e-listbox-selectionsettings>
+                                </ejs-listbox> @*dataSource="ViewBag.data"*@
                             </form>
-                        </div>
-                    </div>
-                    <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
-                        <h6><br /></h6>
-                    </div>
-                    <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
-                        <!--BANNER START-->
-                        <div class="panel single-accordion">
-                            <h6>
-                                <a class="collapsed" style="text-align:center;">
-                                    Grades
-                                </a>
-                            </h6>
-                        </div>
-                        <!--BANNER END-->
-                        <br />
-                        <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
-                            <div>
-                                <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
-                                    <form action="#" method="post">
-                                        <table class="table" style="width:100%">
-                                            <thead>
-                                                <tr>
-                                                    <th>
-                                                        @Html.DisplayNameFor(model => model.FullName)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayNameFor(model => model.FullName)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayNameFor(model => model.FullName)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayNameFor(model => model.FullName)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayNameFor(model => model.FullName)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayNameFor(model => model.FullName)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayNameFor(model => model.FullName)
-                                                    </th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @*@foreach (var item in Model)
-                                                    {
-                                                        <tr>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.Name)
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.Price)
-                                                            </td>
-                                                            <td>
-                                                                @if (!string.IsNullOrEmpty(item.ImageUrl))
-                                                                {
-                                                                    <img src="@Url.Content(item.ImageUrl)" alt="image" style="width:100px; height:150px; max-width:100%; height:auto" />
-                                                                }
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.LastPurchase)
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.LastSale)
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.IsAvailable)
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.Stock)
-                                                            </td>
-                                                        </tr>
-                                                    }*@
-                                            </tbody>
-                                        </table>
-                                    </form>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <!-- ##### About Us Area End ##### -->

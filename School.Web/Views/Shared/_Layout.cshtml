@@ -71,9 +71,36 @@
                             @*Nav Start*@
                             <div class="classynav">
                                 <ul>                                    
-                                    <li><a asp-area="" asp-controller="Students" asp-action="Index">Courses</a></li>
-                                    <li><a asp-area="" asp-controller="Students" asp-action="Index">Classes</a></li>
-                                    <li><a asp-area="" asp-controller="Students" asp-action="Index">Subjects</a></li>
+                                    <li>
+                                        <a href="#">Courses</a>
+                                        <ul class="dropdown">
+                                            <li><a asp-controller="Courses" asp-action="Index">Search</a></li>
+                                            <li><a asp-controller="Courses" asp-action="Create">Create</a></li>
+                                            <li><a asp-controller="Courses" asp-action="Details">Details</a></li>
+                                            <li><a asp-controller="Courses" asp-action="Edit">Edit</a></li>
+                                            <li><a asp-controller="Courses" asp-action="Delete">Delete</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#">Classes</a>
+                                        <ul class="dropdown">
+                                            <li><a asp-controller="Classes" asp-action="Index">Search</a></li>
+                                            <li><a asp-controller="Classes" asp-action="Create">Create</a></li>
+                                            <li><a asp-controller="Classes" asp-action="Details">Details</a></li>
+                                            <li><a asp-controller="Classes" asp-action="Edit">Edit</a></li>
+                                            <li><a asp-controller="Classes" asp-action="Delete">Delete</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#">Subjects</a>
+                                        <ul class="dropdown">
+                                            <li><a asp-controller="Subjects" asp-action="Index">Search</a></li>
+                                            <li><a asp-controller="Subjects" asp-action="Create">Create</a></li>
+                                            <li><a asp-controller="Subjects" asp-action="Details">Details</a></li>
+                                            <li><a asp-controller="Subjects" asp-action="Edit">Edit</a></li>
+                                            <li><a asp-controller="Subjects" asp-action="Delete">Delete</a></li>
+                                        </ul>
+                                    </li>
                                     <li>
                                         <a href="#">Teachers</a>
                                         <ul class="dropdown">
@@ -94,7 +121,16 @@
                                             <li><a asp-controller="Students" asp-action="Delete">Delete</a></li>
                                         </ul>
                                     </li>
-                                    <li><a asp-area="" asp-controller="Students" asp-action="Index">Grades</a></li>
+                                    <li>
+                                        <a href="#">Grades</a>
+                                        <ul class="dropdown">
+                                            <li><a asp-controller="Grades" asp-action="Index">Search</a></li>
+                                            <li><a asp-controller="Grades" asp-action="Create">Create</a></li>
+                                            <li><a asp-controller="Grades" asp-action="Details">Details</a></li>
+                                            <li><a asp-controller="Grades" asp-action="Edit">Edit</a></li>
+                                            <li><a asp-controller="Grades" asp-action="Delete">Delete</a></li>
+                                        </ul>
+                                    </li>
                                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>

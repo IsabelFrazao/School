@@ -4,111 +4,242 @@
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
-
-<div>
-    <h4>Student</h4>
-    <hr/>
-    <dl class="dl-horizontal">
-        @*<dt>
-            @Html.DisplayNameFor(model => model.PhotoUrl)
-        </dt>*@
-        @*<dd>
-            @Html.DisplayFor(model => model.PhotoUrl)
-        </dd>*@
-        <dt>
-            @Html.DisplayNameFor(model => model.FullName)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.FullName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Gender)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Gender)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.DateOfBirth)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.DateOfBirth)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Address)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Address)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ZipCode)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ZipCode)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.City)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.City)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.IdentificationNumber)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.IdentificationNumber)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.TaxNumber)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.TaxNumber)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.SSNumber)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.SSNumber)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.NHSNumber)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.NHSNumber)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.MaritalStatus)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.MaritalStatus)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Nationality)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Nationality)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Telephone)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Telephone)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        @*<dt>
-            @Html.DisplayNameFor(model => model.CourseId)
-        </dt>*@
-        @*<dd>
-            @Html.DisplayFor(model => model.Course.Name)
-        </dd>*@        
-    </dl>
+<!-- ##### Breadcumb Area Start ##### -->
+<div class="breadcumb-area bg-img" style="background-image: url(../img/bg-img/breadcumb.jpg);">
+    <div class="bradcumbContent">
+        <h2>Student Details</h2>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+<!-- ##### Breadcumb Area End ##### -->
+<!-- ##### About Us Area Start ##### -->
+<section class="about-us-area mt-50 section-padding-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="section-heading text-center mx-auto wow fadeInUp" data-wow-delay="300ms">
+                    <h3>Student Details</h3>
+                </div>
+            </div>
+        </div>
+        <section class="contact-area">
+            <div class="contact-content">
+                <div class="row">
+                    <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="400ms">
+                        <!--BANNER START-->
+                        <div class="panel single-accordion">
+                            <h6>
+                                <a class="collapsed" style="text-align:center;">
+                                    General Information
+                                </a>
+                            </h6>
+                        </div>
+                        <!--BANNER END-->
+                        <br />
+                        <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:750px;">
+                            <div class="row">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-3">
+                                    <picture>
+                                        <img src="~/img/bg-img/t1.jpg" alt="Girl1" style="width:auto; max-width:100%;">
+                                    </picture>
+                                </div>
+                                <div class="col-md-8">
+                                    <br />
+                                    <label class="form-label"><b>Student Id:</b></label>
+                                    <label class="form-label">1</label>
+                                </div>
+                            </div>
+                            <br />
+                            <label class="form-label"><b>Full Name:</b></label>
+                            <div style="height:48px;">
+                                <label class="form-label">Frazão</label> @Html.DisplayFor(model => model.FullName)<br />
+                            </div>
+                            <label class="form-label"><b>Gender:</b></label>
+                            <div style="height:48px;">
+                                <label class="form-label">Frazão</label><br />
+                            </div>
+                            <label class="form-label"><b>Date of Birth:</b></label>
+                            <div style="height:48px;">
+                                <label class="form-label">Frazão</label><br />
+                            </div>
+                            <label class="form-label"><b>Address:</b></label>
+                            <div style="height:48px;">
+                                <label class="form-label">Frazão</label><br />
+                            </div>
+                            <label class="form-label"><b>Zip-Code:</b></label>
+                            <div style="height:48px;">
+                                <label class="form-label">Frazão</label><br />
+                            </div>
+                            <label class="form-label"><b>City:</b></label>
+                            <div style="height:48px;">
+                                <label class="form-label">Frazão</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="500ms">
+                        <!--BANNER START-->
+                        <div class="panel single-accordion">
+                            <h6>
+                                <a class="collapsed" style="text-align:center;">
+                                    Detailed Information
+                                </a>
+                            </h6>
+                        </div>
+                        <!--BANNER END-->
+                        <br />
+                        <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:750px;">
+                            <br />
+                            <label class="form-label"><b>Identification Number:</b></label>
+                            <div style="height:48px;">
+                                <label class="form-label">Frazão</label><br />
+                            </div>
+                            <label class="form-label"><b>Tax Number:</b></label>
+                            <div style="height:48px;">
+                                <label class="form-label">Frazão</label><br />
+                            </div>
+                            <label class="form-label"><b>Social Security Number:</b></label>
+                            <div style="height:48px;">
+                                <label class="form-label">Frazão</label><br />
+                            </div>
+                            <label class="form-label"><b>NHS Number:</b></label>
+                            <div style="height:48px;">
+                                <label class="form-label">Frazão</label><br />
+                            </div>
+                            <label class="form-label"><b>Marital Status:</b></label>
+                            <div style="height:48px;">
+                                <label class="form-label">Frazão</label><br />
+                            </div>
+                            <label class="form-label"><b>Nationality:</b></label>
+                            <div style="height:48px;">
+                                <label class="form-label">Frazão</label><br />
+                            </div>
+                            <label class="form-label"><b>Telephone Number:</b></label>
+                            <div style="height:48px;">
+                                <label class="form-label">Frazão</label><br />
+                            </div>
+                            <label class="form-label"><b>Email:</b></label>
+                            <div style="height:48px;">
+                                <label class="form-label">Frazão</label><br />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
+                        <h6><br /></h6>
+                    </div>
+                    <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
+                        <!--BANNER START-->
+                        <div class="panel single-accordion">
+                            <h6>
+                                <a class="collapsed" style="text-align:center;">
+                                    School Information
+                                </a>
+                            </h6>
+                        </div>
+                        <!--BANNER END-->
+                        <br />
+                        <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
+                            <form action="#" method="post">
+                                <label class="form-label"><b>Course:</b></label>
+                                <div style="height:48px;">
+                                    <label class="form-label">Frazão</label><br />
+                                </div>
+                                <label class="form-label"><b>Schedule:</b></label>
+                                <div style="height:48px;">
+                                    <label class="form-label">Frazão</label><br />
+                                </div>
+                                <label class="form-label"><b>Class:</b></label>
+                                <div style="height:48px;">
+                                    <label class="form-label">Frazão</label><br />
+                                </div>
+                                <label class="form-label"><b>School Year:</b></label>
+                                <div style="height:48px;">
+                                    <label class="form-label">Frazão</label><br />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
+                        <h6><br /></h6>
+                    </div>
+                    <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
+                        <!--BANNER START-->
+                        <div class="panel single-accordion">
+                            <h6>
+                                <a class="collapsed" style="text-align:center;">
+                                    School Information
+                                </a>
+                            </h6>
+                        </div>
+                        <!--BANNER END-->
+                        <br />
+                        <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
+                            <form action="#" method="post">
+                                <table class="table" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.FullName)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.FullName)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.FullName)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.FullName)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.FullName)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.FullName)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.FullName)
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @*@foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Name)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Price)
+                                                    </td>
+                                                    <td>
+                                                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                                        {
+                                                            <img src="@Url.Content(item.ImageUrl)" alt="image" style="width:100px; height:150px; max-width:100%; height:auto" />
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.LastPurchase)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.LastSale)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.IsAvailable)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Stock)
+                                                    </td>
+                                                </tr>
+                                            }*@
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- ##### About Us Area End ##### -->
+                    <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:40%">Back</a>
+                </div>
+            </div>
+        </section>
+    </div>
+</section>

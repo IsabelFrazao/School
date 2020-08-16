@@ -1,0 +1,85 @@
+﻿@model School.Web.Models.CourseViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<!-- ##### Breadcumb Area Start ##### -->
+<div class="breadcumb-area bg-img" style="background-image: url(../img/bg-img/breadcumb.jpg);">
+    <div class="bradcumbContent">
+        <h2>Create Course</h2>
+    </div>
+</div>
+<!-- ##### Breadcumb Area End ##### -->
+<!-- ##### About Us Area Start ##### -->
+<section class="about-us-area mt-50 section-padding-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="section-heading text-center mx-auto wow fadeInUp" data-wow-delay="300ms">
+                    <h3>Create Course</h3>
+                </div>
+            </div>
+        </div>
+        <section class="contact-area">
+            <div class="contact-content">
+                <div class="row">
+                    <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
+                        <!--BANNER START-->
+                        <div class="panel single-accordion">
+                            <h6>
+                                <a class="collapsed" style="text-align:center;">
+                                    General Information
+                                </a>
+                            </h6>
+                        </div>
+                        <!--BANNER END-->
+                        <br />
+                        <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:850px;">
+                            <form action="#" method="post" style="height:850px;">
+                                <label class="form-label"><b>Area:</b></label>
+                                <ejs-combobox id="areas" cssClass="e-filled" placeholder="Select an Area" index="2" popupHeight="230px" change="valueChange">
+                                    <e-combobox-fields text="Area" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
+                                </ejs-combobox>
+                                <label class="form-label"><b><br />Name:</b></label>
+                                <input type="text" class="form-control" id="name" placeholder="Name">
+                                <label class="form-label"><b>Description:</b></label>
+                                <input type="text" class="form-control" id="description" placeholder="Description">
+                                <label class="form-label"><b>Coordinator:</b></label>
+                                <ejs-combobox id="coordinator" cssClass="e-filled" placeholder="Select a Coordinator" index="2" popupHeight="230px" change="valueChange">
+                                    <e-combobox-fields text="Coordinator" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
+                                </ejs-combobox>
+                                <div style="height:48px;"></div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-4">
+                                        <label class="form-label"><b>Begin Date:</b></label>
+                                        <input type="date" class="form-control" id="begin-date" placeholder="Begin Date">
+                                    </div>
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-4">
+                                        <label class="form-label"><b>End Date:</b></label>
+                                        <input type="date" class="form-control" id="end-date" placeholder="End Date">
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                </div>
+                                <div style="height:48px;"></div>
+                                <label class="form-label"><b>Subjects:</b></label>
+                                <ejs-listbox id="subjects-select-listbox">
+                                    <e-listbox-selectionsettings showCheckbox="true"></e-listbox-selectionsettings>
+                                </ejs-listbox> @*dataSource="ViewBag.data"*@
+                            </form>
+                        </div>
+                    </div>
+                    <!-- ##### About Us Area End ##### -->
+                    <button class="btn academy-btn mt-30" type="submit" style="margin-left:30%">Create</button>
+                    <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:5%">Back</a>
+                </div>
+            </div>
+        </section>
+    </div>
+</section>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

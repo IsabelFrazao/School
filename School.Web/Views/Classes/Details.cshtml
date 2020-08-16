@@ -1,0 +1,137 @@
+﻿@model School.Web.Models.ClassViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<!-- ##### Breadcumb Area Start ##### -->
+<div class="breadcumb-area bg-img" style="background-image: url(../img/bg-img/breadcumb.jpg);">
+    <div class="bradcumbContent">
+        <h2>Class Details</h2>
+    </div>
+</div>
+<!-- ##### Breadcumb Area End ##### -->
+<!-- ##### About Us Area Start ##### -->
+<section class="about-us-area mt-50 section-padding-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="section-heading text-center mx-auto wow fadeInUp" data-wow-delay="300ms">
+                    <h3>Class Details</h3>
+                </div>
+            </div>
+        </div>
+        <section class="contact-area">
+            <div class="contact-content">
+                <div class="row">
+                    <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
+                        <!--BANNER START-->
+                        <div class="panel single-accordion">
+                            <h6>
+                                <a class="collapsed" style="text-align:center;">
+                                    General Information
+                                </a>
+                            </h6>
+                        </div>
+                        <!--BANNER END-->
+                        <br />
+                        <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:850px;">
+                            <form action="#" method="post" style="height:850px;">
+                                <label class="form-label"><b>Course:</b></label>
+                                <div style="height:48px;">
+                                    <label class="form-label">TPSI</label> @Html.DisplayFor(model => model.Name)<br />
+                                </div>
+                                <label class="form-label"><b>Name:</b></label>
+                                <div style="height:48px;">
+                                    <label class="form-label">TPSI</label> @Html.DisplayFor(model => model.Name)<br />
+                                </div>
+                                <label class="form-label"><b>Schedule:</b></label>
+                                <div style="height:48px;">
+                                    <label class="form-label">TPSI</label> @Html.DisplayFor(model => model.Name)<br />
+                                </div>
+                                <label class="form-label"><b>Classroom:</b></label>
+                                <div style="height:48px;">
+                                    <label class="form-label">TPSI</label> @Html.DisplayFor(model => model.Name)<br />
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-3">
+                                        <label class="form-label"><b>Subjects:</b></label>
+                                        <!--<ejs-listview enable="true" id="subjectschecklistview" showCheckBox="true">
+                                        </ejs-listview>-->
+                                        @*dataSource="ViewBag.dataSource"*@
+                                        <ejs-listbox id="subjects-select-listbox">
+                                            <e-listbox-selectionsettings showCheckbox="true"></e-listbox-selectionsettings>
+                                        </ejs-listbox> @*dataSource="ViewBag.data"*@
+                                        <br />
+                                        <label class="form-label"><b>Total:</b></label>
+                                        <label class="form-label">2</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label"><b>Teachers:</b></label>
+                                        <!--<ejs-listview enable="true" id="teacherschecklistview" showCheckBox="true">
+                                        </ejs-listview>-->
+                                        @*dataSource="ViewBag.dataSource"*@
+                                        <ejs-listbox id="teachers-select-listbox">
+                                            <e-listbox-selectionsettings showCheckbox="true"></e-listbox-selectionsettings>
+                                        </ejs-listbox> @*dataSource="ViewBag.data"*@
+                                        <br />
+                                        <label class="form-label"><b>Total:</b></label>
+                                        <label class="form-label">2</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label"><b>Students:</b></label>
+                                        <!--<ejs-listview enable="true" id="studentschecklistview" showCheckBox="true">
+                                        </ejs-listview>-->
+                                        @*dataSource="ViewBag.dataSource"*@
+                                        <ejs-listbox id="students-select-listbox">
+                                            <e-listbox-selectionsettings showCheckbox="true"></e-listbox-selectionsettings>
+                                        </ejs-listbox> @*dataSource="ViewBag.data"*@
+                                        <br />
+                                        <label class="form-label"><b>Total:</b></label>
+                                        <label class="form-label">2</label>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- ##### About Us Area End ##### -->
+                    <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:40%">Back</a>
+                </div>
+            </div>
+        </section>
+    </div>
+</section>
+
+<style>
+    #listview, #listviewgrp {
+        border: 1px solid #dddddd;
+        border-radius: 3px;
+    }
+
+    .control-section {
+        overflow: auto;
+    }
+
+    #flat-list,
+    #group-list {
+        width: 49%;
+        margin: auto;
+        margin-bottom: 15px;
+    }
+
+        #flat-list h4, #group-list h4 {
+            padding-left: 16px;
+        }
+
+    #flat-list {
+        float: left;
+        padding-left: 16px;
+    }
+
+    #group-list {
+        float: right;
+        padding-right: 16px;
+    }
+</style>
