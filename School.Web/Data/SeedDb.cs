@@ -19,13 +19,13 @@ namespace School.Web.Data
         {
             await _context.Database.EnsureCreatedAsync(); //Check if the Database is created
 
-            if(!_context.Students.Any())
-            {
-                this.AddStudents("Isabel");
-                this.AddStudents("José");
-                this.AddStudents("António");
-                await _context.SaveChangesAsync();
-            }
+            //if(!_context.Students.Any())
+            //{
+            //    this.AddStudents("Isabel");
+            //    this.AddStudents("José");
+            //    this.AddStudents("António");
+            //    await _context.SaveChangesAsync();
+            //}
         }
 
         private void AddStudents(string name)

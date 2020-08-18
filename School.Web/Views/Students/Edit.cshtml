@@ -1,10 +1,10 @@
-﻿@model School.Web.Models.StudentViewModel
+﻿@model School.Web.Data.Entities.Student
 @{
     ViewData["Title"] = "Edit";
 }
 
 <!-- ##### Breadcumb Area Start ##### -->
-<div class="breadcumb-area bg-img" style="background-image: url(../img/bg-img/breadcumb.jpg);">
+<div class="breadcumb-area bg-img" style="background-image: url(~/img/bg-img/breadcumb.jpg);">
     <div class="bradcumbContent">
         <h2>Edit Student</h2>
     </div>
@@ -22,20 +22,20 @@
         </div>
         <section class="contact-area">
             <div class="contact-content">
-                <div class="row">
-                    <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="400ms">
-                        <!--BANNER START-->
-                        <div class="panel single-accordion">
-                            <h6>
-                                <a class="collapsed" style="text-align:center;">
-                                    General Information
-                                </a>
-                            </h6>
-                        </div>
-                        <!--BANNER END-->
-                        <br />
-                        <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:850px;">
-                            <form action="#" method="post" style="height:850px;">
+                <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="400ms">
+                            <!--BANNER START-->
+                            <div class="panel single-accordion">
+                                <h6>
+                                    <a class="collapsed" style="text-align:center;">
+                                        General Information
+                                    </a>
+                                </h6>
+                            </div>
+                            <!--BANNER END-->
+                            <br />
+                            <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:850px;">
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-3">
@@ -44,108 +44,195 @@
                                         </picture>
                                     </div>
                                     <div class="col-md-8">
-                                        <label class="form-label"><b>Student Id:</b></label>
-                                        <label class="form-label">1</label>
+                                        <label class="form-label"><b>Student Number:</b></label>
+                                        <label class="form-label">@Html.DisplayFor(model => model.Id)</label>
                                         <input class="form-control" type="file" />
                                     </div>
                                 </div>
                                 <label class="form-label"><b>Name:</b></label>
-                                <input type="text" class="form-control" id="name" placeholder="Name">
+                                <input type="text" class="form-control" id="name" placeholder="Name" value="@Html.DisplayFor(model => model.FullName)">
                                 <label class="form-label"><b>Gender:</b></label>
                                 <div class="form-check" style="height:48px;">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <br />
-                                            <input type="radio" class="form-check-input" id="rbmale" />
-                                            <label class="form-check-label"><b>Male</b></label>
+                                    @if (Model.Gender == "Male")
+                                    {
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <br />
+                                                <input type="radio" name="radiogender" class="form-check-input" id="rbmale" checked="checked" />
+                                                <label class="form-check-label"><b>Male</b></label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <br />
+                                                <input type="radio" name="radiogender" class="form-check-input" />
+                                                <label class="form-check-label"><b>Female</b></label>
+                                            </div>
                                         </div>
-                                        <div class="col-md-8">
-                                            <br />
-                                            <input type="radio" class="form-check-input" id="rbfemale" />
-                                            <label class="form-check-label"><b>Female</b></label>
+                                    }
+                                    @if (Model.Gender == "Female")
+                                    {
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <br />
+                                                <input type="radio" name="radiogender" class="form-check-input" id="rbmale" />
+                                                <label class="form-check-label"><b>Male</b></label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <br />
+                                                <input type="radio" name="radiogender" class="form-check-input" checked="checked" />
+                                                <label class="form-check-label"><b>Female</b></label>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div><br />
+                                    }
+                                </div>
+                                <br />
                                 <label class="form-label"><b>Date of Birth:</b></label>
-                                <input type="date" class="form-control" id="dateofbirth">
+                                <input type="date" class="form-control" id="dateofbirth" value="@Html.DisplayFor(model => model.DateOfBirth)">
                                 <label class="form-label"><b>Address:</b></label>
-                                <input type="text" class="form-control" id="address" placeholder="Address">
+                                <input type="text" class="form-control" id="address" placeholder="Address" value="@Html.DisplayFor(model => model.Address)">
                                 <label class="form-label"><b>Zip-Code:</b></label>
-                                <input type="text" class="form-control" id="zip-code" placeholder="Zip-Code">
+                                <input type="text" class="form-control" id="zip-code" placeholder="Zip-Code" value="@Html.DisplayFor(model => model.ZipCode)">
                                 <label class="form-label"><b>City:</b></label>
-                                <input type="text" class="form-control" id="city" placeholder="City">
-                            </form>
+                                <input type="text" class="form-control" id="city" placeholder="City" value="@Html.DisplayFor(model => model.City)">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="500ms">
-                        <!--BANNER START-->
-                        <div class="panel single-accordion">
-                            <h6>
-                                <a class="collapsed" style="text-align:center;">
-                                    Detailed Information
-                                </a>
-                            </h6>
-                        </div>
-                        <!--BANNER END-->
-                        <br />
-                        <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:850px;">
-                            <form action="#" method="post">
+                        <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="500ms">
+                            <!--BANNER START-->
+                            <div class="panel single-accordion">
+                                <h6>
+                                    <a class="collapsed" style="text-align:center;">
+                                        Detailed Information
+                                    </a>
+                                </h6>
+                            </div>
+                            <!--BANNER END-->
+                            <br />
+                            <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:850px;">
                                 <label class="form-label"><b>Identification Number:</b></label>
-                                <input type="text" class="form-control" id="idnumber" placeholder="Identification Number">
+                                <input type="text" class="form-control" id="idnumber" placeholder="Identification Number" value="@Html.DisplayFor(model => model.IdentificationNumber)">
                                 <label class="form-label"><b>Tax Number:</b></label>
-                                <input type="text" class="form-control" id="taxnumber" placeholder="Tax Number">
+                                <input type="text" class="form-control" id="taxnumber" placeholder="Tax Number" value="@Html.DisplayFor(model => model.TaxNumber)">
                                 <label class="form-label"><b>Social Security Number:</b></label>
-                                <input type="text" class="form-control" id="ssnumber" placeholder="Social Security Number">
+                                <input type="text" class="form-control" id="ssnumber" placeholder="Social Security Number" value="@Html.DisplayFor(model => model.SSNumber)">
                                 <label class="form-label"><b>National Health Service Number:</b></label>
-                                <input type="text" class="form-control" id="nhsnumber" placeholder="National Health Service Number">
+                                <input type="text" class="form-control" id="nhsnumber" placeholder="National Health Service Number" value="@Html.DisplayFor(model => model.NHSNumber)">
                                 <label class="form-label"><b>Marital Status:</b></label>
                                 <div class="form-check" style="height:48px;">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <input type="radio" class="form-check-input" id="rbsingle" />
-                                            <label class="form-check-label"><b>Single</b></label>
+                                    @if (Model.MaritalStatus == "Single")
+                                    {
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <input type="radio" name="radiostatus" class="form-check-input" id="rbsingle" checked="checked" />
+                                                <label class="form-check-label"><b>Single</b></label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="radio" name="radiostatus" class="form-check-input" id="rbmarried" />
+                                                <label class="form-check-label"><b>Married</b></label>
+                                            </div>
                                         </div>
-                                        <div class="col-md-8">
-                                            <input type="radio" class="form-check-input" id="rbmarried" />
-                                            <label class="form-check-label"><b>Married</b></label>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <input type="radio" name="radiostatus" class="form-check-input" id="rbdivorced" />
+                                                <label class="form-check-label"><b>Divorced</b></label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="radio" name="radiostatus" class="form-check-input" id="rbwidowed" />
+                                                <label class="form-check-label"><b>Widowed</b></label>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <input type="radio" class="form-check-input" id="rbdivorced" />
-                                            <label class="form-check-label"><b>Divorced</b></label>
+                                    }
+                                    @if (Model.MaritalStatus == "Married")
+                                    {
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <input type="radio" name="radiostatus" class="form-check-input" id="rbsingle" />
+                                                <label class="form-check-label"><b>Single</b></label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="radio" name="radiostatus" class="form-check-input" id="rbmarried" checked="checked" />
+                                                <label class="form-check-label"><b>Married</b></label>
+                                            </div>
                                         </div>
-                                        <div class="col-md-8">
-                                            <input type="radio" class="form-check-input" id="rbwidowed" />
-                                            <label class="form-check-label"><b>Widowed</b></label>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <input type="radio" name="radiostatus" class="form-check-input" id="rbdivorced" />
+                                                <label class="form-check-label"><b>Divorced</b></label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="radio" name="radiostatus" class="form-check-input" id="rbwidowed" />
+                                                <label class="form-check-label"><b>Widowed</b></label>
+                                            </div>
                                         </div>
-                                    </div>
+                                    }
+                                    @if (Model.MaritalStatus == "Divorced")
+                                    {
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <input type="radio" name="radiostatus" class="form-check-input" id="rbsingle" />
+                                                <label class="form-check-label"><b>Single</b></label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="radio" name="radiostatus" class="form-check-input" id="rbmarried" />
+                                                <label class="form-check-label"><b>Married</b></label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <input type="radio" name="radiostatus" class="form-check-input" id="rbdivorced" checked="checked" />
+                                                <label class="form-check-label"><b>Divorced</b></label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="radio" name="radiostatus" class="form-check-input" id="rbwidowed" />
+                                                <label class="form-check-label"><b>Widowed</b></label>
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (Model.MaritalStatus == "Widowed")
+                                    {
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <input type="radio" name="radiostatus" class="form-check-input" id="rbsingle" />
+                                                <label class="form-check-label"><b>Single</b></label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="radio" name="radiostatus" class="form-check-input" id="rbmarried" />
+                                                <label class="form-check-label"><b>Married</b></label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <input type="radio" name="radiostatus" class="form-check-input" id="rbdivorced" />
+                                                <label class="form-check-label"><b>Divorced</b></label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="radio" name="radiostatus" class="form-check-input" id="rbwidowed" checked="checked" />
+                                                <label class="form-check-label"><b>Widowed</b></label>
+                                            </div>
+                                        </div>
+                                    }
                                 </div><br />
                                 <label class="form-label"><b>Nationality:</b></label>
-                                <input type="text" class="form-control" id="nationality" placeholder="Nationality">
+                                <input type="text" class="form-control" id="nationality" placeholder="Nationality" value="@Html.DisplayFor(model => model.Nationality)">
                                 <label class="form-label"><b>Telephone Number:</b></label>
-                                <input type="text" class="form-control" id="phone" placeholder="Telephone Number">
+                                <input type="text" class="form-control" id="phone" placeholder="Telephone Number" value="@Html.DisplayFor(model => model.Telephone)">
                                 <label class="form-label"><b>E-mail:</b></label>
-                                <input type="email" class="form-control" id="email" placeholder="E-mail">
-                            </form>
+                                <input type="email" class="form-control" id="email" placeholder="E-mail" value="@Html.DisplayFor(model => model.Email)">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
-                        <h6><br /></h6>
-                    </div>
-                    <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
-                        <!--BANNER START-->
-                        <div class="panel single-accordion">
-                            <h6>
-                                <a class="collapsed" style="text-align:center;">
-                                    School Information
-                                </a>
-                            </h6>
+                        <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
+                            <h6><br /></h6>
                         </div>
-                        <!--BANNER END-->
-                        <br />
-                        <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
-                            <form action="#" method="post">
+                        <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
+                            <!--BANNER START-->
+                            <div class="panel single-accordion">
+                                <h6>
+                                    <a class="collapsed" style="text-align:center;">
+                                        School Information
+                                    </a>
+                                </h6>
+                            </div>
+                            <!--BANNER END-->
+                            <br />
+                            <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
                                 <label class="form-label"><b>Course:</b></label>
                                 <ejs-combobox id="courses" cssClass="e-filled" placeholder="Select a Course" index="2" popupHeight="230px" change="valueChange">
                                     <e-combobox-fields text="Course" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
@@ -162,27 +249,25 @@
                                 <ejs-combobox id="schoolyears" cssClass="e-filled" placeholder="Select a School Year" index="2" popupHeight="230px" change="valueChange">
                                     <e-combobox-fields text="School Year" value="Id"></e-combobox-fields> @*dataSource="(IEnumerable<CarsList>)ViewBag.data"*@
                                 </ejs-combobox>
-                            </form>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
-                        <h6><br /></h6>
-                    </div>
-                    <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
-                        <!--BANNER START-->
-                        <div class="panel single-accordion">
-                            <h6>
-                                <a class="collapsed" style="text-align:center;">
-                                    Grades
-                                </a>
-                            </h6>
+                        <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
+                            <h6><br /></h6>
                         </div>
-                        <!--BANNER END-->
-                        <br />
-                        <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
-                            <div>
-                                <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
-                                    <form action="#" method="post">
+                        <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
+                            <!--BANNER START-->
+                            <div class="panel single-accordion">
+                                <h6>
+                                    <a class="collapsed" style="text-align:center;">
+                                        Grades
+                                    </a>
+                                </h6>
+                            </div>
+                            <!--BANNER END-->
+                            <br />
+                            <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
+                                <div>
+                                    <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
                                         <table class="table" style="width:100%">
                                             <thead>
                                                 <tr>
@@ -242,15 +327,15 @@
                                                     }*@
                                             </tbody>
                                         </table>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <!-- ##### About Us Area End ##### -->
+                        <input asp-action="Edit" class="btn academy-btn mt-30" type="submit" value="Edit" style="margin-left:30%" />
+                        <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:5%">Back</a>
                     </div>
-                    <!-- ##### About Us Area End ##### -->
-                    <button class="btn academy-btn mt-30" type="submit" style="margin-left:30%">Edit</button>
-                    <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:5%">Back</a>
-                </div>
+                </form>
             </div>
         </section>
     </div>

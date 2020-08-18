@@ -1,4 +1,4 @@
-﻿@model IEnumerable<School.Web.Models.TeacherViewModel>
+﻿@model IEnumerable<School.Web.Data.Entities.Teacher>
 
 @{
     ViewData["Title"] = "Home";
@@ -140,9 +140,9 @@
                                                 @Html.DisplayFor(modelItem => item.Course.Name)
                                             </td>*@
                                         <td>
-                                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                            <a asp-area="" asp-controller="Teachers" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                            <a asp-area="" asp-controller="Teachers" asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                            <a asp-area="" asp-controller="Teachers" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                                         </td>
                                     </tr>
                                 }

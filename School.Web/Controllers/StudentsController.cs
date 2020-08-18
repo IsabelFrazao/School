@@ -1,25 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using School.Web.Data;
 using School.Web.Data.Entities;
-using System.Linq;
+using School.Web.Data.Repositories;
+using Syncfusion.EJ2.Linq;
 using System.Threading.Tasks;
 
 namespace School.Web.Controllers
 {
     public class StudentsController : Controller
     {
-        private readonly DataContext _context;
+        private readonly IStudentRepository _studentRepository;
 
-        public StudentsController(DataContext context)
+        public StudentsController(IStudentRepository studentRepository)
         {
-            _context = context;
+            _studentRepository = studentRepository;
         }
 
         // GET: StudentsController
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Students.ToListAsync());
+            return View(_studentRepository.GetAll());
         }
 
         // GET: StudentsController/Details/5
@@ -30,7 +30,7 @@ namespace School.Web.Controllers
                 return NotFound();
             }
 
-            var student = await _context.Students.FirstOrDefaultAsync(m => m.Id == id);//Value pq pode vir nulo
+            var student = await _studentRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
 
             if (student == null)
             {
@@ -43,6 +43,8 @@ namespace School.Web.Controllers
         // GET: StudentsController/Create
         public IActionResult Create()
         {
+            ViewBag.idCount = (_studentRepository.GetAll().Count() + 1).ToString();
+
             return View();
         }
 
@@ -54,8 +56,7 @@ namespace School.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(student);
-                await _context.SaveChangesAsync();
+                await _studentRepository.CreateAsync(student);
                 return RedirectToAction(nameof(Index));
             }
             return View(student);
@@ -69,7 +70,7 @@ namespace School.Web.Controllers
                 return NotFound();
             }
 
-            var student = await _context.Students.FindAsync(id);
+            var student = await _studentRepository.GetByIdAsync(id.Value);
 
             if (student == null)
             {
@@ -82,29 +83,24 @@ namespace School.Web.Controllers
         // POST: StudentsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int? id, Student student)
+        public async Task<IActionResult> Edit(Student student)
         {
-            if (id != student.Id)
+            if (ModelState.IsValid)
             {
-                return NotFound();
-            }
-            try
-            {
-                if (ModelState.IsValid)
+                try
                 {
-                    _context.Update(student);
-                    await _context.SaveChangesAsync();
+                    await _studentRepository.UpdateAsync(student);
                 }
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!StudentExists(student.Id))
+                catch (DbUpdateConcurrencyException)
                 {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
+                    if (!await _studentRepository.ExistsAsync(student.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
             }
             return View(student);
@@ -118,7 +114,7 @@ namespace School.Web.Controllers
                 return NotFound();
             }
 
-            var student = await _context.Students.FirstOrDefaultAsync(m => m.Id == id);//Value pq pode vir nulo
+            var student = await _studentRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
 
             if (student == null)
             {
@@ -133,15 +129,9 @@ namespace School.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var student = await _context.Students.FindAsync(id);
-            _context.Students.Remove(student);
-            await _context.SaveChangesAsync();
+            var student = await _studentRepository.GetByIdAsync(id);
+            await _studentRepository.DeleteAsync(student);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool StudentExists(int id)
-        {
-            return _context.Students.Any(e => e.Id == id);
         }
     }
 }

@@ -5,7 +5,7 @@
 }
 
 <!-- ##### Breadcumb Area Start ##### -->
-<div class="breadcumb-area bg-img" style="background-image: url(../img/bg-img/breadcumb.jpg);">
+<div class="breadcumb-area bg-img" style="background-image: url(~/img/bg-img/breadcumb.jpg);">
     <div class="bradcumbContent">
         <h2>Student Details</h2>
     </div>
@@ -46,33 +46,33 @@
                                 <div class="col-md-8">
                                     <br />
                                     <label class="form-label"><b>Student Id:</b></label>
-                                    <label class="form-label">1</label>
+                                    <label class="form-label">@Html.DisplayFor(model => model.Id)</label>
                                 </div>
                             </div>
                             <br />
                             <label class="form-label"><b>Full Name:</b></label>
                             <div style="height:48px;">
-                                <label class="form-label">Frazão</label> @Html.DisplayFor(model => model.FullName)<br />
+                                <label class="form-label">@Html.DisplayFor(model => model.FullName)</label> <br />
                             </div>
                             <label class="form-label"><b>Gender:</b></label>
                             <div style="height:48px;">
-                                <label class="form-label">Frazão</label><br />
+                                <label class="form-label">@Html.DisplayFor(model => model.Gender)</label><br />
                             </div>
                             <label class="form-label"><b>Date of Birth:</b></label>
                             <div style="height:48px;">
-                                <label class="form-label">Frazão</label><br />
+                                <label class="form-label">@Html.DisplayFor(model => model.DateOfBirth)</label><br />
                             </div>
                             <label class="form-label"><b>Address:</b></label>
                             <div style="height:48px;">
-                                <label class="form-label">Frazão</label><br />
+                                <label class="form-label">@Html.DisplayFor(model => model.Address)</label><br />
                             </div>
                             <label class="form-label"><b>Zip-Code:</b></label>
                             <div style="height:48px;">
-                                <label class="form-label">Frazão</label><br />
+                                <label class="form-label">@Html.DisplayFor(model => model.ZipCode)</label><br />
                             </div>
                             <label class="form-label"><b>City:</b></label>
                             <div style="height:48px;">
-                                <label class="form-label">Frazão</label>
+                                <label class="form-label">@Html.DisplayFor(model => model.City)</label>
                             </div>
                         </div>
                     </div>
@@ -91,35 +91,35 @@
                             <br />
                             <label class="form-label"><b>Identification Number:</b></label>
                             <div style="height:48px;">
-                                <label class="form-label">Frazão</label><br />
+                                <label class="form-label">@Html.DisplayFor(model => model.IdentificationNumber)</label><br />
                             </div>
                             <label class="form-label"><b>Tax Number:</b></label>
                             <div style="height:48px;">
-                                <label class="form-label">Frazão</label><br />
+                                <label class="form-label">@Html.DisplayFor(model => model.TaxNumber)</label><br />
                             </div>
                             <label class="form-label"><b>Social Security Number:</b></label>
                             <div style="height:48px;">
-                                <label class="form-label">Frazão</label><br />
+                                <label class="form-label">@Html.DisplayFor(model => model.SSNumber)</label><br />
                             </div>
-                            <label class="form-label"><b>NHS Number:</b></label>
+                            <label class="form-label"><b>National Health Service Number:</b></label>
                             <div style="height:48px;">
-                                <label class="form-label">Frazão</label><br />
+                                <label class="form-label">@Html.DisplayFor(model => model.NHSNumber)</label><br />
                             </div>
                             <label class="form-label"><b>Marital Status:</b></label>
                             <div style="height:48px;">
-                                <label class="form-label">Frazão</label><br />
+                                <label class="form-label">@Html.DisplayFor(model => model.MaritalStatus)</label><br />
                             </div>
                             <label class="form-label"><b>Nationality:</b></label>
                             <div style="height:48px;">
-                                <label class="form-label">Frazão</label><br />
+                                <label class="form-label">@Html.DisplayFor(model => model.Nationality)</label><br />
                             </div>
                             <label class="form-label"><b>Telephone Number:</b></label>
                             <div style="height:48px;">
-                                <label class="form-label">Frazão</label><br />
+                                <label class="form-label">@Html.DisplayFor(model => model.Telephone)</label><br />
                             </div>
                             <label class="form-label"><b>Email:</b></label>
                             <div style="height:48px;">
-                                <label class="form-label">Frazão</label><br />
+                                <label class="form-label">@Html.DisplayFor(model => model.Email)</label><br />
                             </div>
                         </div>
                     </div>
@@ -141,7 +141,7 @@
                             <form action="#" method="post">
                                 <label class="form-label"><b>Course:</b></label>
                                 <div style="height:48px;">
-                                    <label class="form-label">Frazão</label><br />
+                                    <label class="form-label">@Html.DisplayFor(model => model.Course)</label><br />
                                 </div>
                                 <label class="form-label"><b>Schedule:</b></label>
                                 <div style="height:48px;">
@@ -178,27 +178,14 @@
                                     <thead>
                                         <tr>
                                             <th>
-                                                @Html.DisplayNameFor(model => model.FullName)
+                                                @Html.DisplayNameFor(model => model.FullName) Subject
                                             </th>
                                             <th>
-                                                @Html.DisplayNameFor(model => model.FullName)
+                                                @Html.DisplayNameFor(model => model.FullName) Teacher
                                             </th>
                                             <th>
-                                                @Html.DisplayNameFor(model => model.FullName)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.FullName)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.FullName)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.FullName)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.FullName)
-                                            </th>
-                                            <th></th>
+                                                @Html.DisplayNameFor(model => model.FullName) Grade
+                                            </th>                                            
                                         </tr>
                                     </thead>
                                     <tbody>

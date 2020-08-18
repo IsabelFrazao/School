@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace School.Web.Data.Entities
 {
-    public class Subject
+    public class Subject : IEntity
     {
         public int Id { get; set; }
 

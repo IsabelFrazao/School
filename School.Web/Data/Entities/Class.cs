@@ -2,7 +2,7 @@
 
 namespace School.Web.Data.Entities
 {
-    public class Class
+    public class Class : IEntity
     {
         public int Id { get; set; }
 

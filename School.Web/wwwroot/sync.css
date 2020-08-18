@@ -1,0 +1,29 @@
+#listview, #listviewgrp {
+        border: 1px solid #dddddd;
+        border-radius: 3px;
+    }
+
+    .control-section {
+        overflow: auto;
+    }
+
+    #flat-list,
+    #group-list {
+        width: 49%;
+        margin: auto;
+        margin-bottom: 15px;
+    }
+
+        #flat-list h4, #group-list h4 {
+            padding-left: 16px;
+        }
+
+    #flat-list {
+        float: left;
+        padding-left: 16px;
+    }
+
+    #group-list {
+        float: right;
+        padding-right: 16px;
+    }

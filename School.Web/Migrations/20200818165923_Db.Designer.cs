@@ -10,8 +10,8 @@ using School.Web.Data;
 namespace School.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200712163258_InitialDB")]
-    partial class InitialDB
+    [Migration("20200818165923_Db")]
+    partial class Db
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -86,69 +86,6 @@ namespace School.Web.Migrations
                     b.ToTable("Grades");
                 });
 
-            modelBuilder.Entity("School.Web.Data.Entities.Professor", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.Property<DateTime>("DateOfBirth");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(30);
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.Property<string>("Gender")
-                        .IsRequired();
-
-                    b.Property<string>("IdentificationNumber")
-                        .IsRequired()
-                        .HasMaxLength(30);
-
-                    b.Property<string>("MaritalStatus")
-                        .IsRequired();
-
-                    b.Property<string>("NHSNumber")
-                        .IsRequired()
-                        .HasMaxLength(30);
-
-                    b.Property<string>("Nationality")
-                        .IsRequired()
-                        .HasMaxLength(30);
-
-                    b.Property<string>("SSNumber")
-                        .IsRequired()
-                        .HasMaxLength(30);
-
-                    b.Property<string>("TaxNumber")
-                        .IsRequired()
-                        .HasMaxLength(30);
-
-                    b.Property<string>("Telephone")
-                        .IsRequired()
-                        .HasMaxLength(30);
-
-                    b.Property<string>("ZipCode")
-                        .IsRequired()
-                        .HasMaxLength(30);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Professors");
-                });
-
             modelBuilder.Entity("School.Web.Data.Entities.Student", b =>
                 {
                     b.Property<int>("Id")
@@ -162,6 +99,8 @@ namespace School.Web.Migrations
                     b.Property<string>("City")
                         .IsRequired()
                         .HasMaxLength(50);
+
+                    b.Property<int>("CourseId");
 
                     b.Property<DateTime>("DateOfBirth");
 
@@ -211,6 +150,8 @@ namespace School.Web.Migrations
                         .HasMaxLength(30);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
 
                     b.ToTable("Students");
                 });
@@ -270,11 +211,82 @@ namespace School.Web.Migrations
                     b.ToTable("Subjects");
                 });
 
+            modelBuilder.Entity("School.Web.Data.Entities.Teacher", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<DateTime>("DateOfBirth");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(30);
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<string>("Gender")
+                        .IsRequired();
+
+                    b.Property<string>("IdentificationNumber")
+                        .IsRequired()
+                        .HasMaxLength(30);
+
+                    b.Property<string>("MaritalStatus")
+                        .IsRequired();
+
+                    b.Property<string>("NHSNumber")
+                        .IsRequired()
+                        .HasMaxLength(30);
+
+                    b.Property<string>("Nationality")
+                        .IsRequired()
+                        .HasMaxLength(30);
+
+                    b.Property<string>("SSNumber")
+                        .IsRequired()
+                        .HasMaxLength(30);
+
+                    b.Property<string>("TaxNumber")
+                        .IsRequired()
+                        .HasMaxLength(30);
+
+                    b.Property<string>("Telephone")
+                        .IsRequired()
+                        .HasMaxLength(30);
+
+                    b.Property<string>("ZipCode")
+                        .IsRequired()
+                        .HasMaxLength(30);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Teachers");
+                });
+
             modelBuilder.Entity("School.Web.Data.Entities.Grade", b =>
                 {
                     b.HasOne("School.Web.Data.Entities.Class", "Class")
                         .WithMany()
                         .HasForeignKey("ClassId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("School.Web.Data.Entities.Student", b =>
+                {
+                    b.HasOne("School.Web.Data.Entities.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618

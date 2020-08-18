@@ -1,19 +1,40 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using School.Web.Data.Repositories;
+using System.Threading.Tasks;
 
 namespace School.Web.Controllers
 {
     public class SubjectsController : Controller
     {
-        // GET: CRUDController
-        public ActionResult Index()
+        private readonly ISubjectRepository _subjectRepository;
+
+        public SubjectsController(ISubjectRepository subjectRepository)
         {
-            return View();
+            _subjectRepository = subjectRepository;
         }
 
-        // GET: CRUDController/Details/5
-        public ActionResult Details(int id)
+        // GET: SubjectsController
+        public IActionResult Index()
         {
-            return View();
+            return View(_subjectRepository.GetAll());
+        }
+
+        // GET: SubjectsController/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var subject = await _subjectRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
+
+            if (subject == null)
+            {
+                return NotFound();
+            }
+
+            return View(subject);
         }
     }
 }

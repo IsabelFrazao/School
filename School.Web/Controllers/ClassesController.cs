@@ -1,83 +1,134 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using School.Web.Data.Entities;
+using School.Web.Data.Repositories;
+using System.Threading.Tasks;
 
 namespace School.Web.Controllers
 {
     public class ClassesController : Controller
     {
-        // GET: CRUDController
-        public ActionResult Index()
+        private readonly IClassRepository _classRepository;
+
+        public ClassesController(IClassRepository classRepository)
+        {
+            _classRepository = classRepository;
+        }
+
+        // GET: ClassesController
+        public IActionResult Index()
+        {
+            return View(_classRepository.GetAll());
+        }
+
+        // GET: ClassesController/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var classes = await _classRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
+
+            if (classes == null)
+            {
+                return NotFound();
+            }
+
+            return View(classes);
+        }
+
+        // GET: ClassesController/Create
+        public IActionResult Create()
         {
             return View();
         }
 
-        // GET: CRUDController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
 
-        // GET: CRUDController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: CRUDController/Create
+        // POST: ClassesController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create(Class classes)
         {
-            try
+            if (ModelState.IsValid)
             {
+                await _classRepository.CreateAsync(classes);
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            return View(classes);
         }
 
-        // GET: CRUDController/Edit/5
-        public ActionResult Edit(int id)
+        // GET: ClassesController/Edit/5
+        public async Task<IActionResult> Edit(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var classes = await _classRepository.GetByIdAsync(id.Value);
+
+            if (classes == null)
+            {
+                return NotFound();
+            }
+
+            return View(classes);
         }
 
-        // POST: CRUDController/Edit/5
+        // POST: ClassesController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(Class classes)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    await _classRepository.UpdateAsync(classes);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!await _classRepository.ExistsAsync(classes.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
             }
-            catch
-            {
-                return View();
-            }
+            return View(classes);
         }
 
-        // GET: CRUDController/Delete/5
-        public ActionResult Delete(int id)
+        // GET: ClassesController/Delete/5
+        public async Task<IActionResult> Delete(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var classes = await _classRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
+
+            if (classes == null)
+            {
+                return NotFound();
+            }
+
+            return View(classes);
         }
 
-        // POST: CRUDController/Delete/5
-        [HttpPost]
+        // POST: ClassesController/Delete/5
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            var classes = await _classRepository.GetByIdAsync(id);
+            await _classRepository.DeleteAsync(classes);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using School.Web.Data;
+using School.Web.Data.Repositories;
 
 namespace School.Web
 {
@@ -33,6 +34,13 @@ namespace School.Web
 
 
             services.AddTransient<SeedDb>(); //Instances only once and disposes it afterwards
+
+            services.AddScoped<IStudentRepository, StudentRepository>();
+            services.AddScoped<ITeacherRepository, TeacherRepository>();
+            services.AddScoped<IClassRepository, ClassRepository>();
+            services.AddScoped<ICourseRepository, CourseRepository>();
+            services.AddScoped<ISubjectRepository, SubjectRepository>();
+            services.AddScoped<IGradeRepository, GradeRepository>();
 
 
             services.Configure<CookiePolicyOptions>(options =>

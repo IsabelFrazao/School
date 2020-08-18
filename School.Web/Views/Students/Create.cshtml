@@ -1,4 +1,4 @@
-﻿@model School.Web.Models.StudentViewModel
+﻿@model School.Web.Data.Entities.Student
 
 @{
     ViewData["Title"] = "Create";
@@ -23,20 +23,20 @@
         </div>
         <section class="contact-area">
             <div class="contact-content">
-                <div class="row">
-                    <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="400ms">
-                        <!--BANNER START-->
-                        <div class="panel single-accordion">
-                            <h6>
-                                <a class="collapsed" style="text-align:center;">
-                                    General Information
-                                </a>
-                            </h6>
-                        </div>
-                        <!--BANNER END-->
-                        <br />
-                        <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:850px;">
-                            <form action="#" method="post" style="height:850px;">
+                <form asp-action="Create" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="400ms">
+                            <!--BANNER START-->
+                            <div class="panel single-accordion">
+                                <h6>
+                                    <a class="collapsed" style="text-align:center;">
+                                        General Information
+                                    </a>
+                                </h6>
+                            </div>
+                            <!--BANNER END-->
+                            <br />
+                            <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:850px;">
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-3">
@@ -45,109 +45,106 @@
                                         </picture>
                                     </div>
                                     <div class="col-md-8">
-                                        <label class="form-label"><b>Student Id:</b></label>
-                                        <label class="form-label">1</label>
+                                        <label class="form-label"><b>Student Number:</b></label>
+                                        <label asp-for="Id" class="form-label">@ViewBag.idCount</label>
                                         <input class="form-control" type="file" />
                                     </div>
                                 </div>
                                 <label class="form-label"><b>Name:</b></label>
-                                <input type="text" class="form-control" id="name" placeholder="Name">
-                                <label class="form-label"><b>Gender:</b></label>
+                                <input asp-for="FullName" class="form-control" id="name" placeholder="Name">
+                                @*<span asp-validation-for="FullName" class="text-danger"></span>*@
+                                <label asp-for="Gender" class="form-label"><b>Gender:</b></label>
                                 <div class="form-check" style="height:48px;">
                                     <div class="row">
                                         <div class="col-md-4">
                                             <br />
-                                            <input type="radio" class="form-check-input" id="rbmale" />
+                                            <input type="radio" name="radiogender" class="form-check-input" id="rbmale" />
                                             <label class="form-check-label"><b>Male</b></label>
                                         </div>
                                         <div class="col-md-8">
                                             <br />
-                                            <input type="radio" class="form-check-input" id="rbfemale" />
+                                            <input type="radio" name="radiogender" class="form-check-input" id="rbfemale" />
                                             <label class="form-check-label"><b>Female</b></label>
                                         </div>
                                     </div>
                                 </div><br />
-                                <label class="form-label"><b>Date of Birth:</b></label>
-                                <input type="date" class="form-control" id="dateofbirth">
-                                <label class="form-label"><b>Address:</b></label>
+                                <label asp-for="DateOfBirth" class="form-label"><b>Date of Birth:</b></label>
+                                <input asp-for="DateOfBirth" type="date" class="form-control" id="dateofbirth">
+                                <label asp-for="Address" class="form-label"><b>Address:</b></label>
                                 <input type="text" class="form-control" id="address" placeholder="Address">
-                                <label class="form-label"><b>Zip-Code:</b></label>
-                                <input type="text" class="form-control" id="zip-code" placeholder="Zip-Code">
-                                <label class="form-label"><b>City:</b></label>
-                                <input type="text" class="form-control" id="city" placeholder="City">                                
-                            </form>
+                                <label asp-for="ZipCode" class="form-label"><b>Zip-Code:</b></label>
+                                <input asp-for="ZipCode" type="text" class="form-control" id="zip-code" placeholder="Zip-Code">
+                                <label asp-for="City" class="form-label"><b>City:</b></label>
+                                <input asp-for="City" type="text" class="form-control" id="city" placeholder="City">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="500ms">
-                        <!--BANNER START-->
-                        <div class="panel single-accordion">
-                            <h6>
-                                <a class="collapsed" style="text-align:center;">
-                                    Detailed Information
-                                </a>
-                            </h6>
-                        </div>
-                        <!--BANNER END-->
-                        <br />
-                        <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:850px;">
-                            <form action="#" method="post">
-                                <label class="form-label"><b>Identification Number:</b></label>
-                                <input type="text" class="form-control" id="idnumber" placeholder="Identification Number">
-                                <label class="form-label"><b>Tax Number:</b></label>
-                                <input type="text" class="form-control" id="taxnumber" placeholder="Tax Number">
-                                <label class="form-label"><b>Social Security Number:</b></label>
-                                <input type="text" class="form-control" id="ssnumber" placeholder="Social Security Number">
-                                <label class="form-label"><b>National Health Service Number:</b></label>
-                                <input type="text" class="form-control" id="nhsnumber" placeholder="National Health Service Number">
-                                <label class="form-label"><b>Marital Status:</b></label>
+                        <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="500ms">
+                            <!--BANNER START-->
+                            <div class="panel single-accordion">
+                                <h6>
+                                    <a class="collapsed" style="text-align:center;">
+                                        Detailed Information
+                                    </a>
+                                </h6>
+                            </div>
+                            <!--BANNER END-->
+                            <br />
+                            <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:850px;">
+                                <label asp-for="IdentificationNumber" class="form-label"><b>Identification Number:</b></label>
+                                <input asp-for="IdentificationNumber" type="text" class="form-control" id="idnumber" placeholder="Identification Number">
+                                <label asp-for="TaxNumber" class="form-label"><b>Tax Number:</b></label>
+                                <input asp-for="TaxNumber" type="text" class="form-control" id="taxnumber" placeholder="Tax Number">
+                                <label asp-for="SSNumber" class="form-label"><b>Social Security Number:</b></label>
+                                <input asp-for="SSNumber" type="text" class="form-control" id="ssnumber" placeholder="Social Security Number">
+                                <label asp-for="NHSNumber" class="form-label"><b>National Health Service Number:</b></label>
+                                <input asp-for="NHSNumber" type="text" class="form-control" id="nhsnumber" placeholder="National Health Service Number">
+                                <label asp-for="MaritalStatus" class="form-label"><b>Marital Status:</b></label>
                                 <div class="form-check" style="height:48px;">
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <input type="radio" class="form-check-input" id="rbsingle" />
-                                            <label class="form-check-label"><b>Single</b></label>
+                                            <input type="radio" name="radiostatus" class="form-check-input" id="rbsingle" />
+                                            <label asp-for="MaritalStatus" class="form-check-label"><b>Single</b></label>
                                         </div>
                                         <div class="col-md-8">
-                                            <input type="radio" class="form-check-input" id="rbmarried" />
-                                            <label class="form-check-label"><b>Married</b></label>
+                                            <input type="radio" name="radiostatus" class="form-check-input" id="rbmarried" />
+                                            <label asp-for="MaritalStatus" class="form-check-label"><b>Married</b></label>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <input type="radio" class="form-check-input" id="rbdivorced" />
-                                            <label class="form-check-label"><b>Divorced</b></label>
+                                            <input type="radio" name="radiostatus" class="form-check-input" id="rbdivorced" />
+                                            <label asp-for="MaritalStatus" class="form-check-label"><b>Divorced</b></label>
                                         </div>
                                         <div class="col-md-8">
-                                            <input type="radio" class="form-check-input" id="rbwidowed" />
-                                            <label class="form-check-label"><b>Widowed</b></label>
+                                            <input type="radio" name="radiostatus" class="form-check-input" id="rbwidowed" />
+                                            <label asp-for="MaritalStatus" class="form-check-label"><b>Widowed</b></label>
                                         </div>
                                     </div>
                                 </div><br />
-                                <label class="form-label"><b>Nationality:</b></label>
-                                <input type="text" class="form-control" id="nationality" placeholder="Nationality">
-                                <label class="form-label"><b>Telephone Number:</b></label>
-                                <input type="text" class="form-control" id="phone" placeholder="Telephone Number">
-                                <label class="form-label"><b>E-mail:</b></label>
-                                <input type="email" class="form-control" id="email" placeholder="E-mail">
-                            </form>
+                                <label asp-for="Nationality" class="form-label"><b>Nationality:</b></label>
+                                <input asp-for="Nationality" type="text" class="form-control" id="nationality" placeholder="Nationality">
+                                <label asp-for="Telephone" class="form-label"><b>Telephone Number:</b></label>
+                                <input asp-for="Telephone" type="text" class="form-control" id="phone" placeholder="Telephone Number">
+                                <label asp-for="Email" class="form-label"><b>E-mail:</b></label>
+                                <input asp-for="Email" type="email" class="form-control" id="email" placeholder="E-mail">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
-                        <h6><br /></h6>
-                    </div>
-                    <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
-                        <!--BANNER START-->
-                        <div class="panel single-accordion">
-                            <h6>
-                                <a class="collapsed" style="text-align:center;">
-                                    School Information
-                                </a>
-                            </h6>
+                        <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
+                            <h6><br /></h6>
                         </div>
-                        <!--BANNER END-->
-                        <br />
-                        <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
-                            <form action="#" method="post">
-                                <label class="form-label"><b>Course:</b></label>
+                        <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
+                            <!--BANNER START-->
+                            <div class="panel single-accordion">
+                                <h6>
+                                    <a class="collapsed" style="text-align:center;">
+                                        School Information
+                                    </a>
+                                </h6>
+                            </div>
+                            <!--BANNER END-->
+                            <br />
+                            <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
+                                <label asp-for="Course.Id" class="form-label"><b>Course:</b></label>
                                 <ejs-combobox id="courses" cssClass="e-filled" placeholder="Select a Course" index="2" popupHeight="230px" change="valueChange">
                                     <e-combobox-fields text="Course" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
                                 </ejs-combobox>
@@ -163,95 +160,14 @@
                                 <ejs-combobox id="schoolyears" cssClass="e-filled" placeholder="Select a School Year" index="2" popupHeight="230px" change="valueChange">
                                     <e-combobox-fields text="School Year" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
                                 </ejs-combobox>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
-                        <h6><br /></h6>
-                    </div>
-                    <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
-                        <!--BANNER START-->
-                        <div class="panel single-accordion">
-                            <h6>
-                                <a class="collapsed" style="text-align:center;">
-                                    Grades
-                                </a>
-                            </h6>
-                        </div>
-                        <!--BANNER END-->
-                        <br />
-                        <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
-                            <div>
-                                <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
-                                    <form action="#" method="post">
-                                        <table class="table" style="width:100%">
-                                            <thead>
-                                                <tr>
-                                                    <th>
-                                                        @Html.DisplayNameFor(model => model.FullName)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayNameFor(model => model.FullName)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayNameFor(model => model.FullName)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayNameFor(model => model.FullName)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayNameFor(model => model.FullName)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayNameFor(model => model.FullName)
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayNameFor(model => model.FullName)
-                                                    </th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @*@foreach (var item in Model)
-                                                    {
-                                                        <tr>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.Name)
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.Price)
-                                                            </td>
-                                                            <td>
-                                                                @if (!string.IsNullOrEmpty(item.ImageUrl))
-                                                                {
-                                                                    <img src="@Url.Content(item.ImageUrl)" alt="image" style="width:100px; height:150px; max-width:100%; height:auto" />
-                                                                }
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.LastPurchase)
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.LastSale)
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.IsAvailable)
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.Stock)
-                                                            </td>
-                                                        </tr>
-                                                    }*@
-                                            </tbody>
-                                        </table>
-                                    </form>
-                                </div>
+
                             </div>
                         </div>
+                        <!-- ##### About Us Area End ##### -->
+                        <input asp-action="Create" class="btn academy-btn mt-30" type="submit" value="Create" style="margin-left:30%" />
+                        <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:5%">Back</a>
                     </div>
-                    <!-- ##### About Us Area End ##### -->
-                    <button class="btn academy-btn mt-30" type="submit" style="margin-left:30%">Create</button>
-                    <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:5%">Back</a>
-                </div>
+                </form>
             </div>
         </section>
     </div>
