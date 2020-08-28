@@ -47,7 +47,7 @@ namespace School.Web.Data.Repositories
 
         public async Task<T> GetByIdAsync(int id)
         {
-            return await _context.Set<T>().AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);//e=Entity Genérica
+            return await _context.Set<T>().FirstOrDefaultAsync(e => e.Id == id);//e=Entity Genérica
         }
 
         public async Task UpdateAsync(T entity)
@@ -55,6 +55,6 @@ namespace School.Web.Data.Repositories
             _context.Set<T>().Update(entity);
 
             await SaveAllAsync();
-        }        
+        }
     }
 }

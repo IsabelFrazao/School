@@ -1,0 +1,80 @@
+﻿@model School.Web.Models.SubjectViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<!-- ##### Breadcumb Area Start ##### -->
+<div class="breadcumb-area bg-img" style="background-image: url(../img/bg-img/breadcumb.jpg);">
+    <div class="bradcumbContent">
+        <h2>Create Subject</h2>
+    </div>
+</div>
+<!-- ##### Breadcumb Area End ##### -->
+<!-- ##### About Us Area Start ##### -->
+<section class="about-us-area mt-50 section-padding-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="section-heading text-center mx-auto wow fadeInUp" data-wow-delay="300ms">
+                    <h3>Create Subject</h3>
+                </div>
+            </div>
+        </div>
+        <section class="contact-area">
+            <div class="contact-content">
+                <!--<div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">-->
+                @*<a asp-action="Upload" class="btn academy-btn mt-30" style="margin-left:40%">Upload Subjects</a>
+                    <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
+                        <h6><br /></h6>
+                    </div>
+                    <div class="blog-post-search-widget mb-30">
+                        <form action="#" method="post">
+                            <input type="search" name="search" id="Search" placeholder="Search">
+                            <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                        </form>
+                    </div>*@
+                <!--</div>-->
+                <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
+                    <table class="table" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Code)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Name)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Field)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.IEFPSubjects)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Code)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Field)
+                                    </td>
+                                    <td>
+                                        <a asp-action="Create" asp-route-id="@item.Id">Create</a> |
+                                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <!-- ##### About Us Area End ##### -->
+                    <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:40%">Back</a>
+                </div>
+            </div>
+        </section>
+    </div>
+</section>

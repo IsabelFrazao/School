@@ -1,4 +1,7 @@
-﻿using School.Web.Data.Entities;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using School.Web.Data.Entities;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace School.Web.Data.Repositories
 {
@@ -6,7 +9,6 @@ namespace School.Web.Data.Repositories
     {
         public StudentRepository(DataContext context) : base(context)
         {
-
-        }
+        }        
     }
 }

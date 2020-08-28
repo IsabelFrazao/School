@@ -1,44 +1,20 @@
-﻿using System;
+﻿using School.Web.Data.Entities;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace School.Web.Models
 {
-    public class CourseViewModel
+    public class CourseViewModel : Course
     {
-        public int Id { get; set; }
+        public string[] Fields = new[] { "Áudiovisuais e Produção dos Media", "Ciências Informáticas", "Eletrónica e Automação" };
 
-        [Required(ErrorMessage = "Field {0} is mandatory")]
-        [Range(1, double.MaxValue, ErrorMessage = "You must select a {0}")]
-        public string Field { get; set; }
+        public IEnumerable<Teacher> Teachers { get; set; }
 
-        [Display(Name = "Full Name")]
-        [Required(ErrorMessage = "Field {0} is mandatory")]
-        [StringLength(50, ErrorMessage = "Field {0} must have between {2} and {1} characters", MinimumLength = 3)]
-        public string Name { get; set; }
+        public IEnumerable<Class> Classes { get; set; }
 
-        [DataType(DataType.MultilineText)]
-        public string Description { get; set; }
+        public IEnumerable<IEFPSubject> IEFPSubjects { get; set; }
 
-        /*[Display(Name = "Coordinator")]
-        [Required(ErrorMessage = "Field {0} is mandatory")]
-        [Range(1, double.MaxValue, ErrorMessage = "You must select a {0}")]
-        public Professor Coordinator { get; set; }*/
-
-        [DataType(DataType.Date)]
-        [Display(Name = "Begin Date")]
-        [Required(ErrorMessage = "Field {0} is mandatory")]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
-        public DateTime BeginDate { get; set; }
-
-        [DataType(DataType.Date)]
-        [Display(Name = "End Date")]
-        [Required(ErrorMessage = "Field {0} is mandatory")]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
-        public DateTime EndDate { get; set; }
-
-
-        //Turma
-        //UFCD
-        //public virtual ICollection<Student> Student { get; set; }
+        public IEnumerable<Subject> Subjects { get; set; }
     }
 }

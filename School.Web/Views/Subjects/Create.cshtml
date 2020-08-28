@@ -1,0 +1,109 @@
+﻿@model School.Web.Models.SubjectViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<!-- ##### Breadcumb Area Start ##### -->
+<div class="breadcumb-area bg-img" style="background-image: url(../../img/bg-img/breadcumb.jpg);">
+    <div class="bradcumbContent">
+        <h2>Subject Details</h2>
+    </div>
+</div>
+<!-- ##### Breadcumb Area End ##### -->
+<!-- ##### About Us Area Start ##### -->
+<section class="about-us-area mt-50 section-padding-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="section-heading text-center mx-auto wow fadeInUp" data-wow-delay="300ms">
+                    <h3>Subject Details</h3>
+                </div>
+            </div>
+        </div>
+        <section class="contact-area">
+            <div class="contact-content">
+                <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
+                            <!--BANNER START-->
+                            <div class="panel single-accordion">
+                                <h6>
+                                    <a class="collapsed" style="text-align:center;">
+                                        General Information
+                                    </a>
+                                </h6>
+                            </div>
+                            <!--BANNER END-->
+                            <br />
+                            <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
+                                <label class="form-label"><b>Code:</b></label>
+                                <div style="height:48px;">
+                                    <label class="form-label">@Html.DisplayFor(model => model.Code)</label> <br />
+                                </div>
+                                <label class="form-label"><b>Name:</b></label>
+                                <div style="height:48px;">
+                                    <label class="form-label">@Html.DisplayFor(model => model.Name)</label> <br />
+                                </div>
+                                <label class="form-label"><b>Area:</b></label>
+                                <div style="height:48px;">
+                                    <label class="form-label">@Html.DisplayFor(model => model.Field)</label> <br />
+                                </div>
+                                <label asp-for="CourseId" class="form-label"><b>Course:</b></label>
+                                <span asp-validation-for="CourseId" class="text-danger"></span>
+                                <ejs-combobox id="courses" ejs-for="CourseId" dataSource="Model.Courses" cssClass="e-filled" placeholder="@Model.Course.Name" index="2" popupHeight="230px" change="valueChange">
+                                    <e-combobox-fields text="Name" value="Id"></e-combobox-fields>
+                                </ejs-combobox>
+                                <label asp-for="TeacherId" class="form-label"><b>Teacher:</b></label>
+                                <span asp-validation-for="TeacherId" class="text-danger"></span>
+                                <ejs-combobox id="teachers" ejs-for="TeacherId" dataSource="Model.Teachers" cssClass="e-filled" pplaceholder="@Model.Teacher.FullName" index="2" popupHeight="230px" change="valueChange">
+                                    <e-combobox-fields text="FullName" value="Id"></e-combobox-fields>
+                                </ejs-combobox>
+                            </div>
+                        </div>
+                        <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
+                            <h6><br /></h6>
+                        </div>
+                        <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
+                            <!--BANNER START-->
+                            <div class="panel single-accordion">
+                                <h6>
+                                    <a class="collapsed" style="text-align:center;">
+                                        Detailed Information
+                                    </a>
+                                </h6>
+                            </div>
+                            <!--BANNER END-->
+                            <br />
+                            <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
+                                <br />
+                                <label class="form-label"><b>Duration:</b></label>
+                                <div style="height:48px;">
+                                    <label class="form-label">@Html.DisplayFor(model => model.Duration)</label><br />
+                                </div>
+                                <label asp-for="Credits" class="form-label"><b>Credits:</b></label>
+                                <span asp-validation-for="Credits" class="text-danger"></span>
+                                <input asp-for="Credits" class="form-control" id="name" placeholder="Credits">
+                                <label class="form-label"><b>QNQ Level:</b></label>
+                                <div style="height:48px;">
+                                    <label class="form-label">@Html.DisplayFor(model => model.QNQLevel)</label><br />
+                                </div>
+                                <label class="form-label"><b>Component:</b></label>
+                                <div style="height:48px;">
+                                    <label class="form-label">@Html.DisplayFor(model => model.Component)</label><br />
+                                </div>
+                                <label class="form-label"><b>For more Information, visit:</b></label>
+                                <div style="height:48px;">
+                                    <label class="form-label">Put link here</label><br />
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ##### About Us Area End ##### -->
+                        <input asp-action="Create" class="btn academy-btn mt-30" type="submit" value="Create" style="margin-left:30%" />
+                        <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:5%">Back</a>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+</section>

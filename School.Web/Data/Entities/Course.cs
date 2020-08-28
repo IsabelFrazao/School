@@ -7,8 +7,8 @@ namespace School.Web.Data.Entities
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Field {0} is mandatory")]
-        [Range(1, double.MaxValue, ErrorMessage = "You must select a {0}")]
+        //[Required(ErrorMessage = "Field {0} is mandatory")]
+        //[Range(1, double.MaxValue, ErrorMessage = "You must select a {0}")]
         public string Field { get; set; }
 
         [Display(Name = "Full Name")]
@@ -19,10 +19,12 @@ namespace School.Web.Data.Entities
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
 
-        /*[Display(Name = "Coordinator")]
-        [Required(ErrorMessage = "Field {0} is mandatory")]
-        [Range(1, double.MaxValue, ErrorMessage = "You must select a {0}")]
-        public Professor Coordinator { get; set; }*/
+        [Display(Name = "Coordinator")]
+        //[Required(ErrorMessage = "Field {0} is mandatory")]
+        //[Range(1, double.MaxValue, ErrorMessage = "You must select a {0}")]
+        public Teacher Coordinator { get; set; }
+
+        public int CoordinatorId { get; set; }
 
         [DataType(DataType.Date)]
         [Display(Name = "Begin Date")]

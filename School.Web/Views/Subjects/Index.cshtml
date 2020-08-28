@@ -1,4 +1,4 @@
-﻿@model IEnumerable<School.Web.Models.SubjectViewModel>
+﻿@model IEnumerable<School.Web.Data.Entities.Subject>
 
 @{
     ViewData["Title"] = "Home";
@@ -24,6 +24,10 @@
         <section class="contact-area">
             <div class="contact-content">
                 <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
+                    <a asp-action="Upload" class="btn academy-btn mt-30" style="margin-left:40%">Upload Subjects</a>
+                    <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
+                        <h6><br /></h6>
+                    </div>
                     <div class="blog-post-search-widget mb-30">
                         <form action="#" method="post">
                             <input type="search" name="search" id="Search" placeholder="Search">
@@ -32,72 +36,53 @@
                     </div>
                 </div>
                 <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
-                    <form action="#" method="post">
-                        <table class="table" style="width:100%">
+                    <table class="table" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.Name)
+                                        @Html.DisplayNameFor(model => model.Code)
                                     </th>
                                     <th>
                                         @Html.DisplayNameFor(model => model.Name)
+                                    </th>                                    
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Field)
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.Name)
+                                        @Html.DisplayNameFor(model => model.QNQLevel)
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.Name)
+                                        @Html.DisplayNameFor(model => model.Component)
                                     </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Name)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Name)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Name)
-                                    </th>
-                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @*@foreach (var item in Model)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Name)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Price)
-                                            </td>
-                                            <td>
-                                                @if (!string.IsNullOrEmpty(item.ImageUrl))
-                                                {
-                                                    <img src="@Url.Content(item.ImageUrl)" alt="image" style="width:100px; height:150px; max-width:100%; height:auto" />
-                                                }
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.LastPurchase)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.LastSale)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.IsAvailable)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Stock)
-                                            </td>
-                                            <td>
-                                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
-                                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>
-                                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
-                                            </td>
-                                        </tr>
-                                    }*@
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Code)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Name)
+                                        </td>                                        
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Field)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.QNQLevel)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Component)
+                                        </td>
+                                        <td>
+                                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
-                        </table>
-                    </form>
+                        </table>                                        
                 </div>
             </div>
         </section>

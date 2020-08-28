@@ -26,13 +26,44 @@ namespace School.Web.Data
             //    this.AddStudents("António");
             //    await _context.SaveChangesAsync();
             //}
+
+            if (!_context.Teachers.Any())
+            {
+                this.AddTeachers("Not Selected");
+
+                await _context.SaveChangesAsync();
+            }
+
+            if (!_context.Courses.Any())
+            {
+                this.AddCourses("Not Selected");
+                
+                await _context.SaveChangesAsync();
+            }            
         }
 
-        private void AddStudents(string name)
+        //private void AddStudents(string name)
+        //{
+        //    _context.Students.Add(new Student
+        //    {
+        //        FullName = "Isabel Frazão",
+        //    });
+        //}
+
+        private void AddCourses(string name)
         {
-            _context.Students.Add(new Student
+            _context.Courses.Add(new Course
             {
-                FullName = "Isabel Frazão",
+                Name = "Not Selected",
+                CoordinatorId = 1
+            });
+        }
+
+        private void AddTeachers(string name)
+        {
+            _context.Teachers.Add(new Teacher
+            {
+                FullName = "Not Selected"
             });
         }
     }

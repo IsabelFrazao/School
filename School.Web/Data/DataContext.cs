@@ -1,7 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using School.Web.Data.Entities;
+using School.Web.Migrations;
 using System.Linq;
+using Class = School.Web.Data.Entities.Class;
+using Course = School.Web.Data.Entities.Course;
+using Subject = School.Web.Data.Entities.Subject;
+using Teacher = School.Web.Data.Entities.Teacher;
 
 namespace School.Web.Data
 {
@@ -13,6 +18,7 @@ namespace School.Web.Data
         public DbSet<Course> Courses { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<Grade> Grades { get; set; }
+        public DbSet<IEFPSubject> IEFPSubjects { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {

@@ -23,149 +23,173 @@
         </div>
         <section class="contact-area">
             <div class="contact-content">
-                <div class="row">
-                    <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="400ms">
-                        <!--BANNER START-->
-                        <div class="panel single-accordion">
-                            <h6>
-                                <a class="collapsed" style="text-align:center;">
-                                    General Information
-                                </a>
-                            </h6>
-                        </div>
-                        <!--BANNER END-->
-                        <br />
-                        <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:850px;">
-                            <form action="#" method="post" style="height:850px;">
+                <form asp-action="Create" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="400ms">
+                            <!--BANNER START-->
+                            <div class="panel single-accordion">
+                                <h6>
+                                    <a class="collapsed" style="text-align:center;">
+                                        General Information
+                                    </a>
+                                </h6>
+                            </div>
+                            <!--BANNER END-->
+                            <br />
+                            <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:850px;">
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-3">
-                                        <picture>
-                                            <img src="~/img/bg-img/t1.jpg" alt="Girl1" style="width:auto; max-width:100%;">
-                                        </picture>
+                                        @if (!string.IsNullOrEmpty(Model.PhotoUrl))
+                                            {
+                                                <picture>
+                                                    <img src="@Url.Content(Model.PhotoUrl)" alt="image" style="width:200px; height:300px; max-width:100%; height:auto" />
+                                                </picture>
+                                            }
+                                        @*<picture>
+                                                <img src="~/img/bg-img/t1.jpg" alt="Girl1" style="width:auto; max-width:100%;">
+                                            </picture>*@
                                     </div>
                                     <div class="col-md-8">
-                                        <label class="form-label"><b>Student Id:</b></label>
-                                        <label class="form-label">1</label>
-                                        <input class="form-control" type="file" />
+                                        <label asp-for="Id" class="form-label"><b>Teacher Number:</b></label>
+                                        <label asp-for="Id" class="form-label">@ViewBag.idCount</label>
+                                        <input asp-for="ImageFile" class="form-control" type="file" />
                                     </div>
                                 </div>
-                                <label class="form-label"><b>Name:</b></label>
-                                <input type="text" class="form-control" id="name" placeholder="Name">
-                                <label class="form-label"><b>Gender:</b></label>
+                                <label asp-for="FullName" class="form-label"><b>Name:</b></label>
+                                <span asp-validation-for="FullName" class="text-danger"></span>
+                                <input asp-for="FullName" class="form-control" id="name" placeholder="Name">
+                                <label asp-for="Gender" class="form-label"><b>Gender:</b></label>
+                                <span asp-validation-for="Gender" class="text-danger"></span>
                                 <div class="form-check" style="height:48px;">
                                     <div class="row">
                                         <div class="col-md-4">
                                             <br />
-                                            <input type="radio" class="form-check-input" id="rbmale" />
-                                            <label class="form-check-label"><b>Male</b></label>
+                                            @Html.RadioButtonFor(model => model.Gender, "Male")<b> Male</b>
                                         </div>
                                         <div class="col-md-8">
                                             <br />
-                                            <input type="radio" class="form-check-input" id="rbfemale" />
-                                            <label class="form-check-label"><b>Female</b></label>
+                                            @Html.RadioButtonFor(model => model.Gender, "Female")<b> Female</b>
                                         </div>
                                     </div>
                                 </div><br />
-                                <label class="form-label"><b>Date of Birth:</b></label>
-                                <input type="date" class="form-control" id="dateofbirth">
-                                <label class="form-label"><b>Address:</b></label>
-                                <input type="text" class="form-control" id="address" placeholder="Address">
-                                <label class="form-label"><b>Zip-Code:</b></label>
-                                <input type="text" class="form-control" id="zip-code" placeholder="Zip-Code">
-                                <label class="form-label"><b>City:</b></label>
-                                <input type="text" class="form-control" id="city" placeholder="City">
-                            </form>
+                                <label asp-for="DateOfBirth" class="form-label"><b>Date of Birth:</b></label>
+                                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                                <input asp-for="DateOfBirth" type="date" class="form-control" id="dateofbirth">
+                                <label asp-for="Address" class="form-label"><b>Address:</b></label>
+                                <span asp-validation-for="Address" class="text-danger"></span>
+                                <input asp-for="Address" type="text" class="form-control" id="address" placeholder="Address">
+                                <label asp-for="ZipCode" class="form-label"><b>Zip-Code:</b></label>
+                                <span asp-validation-for="ZipCode" class="text-danger"></span>
+                                <input asp-for="ZipCode" type="text" class="form-control" id="zip-code" placeholder="Zip-Code">
+                                <label asp-for="City" class="form-label"><b>City:</b></label>
+                                <span asp-validation-for="City" class="text-danger"></span>
+                                <input asp-for="City" type="text" class="form-control" id="city" placeholder="City">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="500ms">
-                        <!--BANNER START-->
-                        <div class="panel single-accordion">
-                            <h6>
-                                <a class="collapsed" style="text-align:center;">
-                                    Detailed Information
-                                </a>
-                            </h6>
-                        </div>
-                        <!--BANNER END-->
-                        <br />
-                        <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:850px;">
-                            <form action="#" method="post">
-                                <label class="form-label"><b>Identification Number:</b></label>
-                                <input type="text" class="form-control" id="idnumber" placeholder="Identification Number">
-                                <label class="form-label"><b>Tax Number:</b></label>
-                                <input type="text" class="form-control" id="taxnumber" placeholder="Tax Number">
-                                <label class="form-label"><b>Social Security Number:</b></label>
-                                <input type="text" class="form-control" id="ssnumber" placeholder="Social Security Number">
-                                <label class="form-label"><b>National Health Service Number:</b></label>
-                                <input type="text" class="form-control" id="nhsnumber" placeholder="National Health Service Number">
-                                <label class="form-label"><b>Marital Status:</b></label>
+                        <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="500ms">
+                            <!--BANNER START-->
+                            <div class="panel single-accordion">
+                                <h6>
+                                    <a class="collapsed" style="text-align:center;">
+                                        Detailed Information
+                                    </a>
+                                </h6>
+                            </div>
+                            <!--BANNER END-->
+                            <br />
+                            <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:850px;">
+                                <label asp-for="IdentificationNumber" class="form-label"><b>Identification Number:</b></label>
+                                <span asp-validation-for="IdentificationNumber" class="text-danger"></span>
+                                <input asp-for="IdentificationNumber" type="text" class="form-control" id="idnumber" placeholder="Identification Number">
+                                <label asp-for="TaxNumber" class="form-label"><b>Tax Number:</b></label>
+                                <span asp-validation-for="TaxNumber" class="text-danger"></span>
+                                <input asp-for="TaxNumber" type="text" class="form-control" id="taxnumber" placeholder="Tax Number">
+                                <label asp-for="SSNumber" class="form-label"><b>Social Security Number:</b></label>
+                                <span asp-validation-for="SSNumber" class="text-danger"></span>
+                                <input asp-for="SSNumber" type="text" class="form-control" id="ssnumber" placeholder="Social Security Number">
+                                <label asp-for="NHSNumber" class="form-label"><b>National Health Service Number:</b></label>
+                                <span asp-validation-for="NHSNumber" class="text-danger"></span>
+                                <input asp-for="NHSNumber" type="text" class="form-control" id="nhsnumber" placeholder="National Health Service Number">
+                                <label asp-for="MaritalStatus" class="form-label"><b>Marital Status:</b></label>
+                                <span asp-validation-for="MaritalStatus" class="text-danger"></span>
                                 <div class="form-check" style="height:48px;">
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <input type="radio" class="form-check-input" id="rbsingle" />
-                                            <label class="form-check-label"><b>Single</b></label>
+                                            @Html.RadioButtonFor(model => model.MaritalStatus, "Single")<b> Single</b>
                                         </div>
                                         <div class="col-md-8">
-                                            <input type="radio" class="form-check-input" id="rbmarried" />
-                                            <label class="form-check-label"><b>Married</b></label>
+                                            @Html.RadioButtonFor(model => model.MaritalStatus, "Married")<b> Married</b>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <input type="radio" class="form-check-input" id="rbdivorced" />
-                                            <label class="form-check-label"><b>Divorced</b></label>
+                                            @Html.RadioButtonFor(model => model.MaritalStatus, "Divorced")<b> Divorced</b>
                                         </div>
                                         <div class="col-md-8">
-                                            <input type="radio" class="form-check-input" id="rbwidowed" />
-                                            <label class="form-check-label"><b>Widowed</b></label>
+                                            @Html.RadioButtonFor(model => model.MaritalStatus, "Widowed")<b> Widowed</b>
                                         </div>
                                     </div>
                                 </div><br />
-                                <label class="form-label"><b>Nationality:</b></label>
-                                <input type="text" class="form-control" id="nationality" placeholder="Nationality">
-                                <label class="form-label"><b>Telephone Number:</b></label>
-                                <input type="text" class="form-control" id="phone" placeholder="Telephone Number">
-                                <label class="form-label"><b>E-mail:</b></label>
-                                <input type="email" class="form-control" id="email" placeholder="E-mail">
-                            </form>
+                                <label asp-for="Nationality" class="form-label"><b>Nationality:</b></label>
+                                <span asp-validation-for="Nationality" class="text-danger"></span>
+                                <input asp-for="Nationality" type="text" class="form-control" id="nationality" placeholder="Nationality">
+                                <label asp-for="Telephone" class="form-label"><b>Telephone Number:</b></label>
+                                <span asp-validation-for="Telephone" class="text-danger"></span>
+                                <input asp-for="Telephone" type="text" class="form-control" id="phone" placeholder="Telephone Number">
+                                <label asp-for="Email" class="form-label"><b>E-mail:</b></label>
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                                <input asp-for="Email" type="email" class="form-control" id="email" placeholder="E-mail">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
-                        <h6><br /></h6>
-                    </div>
-                    <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
-                        <!--BANNER START-->
-                        <div class="panel single-accordion">
-                            <h6>
-                                <a class="collapsed" style="text-align:center;">
-                                    School Information
-                                </a>
-                            </h6>
+                        <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
+                            <h6><br /></h6>
                         </div>
-                        <!--BANNER END-->
-                        <br />
-                        <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
-                            <form action="#" method="post">
+                        <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
+                            <!--BANNER START-->
+                            <div class="panel single-accordion">
+                                <h6>
+                                    <a class="collapsed" style="text-align:center;">
+                                        School Information
+                                    </a>
+                                </h6>
+                            </div>
+                            <!--BANNER END-->
+                            <br />
+                            <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
                                 <label class="form-label"><b>Subjects:</b></label>
-                                <ejs-listbox id="subjects-select-listbox">
+                                <span asp-validation-for="Subjects" class="text-danger"></span>
+                                <ejs-listbox ejs-for="Subjects" dataSource="Model.Subjects" id="subjects-select-listbox">
                                     <e-listbox-selectionsettings showCheckbox="true"></e-listbox-selectionsettings>
-                                </ejs-listbox> @*dataSource="ViewBag.data"*@
-                                <label class="form-label"><b>Classes:</b></label>
-                                <ejs-listbox id="classes-select-listbox">
-                                    <e-listbox-selectionsettings showCheckbox="true"></e-listbox-selectionsettings>
-                                </ejs-listbox> @*dataSource="ViewBag.data"*@
-                                <label class="form-label"><b>Courses:</b></label>
-                                <ejs-listbox id="courses-select-listbox">
-                                    <e-listbox-selectionsettings showCheckbox="true"></e-listbox-selectionsettings>
-                                </ejs-listbox> @*dataSource="ViewBag.data"*@
-                            </form>
+                                    <e-listbox-fields text="Name" value="Id"></e-listbox-fields>
+                                </ejs-listbox>
+                                <div style="height:48px;"></div>
+                                <div class="row">
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-4">
+                                        <label class="form-label"><b>Classes:</b></label>
+                                        <ejs-listbox ejs-for="Classes" dataSource="Model.Classes" id="classes-select-listbox">
+                                            <e-listbox-selectionsettings showCheckbox="false"></e-listbox-selectionsettings>
+                                            <e-listbox-fields text="Name" value="Id"></e-listbox-fields>
+                                        </ejs-listbox>
+                                    </div>
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-4">
+                                        <label class="form-label"><b>Courses:</b></label>
+                                        <ejs-listbox ejs-for="Courses" dataSource="Model.Courses" id="courses-select-listbox">
+                                            <e-listbox-selectionsettings showCheckbox="false"></e-listbox-selectionsettings>
+                                            <e-listbox-fields text="Name" value="Id"></e-listbox-fields>
+                                        </ejs-listbox>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                </div>
+                            </div>
                         </div>
+                        <!-- ##### About Us Area End ##### -->
+                        <input asp-action="Create" class="btn academy-btn mt-30" type="submit" value="Create" style="margin-left:30%" />
+                        <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:5%">Back</a>
                     </div>
-                    <!-- ##### About Us Area End ##### -->
-                    <button class="btn academy-btn mt-30" type="submit" style="margin-left:30%">Create</button>
-                    <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:5%">Back</a>
-                </div>
+                </form>
             </div>
         </section>
     </div>

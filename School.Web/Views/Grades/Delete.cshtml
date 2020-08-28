@@ -1,11 +1,11 @@
-﻿@model School.Web.Models.GradeViewModel
+﻿@model School.Web.Data.Entities.Grade
 
 @{
     ViewData["Title"] = "Delete";
 }
 
 <!-- ##### Breadcumb Area Start ##### -->
-<div class="breadcumb-area bg-img" style="background-image: url(../img/bg-img/breadcumb.jpg);">
+<div class="breadcumb-area bg-img" style="background-image: url(../../img/bg-img/breadcumb.jpg);">
     <div class="bradcumbContent">
         <h2>Delete Grades</h2>
     </div>
@@ -38,7 +38,6 @@
                         <!--BANNER END-->
                         <br />
                         <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:850px;">
-                            <form action="#" method="post" style="height:850px;">
                                 <label class="form-label"><b>Area:</b></label>
                                 <ejs-combobox id="areas" cssClass="e-filled" placeholder="Select an Area" index="2" popupHeight="230px" change="valueChange">
                                     <e-combobox-fields text="Area" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
@@ -117,11 +116,13 @@
                                             }*@
                                     </tbody>
                                 </table>
-                            </form>
                         </div>
                     </div>
                     <!-- ##### About Us Area End ##### -->
-                    <button class="btn academy-btn mt-30" type="submit" style="margin-left:30%">Delete</button>
+                    <form asp-action="Delete" style="margin-left:30%">
+                        <input type="hidden" asp-for="Id" />
+                        <input type="submit" value="Delete" class="btn academy-btn mt-30" />
+                    </form>
                     <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:5%">Back</a>
                 </div>
             </div>

@@ -72,72 +72,47 @@
                             </div>
 
                             @*Nav Start*@
-                            <div class="classynav">
-                                <ul>
-                                    <li>
-                                        <a href="#">Courses</a>
-                                        <ul class="dropdown">
-                                            <li><a asp-controller="Courses" asp-action="Index">Search</a></li>
-                                            <li><a asp-controller="Courses" asp-action="Create">Create</a></li>
-                                            <li><a asp-controller="Courses" asp-action="Details">Details</a></li>
-                                            <li><a asp-controller="Courses" asp-action="Edit">Edit</a></li>
-                                            <li><a asp-controller="Courses" asp-action="Delete">Delete</a></li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a href="#">Classes</a>
-                                        <ul class="dropdown">
-                                            <li><a asp-controller="Classes" asp-action="Index">Search</a></li>
-                                            <li><a asp-controller="Classes" asp-action="Create">Create</a></li>
-                                            <li><a asp-controller="Classes" asp-action="Details">Details</a></li>
-                                            <li><a asp-controller="Classes" asp-action="Edit">Edit</a></li>
-                                            <li><a asp-controller="Classes" asp-action="Delete">Delete</a></li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a href="#">Subjects</a>
-                                        <ul class="dropdown">
-                                            <li><a asp-controller="Subjects" asp-action="Index">Search</a></li>
-                                            <li><a asp-controller="Subjects" asp-action="Create">Create</a></li>
-                                            <li><a asp-controller="Subjects" asp-action="Details">Details</a></li>
-                                            <li><a asp-controller="Subjects" asp-action="Edit">Edit</a></li>
-                                            <li><a asp-controller="Subjects" asp-action="Delete">Delete</a></li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a href="#">Teachers</a>
-                                        <ul class="dropdown">
-                                            <li><a asp-controller="Teachers" asp-action="Index">Search</a></li>
-                                            <li><a asp-controller="Teachers" asp-action="Create">Create</a></li>
-                                            <li><a asp-controller="Teachers" asp-action="Details">Details</a></li>
-                                            <li><a asp-controller="Teachers" asp-action="Edit">Edit</a></li>
-                                            <li><a asp-controller="Teachers" asp-action="Delete">Delete</a></li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a href="#">Students</a>
-                                        <ul class="dropdown">
-                                            <li><a asp-controller="Students" asp-action="Index">Search</a></li>
-                                            <li><a asp-controller="Students" asp-action="Create">Create</a></li>
-                                            <li><a asp-controller="Students" asp-action="Details">Details</a></li>
-                                            <li><a asp-controller="Students" asp-action="Edit">Edit</a></li>
-                                            <li><a asp-controller="Students" asp-action="Delete">Delete</a></li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a href="#">Grades</a>
-                                        <ul class="dropdown">
-                                            <li><a asp-controller="Grades" asp-action="Index">Search</a></li>
-                                            <li><a asp-controller="Grades" asp-action="Create">Create</a></li>
-                                            <li><a asp-controller="Grades" asp-action="Details">Details</a></li>
-                                            <li><a asp-controller="Grades" asp-action="Edit">Edit</a></li>
-                                            <li><a asp-controller="Grades" asp-action="Delete">Delete</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                                </ul>
+                            <div class="classynav" style="justify-content:center; font-size:20px;">
+                                <div class="row" style="justify-content:center">
+                                    <div>
+                                        <a asp-area="" asp-controller="Home" asp-action="Index"><b>HOME</b></a>
+                                    </div>
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-2">
+                                        <a asp-area="" asp-controller="Home" asp-action="About"><b>ABOUT</b></a>
+                                    </div>
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-2">
+                                        <a asp-area="" asp-controller="Home" asp-action="Contact"><b>CONTACT</b></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="classynav" style="justify-content:center;">
+                                <div class="row" style="justify-content:center;">
+                                    <div class="col-md-1">
+                                        <a asp-controller="Courses" asp-action="Index"><b>COURSES</b></a>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1">
+                                        <a asp-controller="Classes" asp-action="Index"><b>CLASSES</b></a>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1">
+                                        <a asp-controller="Subjects" asp-action="Index"><b>SUBJECTS</b></a>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1">
+                                        <a asp-controller="Teachers" asp-action="Index"><b>TEACHERS</b></a>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1">
+                                        <a asp-controller="Students" asp-action="Index"><b>STUDENTS</b></a>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-1">
+                                        <a asp-controller="Grades" asp-action="Index"><b>GRADES</b></a>
+                                    </div>
+                                </div>
                             </div>
                             @*Nav End*@
                         </div>
@@ -150,7 +125,7 @@
                     </nav>
                 </div>
             </div>
-        </div>
+            @*</div>*@
     </header>
     <!-- ##### Header Area End ##### -->
 
@@ -178,3 +153,20 @@
     <ejs-scripts></ejs-scripts>
 </body>
 </html>
+
+<!--DROPDWON MENU-->
+@*<ul>
+        <li>
+            <a href="#">Back Office</a>
+            <ul class="dropdown">
+                <li><a asp-controller="Courses" asp-action="Index">Courses</a></li>
+                <li><a asp-controller="Classes" asp-action="Index">Classes</a></li>
+                <li><a asp-controller="Subjects" asp-action="Index">Subjects</a></li>
+                <li><a asp-controller="Teachers" asp-action="Index">Teachers</a></li>
+                <li><a asp-controller="Students" asp-action="Index">Students</a></li>
+                <li><a asp-controller="Grades" asp-action="Index">Grades</a></li>
+            </ul>
+        </li>
+        <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
+        <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+    </ul>*@

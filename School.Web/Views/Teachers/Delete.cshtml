@@ -5,7 +5,7 @@
 }
 
 <!-- ##### Breadcumb Area Start ##### -->
-<div class="breadcumb-area bg-img" style="background-image: url(../img/bg-img/breadcumb.jpg);">
+<div class="breadcumb-area bg-img" style="background-image: url(../../img/bg-img/breadcumb.jpg);">
     <div class="bradcumbContent">
         <h2>Delete Student</h2>
     </div>
@@ -24,7 +24,7 @@
         <section class="contact-area">
             <div class="contact-content">
                 <h2 style="text-align:center">Are you sure you want to Delete this?</h2>
-                <br />
+                <br /><br />
                 <div class="row">
                     <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="400ms">
                         <!--BANNER START-->
@@ -41,39 +41,46 @@
                             <div class="row">
                                 <div class="col-md-1"></div>
                                 <div class="col-md-3">
-                                    <picture>
-                                        <img src="~/img/bg-img/t1.jpg" alt="Girl1" style="width:auto; max-width:100%;">
-                                    </picture>
+                                    @if (!string.IsNullOrEmpty(Model.PhotoUrl))
+                                    {
+                                        <picture>
+                                            <img src="@Url.Content(Model.PhotoUrl)" alt="image" style="width:200px; height:300px; max-width:100%; height:auto" />
+                                        </picture>
+                                    }
+                                    @*<picture>
+            <img src="~/img/bg-img/t1.jpg" alt="Girl1" style="width:auto; max-width:100%;">
+        </picture>*@
                                 </div>
                                 <div class="col-md-8">
-                                    <label class="form-label"><b>Student Id:</b></label>
-                                    <label class="form-label">1</label>
+                                    <br />
+                                    <label class="form-label"><b>Teacher Number:</b></label>
+                                    <label class="form-label">@Html.DisplayFor(model => model.Id)</label>
                                 </div>
                             </div>
                             <br />
                             <label class="form-label"><b>Full Name:</b></label>
                             <div style="height:48px;">
-                                <label class="form-label">Frazão</label> @Html.DisplayFor(model => model.FullName)<br />
+                                <label class="form-label">@Html.DisplayFor(model => model.FullName)</label> <br />
                             </div>
                             <label class="form-label"><b>Gender:</b></label>
                             <div style="height:48px;">
-                                <label class="form-label">Frazão</label><br />
+                                <label class="form-label">@Html.DisplayFor(model => model.Gender)</label><br />
                             </div>
                             <label class="form-label"><b>Date of Birth:</b></label>
                             <div style="height:48px;">
-                                <label class="form-label">Frazão</label><br />
+                                <label class="form-label">@Html.DisplayFor(model => model.DateOfBirth)</label><br />
                             </div>
                             <label class="form-label"><b>Address:</b></label>
                             <div style="height:48px;">
-                                <label class="form-label">Frazão</label><br />
+                                <label class="form-label">@Html.DisplayFor(model => model.Address)</label><br />
                             </div>
                             <label class="form-label"><b>Zip-Code:</b></label>
                             <div style="height:48px;">
-                                <label class="form-label">Frazão</label><br />
+                                <label class="form-label">@Html.DisplayFor(model => model.ZipCode)</label><br />
                             </div>
                             <label class="form-label"><b>City:</b></label>
                             <div style="height:48px;">
-                                <label class="form-label">Frazão</label>
+                                <label class="form-label">@Html.DisplayFor(model => model.City)</label>
                             </div>
                         </div>
                     </div>
@@ -92,35 +99,35 @@
                             <br />
                             <label class="form-label"><b>Identification Number:</b></label>
                             <div style="height:48px;">
-                                <label class="form-label">Frazão</label><br />
+                                <label class="form-label">@Html.DisplayFor(model => model.IdentificationNumber)</label><br />
                             </div>
                             <label class="form-label"><b>Tax Number:</b></label>
                             <div style="height:48px;">
-                                <label class="form-label">Frazão</label><br />
+                                <label class="form-label">@Html.DisplayFor(model => model.TaxNumber)</label><br />
                             </div>
                             <label class="form-label"><b>Social Security Number:</b></label>
                             <div style="height:48px;">
-                                <label class="form-label">Frazão</label><br />
+                                <label class="form-label">@Html.DisplayFor(model => model.SSNumber)</label><br />
                             </div>
-                            <label class="form-label"><b>NHS Number:</b></label>
+                            <label class="form-label"><b>National Health Service Number:</b></label>
                             <div style="height:48px;">
-                                <label class="form-label">Frazão</label><br />
+                                <label class="form-label">@Html.DisplayFor(model => model.NHSNumber)</label><br />
                             </div>
                             <label class="form-label"><b>Marital Status:</b></label>
                             <div style="height:48px;">
-                                <label class="form-label">Frazão</label><br />
+                                <label class="form-label">@Html.DisplayFor(model => model.MaritalStatus)</label><br />
                             </div>
                             <label class="form-label"><b>Nationality:</b></label>
                             <div style="height:48px;">
-                                <label class="form-label">Frazão</label><br />
+                                <label class="form-label">@Html.DisplayFor(model => model.Nationality)</label><br />
                             </div>
                             <label class="form-label"><b>Telephone Number:</b></label>
                             <div style="height:48px;">
-                                <label class="form-label">Frazão</label><br />
+                                <label class="form-label">@Html.DisplayFor(model => model.Telephone)</label><br />
                             </div>
                             <label class="form-label"><b>Email:</b></label>
                             <div style="height:48px;">
-                                <label class="form-label">Frazão</label><br />
+                                <label class="form-label">@Html.DisplayFor(model => model.Email)</label><br />
                             </div>
                         </div>
                     </div>
@@ -139,57 +146,37 @@
                         <!--BANNER END-->
                         <br />
                         <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
-                            <form action="#" method="post">
-                                <label class="form-label"><b>Course:</b></label>
-                                <div style="height:48px;">
-                                    <label class="form-label">Frazão</label><br />
+                            <label class="form-label"><b>Subjects:</b></label>
+                            <!-- ListView element -->
+                            <ejs-listview enable="true" id="subjectchecklistview" showCheckBox="true">
+                            </ejs-listview>
+                            <div style="height:48px;"></div>
+                            <div class="row">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-4">
+                                    <label class="form-label"><b>Classes:</b></label>
+                                    <ejs-listbox id="classes-select-listbox">
+                                        <e-listbox-selectionsettings showCheckbox="false"></e-listbox-selectionsettings>
+                                        <e-listbox-fields text="Name" value="Id"></e-listbox-fields>
+                                    </ejs-listbox>
                                 </div>
-                                <label class="form-label"><b>Schedule:</b></label>
-                                <div style="height:48px;">
-                                    <label class="form-label">Frazão</label><br />
+                                <div class="col-md-2"></div>
+                                <div class="col-md-4">
+                                    <label class="form-label"><b>Courses:</b></label>
+                                    <ejs-listbox id="courses-select-listbox">
+                                        <e-listbox-selectionsettings showCheckbox="false"></e-listbox-selectionsettings>
+                                        <e-listbox-fields text="Name" value="Id"></e-listbox-fields>
+                                    </ejs-listbox>
                                 </div>
-                                <label class="form-label"><b>Class:</b></label>
-                                <div style="height:48px;">
-                                    <label class="form-label">Frazão</label><br />
-                                </div>
-                                <label class="form-label"><b>School Year:</b></label>
-                                <div style="height:48px;">
-                                    <label class="form-label">Frazão</label><br />
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
-                        <h6><br /></h6>
-                    </div>
-                    <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
-                        <!--BANNER START-->
-                        <div class="panel single-accordion">
-                            <h6>
-                                <a class="collapsed" style="text-align:center;">
-                                    School Information
-                                </a>
-                            </h6>
-                        </div>
-                        <!--BANNER END-->
-                        <br />
-                        <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
-                            <form action="#" method="post">
-                                <label class="form-label"><b>Subjects:</b></label>
-                                <!-- ListView element -->
-                                <ejs-listview enable="true" id="subjectchecklistview" showCheckBox="true">
-                                </ejs-listview> @*dataSource="ViewBag.dataSource"*@
-                                <label class="form-label"><b>Classes:</b></label>
-                                <ejs-listview enable="true" id="classeschecklistview" showCheckBox="true">
-                                </ejs-listview> @*dataSource="ViewBag.dataSource"*@
-                                <label class="form-label"><b>Courses:</b></label>
-                                <ejs-listview enable="true" id="courseschecklistview" showCheckBox="true">
-                                </ejs-listview> @*dataSource="ViewBag.dataSource"*@
-                            </form>
+                                <div class="col-md-1"></div>
+                            </div>
                         </div>
                     </div>
                     <!-- ##### About Us Area End ##### -->
-                    <button class="btn academy-btn mt-30" type="submit" style="margin-left:30%">Delete</button>
+                    <form asp-action="Delete" style="margin-left:30%">
+                        <input type="hidden" asp-for="Id" />
+                        <input type="submit" value="Delete" class="btn academy-btn mt-30" />
+                    </form>
                     <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:5%">Back</a>
                 </div>
             </div>

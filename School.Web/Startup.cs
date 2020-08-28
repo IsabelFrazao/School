@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using School.Web.Data;
 using School.Web.Data.Repositories;
+using School.Web.Helpers;
 
 namespace School.Web
 {
@@ -41,6 +42,9 @@ namespace School.Web
             services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddScoped<ISubjectRepository, SubjectRepository>();
             services.AddScoped<IGradeRepository, GradeRepository>();
+            services.AddScoped<IIEFPSubjectRepository, IEFPSubjectRepository>();
+            services.AddScoped<IImageHelper, ImageHelper>();
+            services.AddScoped<IConverterHelper, ConverterHelper>();
 
 
             services.Configure<CookiePolicyOptions>(options =>

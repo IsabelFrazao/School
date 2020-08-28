@@ -1,4 +1,4 @@
-﻿@model School.Web.Data.Entities.Student
+﻿@model School.Web.Models.StudentViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -40,41 +40,50 @@
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-3">
-                                        <picture>
-                                            <img src="~/img/bg-img/t1.jpg" alt="Girl1" style="width:auto; max-width:100%;">
-                                        </picture>
+                                        @if (!string.IsNullOrEmpty(Model.PhotoUrl))
+                                        {
+                                            <picture>
+                                                <img src="@Url.Content(Model.PhotoUrl)" alt="image" style="width:200px; height:300px; max-width:100%; height:auto" />
+                                            </picture>
+                                        }
+                                        @*<picture>
+                                                <img src="~/img/bg-img/t1.jpg" alt="Girl1" style="width:auto; max-width:100%;">
+                                            </picture>*@
                                     </div>
                                     <div class="col-md-8">
-                                        <label class="form-label"><b>Student Number:</b></label>
+                                        <label asp-for="Id" class="form-label"><b>Student Number:</b></label>
                                         <label asp-for="Id" class="form-label">@ViewBag.idCount</label>
-                                        <input class="form-control" type="file" />
+                                        <input asp-for="ImageFile" class="form-control" type="file"/>
                                     </div>
                                 </div>
-                                <label class="form-label"><b>Name:</b></label>
+                                <label asp-for="FullName" class="form-label"><b>Name:</b></label>
+                                <span asp-validation-for="FullName" class="text-danger"></span>
                                 <input asp-for="FullName" class="form-control" id="name" placeholder="Name">
-                                @*<span asp-validation-for="FullName" class="text-danger"></span>*@
                                 <label asp-for="Gender" class="form-label"><b>Gender:</b></label>
+                                <span asp-validation-for="Gender" class="text-danger"></span>
                                 <div class="form-check" style="height:48px;">
                                     <div class="row">
                                         <div class="col-md-4">
                                             <br />
-                                            <input type="radio" name="radiogender" class="form-check-input" id="rbmale" />
-                                            <label class="form-check-label"><b>Male</b></label>
+                                            @Html.RadioButtonFor(model => model.Gender, "Male")<b> Male</b>
                                         </div>
                                         <div class="col-md-8">
                                             <br />
-                                            <input type="radio" name="radiogender" class="form-check-input" id="rbfemale" />
-                                            <label class="form-check-label"><b>Female</b></label>
+                                            @Html.RadioButtonFor(model => model.Gender, "Female")<b> Female</b>
                                         </div>
                                     </div>
                                 </div><br />
                                 <label asp-for="DateOfBirth" class="form-label"><b>Date of Birth:</b></label>
+                                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                                 <input asp-for="DateOfBirth" type="date" class="form-control" id="dateofbirth">
                                 <label asp-for="Address" class="form-label"><b>Address:</b></label>
-                                <input type="text" class="form-control" id="address" placeholder="Address">
+                                <span asp-validation-for="Address" class="text-danger"></span>
+                                <input asp-for="Address" type="text" class="form-control" id="address" placeholder="Address">
                                 <label asp-for="ZipCode" class="form-label"><b>Zip-Code:</b></label>
+                                <span asp-validation-for="ZipCode" class="text-danger"></span>
                                 <input asp-for="ZipCode" type="text" class="form-control" id="zip-code" placeholder="Zip-Code">
                                 <label asp-for="City" class="form-label"><b>City:</b></label>
+                                <span asp-validation-for="City" class="text-danger"></span>
                                 <input asp-for="City" type="text" class="form-control" id="city" placeholder="City">
                             </div>
                         </div>
@@ -88,44 +97,49 @@
                                 </h6>
                             </div>
                             <!--BANNER END-->
-                            <br />
+                            <br/>
                             <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:850px;">
                                 <label asp-for="IdentificationNumber" class="form-label"><b>Identification Number:</b></label>
+                                <span asp-validation-for="IdentificationNumber" class="text-danger"></span>
+                                <br />
                                 <input asp-for="IdentificationNumber" type="text" class="form-control" id="idnumber" placeholder="Identification Number">
                                 <label asp-for="TaxNumber" class="form-label"><b>Tax Number:</b></label>
+                                <span asp-validation-for="TaxNumber" class="text-danger"></span>
                                 <input asp-for="TaxNumber" type="text" class="form-control" id="taxnumber" placeholder="Tax Number">
                                 <label asp-for="SSNumber" class="form-label"><b>Social Security Number:</b></label>
+                                <span asp-validation-for="SSNumber" class="text-danger"></span>
                                 <input asp-for="SSNumber" type="text" class="form-control" id="ssnumber" placeholder="Social Security Number">
                                 <label asp-for="NHSNumber" class="form-label"><b>National Health Service Number:</b></label>
+                                <span asp-validation-for="NHSNumber" class="text-danger"></span>
                                 <input asp-for="NHSNumber" type="text" class="form-control" id="nhsnumber" placeholder="National Health Service Number">
                                 <label asp-for="MaritalStatus" class="form-label"><b>Marital Status:</b></label>
+                                <span asp-validation-for="MaritalStatus" class="text-danger"></span>
                                 <div class="form-check" style="height:48px;">
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <input type="radio" name="radiostatus" class="form-check-input" id="rbsingle" />
-                                            <label asp-for="MaritalStatus" class="form-check-label"><b>Single</b></label>
+                                            @Html.RadioButtonFor(model => model.MaritalStatus, "Single")<b> Single</b>
                                         </div>
                                         <div class="col-md-8">
-                                            <input type="radio" name="radiostatus" class="form-check-input" id="rbmarried" />
-                                            <label asp-for="MaritalStatus" class="form-check-label"><b>Married</b></label>
+                                            @Html.RadioButtonFor(model => model.MaritalStatus, "Married")<b> Married</b>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <input type="radio" name="radiostatus" class="form-check-input" id="rbdivorced" />
-                                            <label asp-for="MaritalStatus" class="form-check-label"><b>Divorced</b></label>
+                                            @Html.RadioButtonFor(model => model.MaritalStatus, "Divorced")<b> Divorced</b>
                                         </div>
                                         <div class="col-md-8">
-                                            <input type="radio" name="radiostatus" class="form-check-input" id="rbwidowed" />
-                                            <label asp-for="MaritalStatus" class="form-check-label"><b>Widowed</b></label>
+                                            @Html.RadioButtonFor(model => model.MaritalStatus, "Widowed")<b> Widowed</b>
                                         </div>
                                     </div>
                                 </div><br />
                                 <label asp-for="Nationality" class="form-label"><b>Nationality:</b></label>
+                                <span asp-validation-for="Nationality" class="text-danger"></span>
                                 <input asp-for="Nationality" type="text" class="form-control" id="nationality" placeholder="Nationality">
                                 <label asp-for="Telephone" class="form-label"><b>Telephone Number:</b></label>
+                                <span asp-validation-for="Telephone" class="text-danger"></span>
                                 <input asp-for="Telephone" type="text" class="form-control" id="phone" placeholder="Telephone Number">
                                 <label asp-for="Email" class="form-label"><b>E-mail:</b></label>
+                                <span asp-validation-for="Email" class="text-danger"></span>
                                 <input asp-for="Email" type="email" class="form-control" id="email" placeholder="E-mail">
                             </div>
                         </div>
@@ -144,23 +158,26 @@
                             <!--BANNER END-->
                             <br />
                             <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
-                                <label asp-for="Course.Id" class="form-label"><b>Course:</b></label>
-                                <ejs-combobox id="courses" cssClass="e-filled" placeholder="Select a Course" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="Course" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
+                                <label asp-for="CourseId" class="form-label"><b>Course:</b></label>
+                                @*<span asp-validation-for="Course" class="text-danger"></span>*@
+                                <ejs-combobox id="courses" ejs-for="CourseId" dataSource="Model.Courses" cssClass="e-filled" placeholder="Select a Course" index="2" popupHeight="230px" change="valueChange">
+                                    <e-combobox-fields text="Name" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
                                 </ejs-combobox>
                                 <label class="form-label"><b>Schedule:</b></label>
-                                <ejs-combobox id="schedules" cssClass="e-filled" placeholder="Select a Schedule" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="Schedule" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
+                                @*<span asp-validation-for="Course" class="text-danger"></span>*@
+                                <ejs-combobox id="schedules" ejs-for="Schedule" dataSource="Model.Schedules" cssClass="e-filled" placeholder="Select a Schedule" index="2" popupHeight="230px" change="valueChange">
+                                    <e-combobox-fields text="Schedule"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
                                 </ejs-combobox>
                                 <label class="form-label"><b>Class:</b></label>
-                                <ejs-combobox id="classes" cssClass="e-filled" placeholder="Select a Class" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="Class" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
+                                @*<span asp-validation-for="Course" class="text-danger"></span>*@
+                                <ejs-combobox id="classes" ejs-for="ClassId" dataSource="Model.Classes" cssClass="e-filled" placeholder="Select a Class" index="2" popupHeight="230px" change="valueChange">
+                                    <e-combobox-fields text="Name" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
                                 </ejs-combobox>
                                 <label class="form-label"><b>School Year:</b></label>
-                                <ejs-combobox id="schoolyears" cssClass="e-filled" placeholder="Select a School Year" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="School Year" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
+                                @*<span asp-validation-for="Course" class="text-danger"></span>*@
+                                <ejs-combobox id="schoolyears" ejs-for="SchoolYear" dataSource="Model.SchoolYears" cssClass="e-filled" placeholder="Select a School Year" index="2" popupHeight="230px" change="valueChange">
+                                    <e-combobox-fields text="SchoolYear" ></e-combobox-fields> @*dataSource="@ViewBag.data"*@
                                 </ejs-combobox>
-
                             </div>
                         </div>
                         <!-- ##### About Us Area End ##### -->

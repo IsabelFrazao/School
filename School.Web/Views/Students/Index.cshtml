@@ -23,6 +23,10 @@
         <section class="contact-area">
             <div class="contact-content">
                 <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
+                    <a asp-action="Create" class="btn academy-btn mt-30" style="margin-left:40%">Create New</a>
+                    <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
+                        <h6><br /></h6>
+                    </div>
                     <div class="blog-post-search-widget mb-30">
                         <form action="#" method="post">
                             <input type="search" name="search" id="Search" placeholder="Search">
@@ -31,123 +35,60 @@
                     </div>
                 </div>
                 <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
-                    <form action="#" method="post">
-                        <table class="table" style="width:100%">
-                            <thead>
+                    <table class="table" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.FullName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.DateOfBirth)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Address)
+                                </th>                                
+                                <th>
+                                    @Html.DisplayNameFor(model => model.IdentificationNumber)
+                                </th>                                
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Telephone)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Email)
+                                </th>                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
                                 <tr>
-                                    @*<th>
-                                            @Html.DisplayNameFor(model => model.PhotoUrl)
-                                        </th>*@
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.FullName)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Gender)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.DateOfBirth)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Address)
-                                    </th>
-                                    @*<th>
-                                        @Html.DisplayNameFor(model => model.ZipCode)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.City)
-                                    </th>*@
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.IdentificationNumber)
-                                    </th>
-                                    @*<th>
-                                            @Html.DisplayNameFor(model => model.TaxNumber)
-                                        </th>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.SSNumber)
-                                        </th>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.NHSNumber)
-                                        </th>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.MaritalStatus)
-                                        </th>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.Nationality)
-                                        </th>*@
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Telephone)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Email)
-                                    </th>
-                                    @*<th>
-                                            @Html.DisplayNameFor(model => model.CourseId)
-                                        </th>*@
-                                    <th></th>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.FullName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DateOfBirth)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Address)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.IdentificationNumber)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Telephone)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Email)
+                                    </td>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model)
-                                {
-                                    <tr>
-                                        @*<td>
-                                                @Html.DisplayFor(modelItem => item.PhotoUrl)
-                                            </td>*@
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.FullName)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Gender)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.DateOfBirth)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Address)
-                                        </td>
-                                        @*<td>
-                                            @Html.DisplayFor(modelItem => item.ZipCode)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.City)
-                                        </td>*@
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.IdentificationNumber)
-                                        </td>
-                                        @*<td>
-                                                @Html.DisplayFor(modelItem => item.TaxNumber)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.SSNumber)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.NHSNumber)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.MaritalStatus)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Nationality)
-                                            </td>*@
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Telephone)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Email)
-                                        </td>
-                                        @*<td>
-                                                @Html.DisplayFor(modelItem => item.Course.Name)
-                                            </td>*@
-                                        <td>
-                                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </form>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>

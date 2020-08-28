@@ -24,6 +24,10 @@
         <section class="contact-area">
             <div class="contact-content">
                 <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
+                    <a asp-action="Create" class="btn academy-btn mt-30" style="margin-left:40%">Create New</a>
+                    <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
+                        <h6><br /></h6>
+                    </div>
                     <div class="blog-post-search-widget mb-30">
                         <form action="#" method="post">
                             <input type="search" name="search" id="Search" placeholder="Search">
@@ -32,50 +36,48 @@
                     </div>
                 </div>
                 <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
-                    <form action="#" method="post">
-                        <table class="table" style="width:100%">
-                            <thead>
+                    <table class="table" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Course)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Name)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Schedule)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Room)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
                                 <tr>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Name)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Schedule)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Room)
-                                    </th>
-                                    @*<th>
-                                        @Html.DisplayNameFor(model => model.Course)
-                                    </th>*@                                    
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CourseId)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Schedule)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Room)
+                                    </td>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Name)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Schedule)
-                                            </td>                                            
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Room)
-                                            </td>
-                                            @*<td>
-                                                @Html.DisplayFor(modelItem => item.Course)
-                                            </td>*@                                            
-                                            <td>
-                                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
-                                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>
-                                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
-                                            </td>
-                                        </tr>
-                                    }
-                            </tbody>
-                        </table>
-                    </form>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>

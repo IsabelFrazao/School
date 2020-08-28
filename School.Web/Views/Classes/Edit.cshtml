@@ -6,7 +6,7 @@
 <!-- ##### Breadcumb Area Start ##### -->
 <div class="breadcumb-area bg-img" style="background-image: url(../img/bg-img/breadcumb.jpg);">
     <div class="bradcumbContent">
-        <h2>Create Class</h2>
+        <h2>Edit Class</h2>
     </div>
 </div>
 <!-- ##### Breadcumb Area End ##### -->
@@ -16,39 +16,43 @@
         <div class="row">
             <div class="col-12">
                 <div class="section-heading text-center mx-auto wow fadeInUp" data-wow-delay="300ms">
-                    <h3>Create Class</h3>
+                    <h3>Edit Class</h3>
                 </div>
             </div>
         </div>
         <section class="contact-area">
             <div class="contact-content">
-                <div class="row">
-                    <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
-                        <!--BANNER START-->
-                        <div class="panel single-accordion">
-                            <h6>
-                                <a class="collapsed" style="text-align:center;">
-                                    General Information
-                                </a>
-                            </h6>
-                        </div>
-                        <!--BANNER END-->
-                        <br />
-                        <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:850px;">
-                            <form action="#" method="post" style="height:850px;">
-                                <label class="form-label"><b>Course:</b></label>
-                                <ejs-combobox id="courses" cssClass="e-filled" placeholder="Select a Course" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="Course" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
+                <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
+                            <!--BANNER START-->
+                            <div class="panel single-accordion">
+                                <h6>
+                                    <a class="collapsed" style="text-align:center;">
+                                        General Information
+                                    </a>
+                                </h6>
+                            </div>
+                            <!--BANNER END-->
+                            <br />
+                            <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:850px;">
+                                <label asp-for="CourseId" class="form-label"><b>Course:</b></label>
+                                <span asp-validation-for="CourseId" class="text-danger"></span>
+                                <ejs-combobox id="courses" ejs-for="Course.Name" dataSource="Model.Courses" cssClass="e-filled" placeholder="Select a Course" index="2" popupHeight="230px" change="valueChange">
+                                    <e-combobox-fields text="Name" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
                                 </ejs-combobox>
-                                <label class="form-label"><b>Name:</b></label>
-                                <input type="text" class="form-control" id="name" placeholder="Name">
+                                <label asp-for="Name" class="form-label"><b>Name:</b></label>
+                                @*<span asp-validation-for="Course" class="text-danger"></span>*@
+                                <input asp-for="Name" type="text" class="form-control" id="name" placeholder="Name">
                                 <label class="form-label"><b>Schedule:</b></label>
-                                <ejs-combobox id="schedules" cssClass="e-filled" placeholder="Select a Schedule" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="Schedule" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
+                                @*<span asp-validation-for="Course" class="text-danger"></span>*@
+                                <ejs-combobox id="schedules" ejs-for="Schedule" dataSource="Model.Schedules" cssClass="e-filled" placeholder="Select a Schedule" index="2" popupHeight="230px" change="valueChange">
+                                    <e-combobox-fields text="Schedule" ></e-combobox-fields> @*dataSource="@ViewBag.data"*@
                                 </ejs-combobox>
                                 <label class="form-label"><b>Classroom:</b></label>
-                                <ejs-combobox id="classrooms" cssClass="e-filled" placeholder="Select a Classroom" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="Classroom" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
+                                @*<span asp-validation-for="Course" class="text-danger"></span>*@
+                                <ejs-combobox id="classrooms" ejs-for="Room" dataSource="Model.Classrooms" cssClass="e-filled" placeholder="Select a Classroom" index="2" popupHeight="230px" change="valueChange">
+                                    <e-combobox-fields text="Classroom" ></e-combobox-fields> @*dataSource="@ViewBag.data"*@
                                 </ejs-combobox>
                                 <div style="height:48px;"></div>
                                 <div class="row">
@@ -65,8 +69,9 @@
                                     <div class="col-md-2"></div>
                                     <div class="col-md-4">
                                         <label class="form-label"><b>Students:</b></label>
-                                        <ejs-listbox id="students-select-listbox">
-                                            <e-listbox-selectionsettings showCheckbox="true"></e-listbox-selectionsettings>
+                                        <ejs-listbox ejs-for="Students" dataSource="Model.Students" id="students-select-listbox">
+                                            <e-listbox-selectionsettings showCheckbox="true" ></e-listbox-selectionsettings>
+                                            <e-listbox-fields text="FullName" value="Id" ></e-listbox-fields>
                                         </ejs-listbox> @*dataSource="ViewBag.data"*@
                                         <br />
                                         <label class="form-label"><b>Total:</b></label>
@@ -74,13 +79,13 @@
                                     </div>
                                     <div class="col-md-1"></div>
                                 </div>
-                            </form>
+                            </div>
                         </div>
+                        <!-- ##### About Us Area End ##### -->
+                        <input asp-action="Edit" class="btn academy-btn mt-30" type="submit" value="Edit" style="margin-left:30%" />
+                        <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:5%">Back</a>
                     </div>
-                    <!-- ##### About Us Area End ##### -->
-                    <button class="btn academy-btn mt-30" type="submit" style="margin-left:30%">Edit</button>
-                    <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:5%">Back</a>
-                </div>
+                </form>
             </div>
         </section>
     </div>

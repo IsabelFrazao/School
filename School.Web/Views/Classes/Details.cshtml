@@ -36,64 +36,63 @@
                         <!--BANNER END-->
                         <br />
                         <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:850px;">
-                            <form action="#" method="post" style="height:850px;">
-                                <label class="form-label"><b>Course:</b></label>
-                                <div style="height:48px;">
-                                    <label class="form-label">TPSI</label> @Html.DisplayFor(model => model.Name)<br />
+                            <label class="form-label"><b>Course:</b></label>
+                            <div style="height:48px;">
+                                <label class="form-label">@Html.DisplayFor(model => model.Course.Name)</label><br />
+                            </div>
+                            <label class="form-label"><b>Name:</b></label>
+                            <div style="height:48px;">
+                                <label class="form-label">@Html.DisplayFor(model => model.Name)</label><br />
+                            </div>
+                            <label class="form-label"><b>Schedule:</b></label>
+                            <div style="height:48px;">
+                                <label class="form-label">@Html.DisplayFor(model => model.Schedule)</label><br />
+                            </div>
+                            <label class="form-label"><b>Classroom:</b></label>
+                            <div style="height:48px;">
+                                <label class="form-label">@Html.DisplayFor(model => model.Room)</label><br />
+                            </div>
+                            <div class="row">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-3">
+                                    <label class="form-label"><b>Subjects:</b></label>
+                                    <!--<ejs-listview enable="true" id="subjectschecklistview" showCheckBox="true">
+                                    </ejs-listview>-->
+                                    @*dataSource="ViewBag.dataSource"*@
+                                    <ejs-listbox id="subjects-select-listbox">
+                                        <e-listbox-selectionsettings showCheckbox="true"></e-listbox-selectionsettings>
+                                    </ejs-listbox> @*dataSource="ViewBag.data"*@
+                                    <br />
+                                    <label class="form-label"><b>Total:</b></label>
+                                    <label class="form-label">2</label>
                                 </div>
-                                <label class="form-label"><b>Name:</b></label>
-                                <div style="height:48px;">
-                                    <label class="form-label">TPSI</label> @Html.DisplayFor(model => model.Name)<br />
+                                <div class="col-md-3">
+                                    <label class="form-label"><b>Teachers:</b></label>
+                                    <!--<ejs-listview enable="true" id="teacherschecklistview" showCheckBox="true">
+                                    </ejs-listview>-->
+                                    @*dataSource="ViewBag.dataSource"*@
+                                    <ejs-listbox id="teachers-select-listbox">
+                                        <e-listbox-selectionsettings showCheckbox="true"></e-listbox-selectionsettings>
+                                    </ejs-listbox> @*dataSource="ViewBag.data"*@
+                                    <br />
+                                    <label class="form-label"><b>Total:</b></label>
+                                    <label class="form-label">2</label>
                                 </div>
-                                <label class="form-label"><b>Schedule:</b></label>
-                                <div style="height:48px;">
-                                    <label class="form-label">TPSI</label> @Html.DisplayFor(model => model.Name)<br />
+                                <div class="col-md-3">
+                                    <label class="form-label"><b>Students:</b></label>
+                                    <!--<ejs-listview enable="true" id="studentschecklistview" showCheckBox="true">
+                                    </ejs-listview>-->
+                                    @*dataSource="ViewBag.dataSource"*@
+                                <ejs-listbox dataSource="Model.Students" id="students-select-listbox">
+                                    <e-listbox-selectionsettings showCheckbox="false" ></e-listbox-selectionsettings>
+                                    <e-listbox-fields text="FullName" value="Id"></e-listbox-fields>
+                                </ejs-listbox> @*dataSource="ViewBag.data"*@
+                                    <br />
+                                    <label class="form-label"><b>Total:</b></label>
+                                    <label class="form-label">2</label>
                                 </div>
-                                <label class="form-label"><b>Classroom:</b></label>
-                                <div style="height:48px;">
-                                    <label class="form-label">TPSI</label> @Html.DisplayFor(model => model.Name)<br />
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-3">
-                                        <label class="form-label"><b>Subjects:</b></label>
-                                        <!--<ejs-listview enable="true" id="subjectschecklistview" showCheckBox="true">
-                                        </ejs-listview>-->
-                                        @*dataSource="ViewBag.dataSource"*@
-                                        <ejs-listbox id="subjects-select-listbox">
-                                            <e-listbox-selectionsettings showCheckbox="true"></e-listbox-selectionsettings>
-                                        </ejs-listbox> @*dataSource="ViewBag.data"*@
-                                        <br />
-                                        <label class="form-label"><b>Total:</b></label>
-                                        <label class="form-label">2</label>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label"><b>Teachers:</b></label>
-                                        <!--<ejs-listview enable="true" id="teacherschecklistview" showCheckBox="true">
-                                        </ejs-listview>-->
-                                        @*dataSource="ViewBag.dataSource"*@
-                                        <ejs-listbox id="teachers-select-listbox">
-                                            <e-listbox-selectionsettings showCheckbox="true"></e-listbox-selectionsettings>
-                                        </ejs-listbox> @*dataSource="ViewBag.data"*@
-                                        <br />
-                                        <label class="form-label"><b>Total:</b></label>
-                                        <label class="form-label">2</label>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label"><b>Students:</b></label>
-                                        <!--<ejs-listview enable="true" id="studentschecklistview" showCheckBox="true">
-                                        </ejs-listview>-->
-                                        @*dataSource="ViewBag.dataSource"*@
-                                        <ejs-listbox id="students-select-listbox">
-                                            <e-listbox-selectionsettings showCheckbox="true"></e-listbox-selectionsettings>
-                                        </ejs-listbox> @*dataSource="ViewBag.data"*@
-                                        <br />
-                                        <label class="form-label"><b>Total:</b></label>
-                                        <label class="form-label">2</label>
-                                    </div>
-                                    <div class="col-md-1"></div>
-                                </div>
-                            </form>
+                                <div class="col-md-1"></div>
+                            </div>
                         </div>
                     </div>
                     <!-- ##### About Us Area End ##### -->
@@ -103,35 +102,3 @@
         </section>
     </div>
 </section>
-
-<style>
-    #listview, #listviewgrp {
-        border: 1px solid #dddddd;
-        border-radius: 3px;
-    }
-
-    .control-section {
-        overflow: auto;
-    }
-
-    #flat-list,
-    #group-list {
-        width: 49%;
-        margin: auto;
-        margin-bottom: 15px;
-    }
-
-        #flat-list h4, #group-list h4 {
-            padding-left: 16px;
-        }
-
-    #flat-list {
-        float: left;
-        padding-left: 16px;
-    }
-
-    #group-list {
-        float: right;
-        padding-right: 16px;
-    }
-</style>
