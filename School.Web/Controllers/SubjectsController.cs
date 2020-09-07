@@ -9,6 +9,7 @@ using School.Web.Data.Entities;
 using School.Web.Data.Repositories;
 using School.Web.Helpers;
 using School.Web.Models;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -24,8 +25,13 @@ namespace School.Web.Controllers
         private readonly ITeacherRepository _teacherRepository;
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IConverterHelper _converterHelper;
+        private readonly IFileHelper _fileHelper;
 
-        public SubjectsController(ISubjectRepository subjectRepository, IIEFPSubjectRepository iefpSubjectRepository, ICourseRepository courseRepository, ITeacherRepository teacherRepository, IHostingEnvironment hostingEnvironment, IConverterHelper converterHelper)
+        public object ExcelReaderFactory { get; private set; }
+
+        public SubjectsController(ISubjectRepository subjectRepository, IIEFPSubjectRepository iefpSubjectRepository,
+            ICourseRepository courseRepository, ITeacherRepository teacherRepository, IHostingEnvironment hostingEnvironment,
+            IConverterHelper converterHelper, IFileHelper fileHelper)
         {
             _subjectRepository = subjectRepository;
             _iefpSubjectRepository = iefpSubjectRepository;
@@ -33,6 +39,7 @@ namespace School.Web.Controllers
             _teacherRepository = teacherRepository;
             _hostingEnvironment = hostingEnvironment;
             _converterHelper = converterHelper;
+            _fileHelper = fileHelper;
         }
 
         // GET: SubjectsController
@@ -51,11 +58,8 @@ namespace School.Web.Controllers
 
             var subject = await _subjectRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
 
-            var course = await _courseRepository.GetByIdAsync(subject.CourseId);
-            subject.Course = course;
-
-            var teacher = await _teacherRepository.GetByIdAsync(subject.TeacherId);
-            subject.Teacher = teacher;
+            subject.Course = await _courseRepository.GetByIdAsync(subject.CourseId);
+            subject.Teacher = await _teacherRepository.GetByIdAsync(subject.TeacherId);
 
             if (subject == null)
             {
@@ -69,11 +73,28 @@ namespace School.Web.Controllers
         {
             var model = new SubjectViewModel
             {
-                Courses = _courseRepository.GetAll(),
-                Teachers = _teacherRepository.GetAll()
+                Courses = _courseRepository.GetAll().Where(c => c.Id > 1),
+                Teachers = _teacherRepository.GetAll().Where(c => c.Id > 1),
+                IEFPSubjects = _iefpSubjectRepository.GetAll().Where(e => e.Field == "Áudiovisuais e Produção dos Media" ||
+                e.Field == "Ciências Informáticas" || e.Field == "Eletrónica e Automação").ToList()//Filter by Field                
             };
 
-            model.IEFPSubjects = _iefpSubjectRepository.GetAll().Where(e => e.Field == "Áudiovisuais e Produção dos Media" || e.Field == "Ciências Informáticas" || e.Field == "Eletrónica e Automação");//Filter by Field
+            IEnumerable<Subject> Subjects = _subjectRepository.GetAll();
+
+            List<IEFPSubject> ISubjects = new List<IEFPSubject>(model.IEFPSubjects);
+
+            foreach(var iefpsubject in ISubjects)
+            {
+                foreach (var subject in Subjects)
+                {
+                    if (iefpsubject.Code == subject.Code)
+                        model.IEFPSubjects.Remove(iefpsubject);
+                }
+            }
+
+            //model.Courses = _courseRepository.GetAll();
+            //model.Teachers = _teacherRepository.GetAll();
+            //model.IEFPSubjects = _iefpSubjectRepository.GetAll().Where(e => e.Field == "Áudiovisuais e Produção dos Media" || e.Field == "Ciências Informáticas" || e.Field == "Eletrónica e Automação");//Filter by Field
 
             return View(model);
         }
@@ -88,43 +109,15 @@ namespace School.Web.Controllers
 
             var iefpsubject = await _iefpSubjectRepository.GetByIdAsync(id.Value);
 
-            var subject = new Subject
-            {
-                Code = iefpsubject.Code,
-                Name = iefpsubject.Name,
-                Duration = iefpsubject.Duration,
-                ReferenceCode = iefpsubject.ReferenceCode,
-                FieldCode = iefpsubject.FieldCode,
-                Field = iefpsubject.Field,
-                Reference = iefpsubject.Reference,
-                QNQLevel = iefpsubject.QNQLevel,
-                QEQLevel = iefpsubject.QEQLevel,
-                Component = iefpsubject.Component,
-                CourseId = 3,
-                Course = await _courseRepository.GetByIdAsync(3),
-                TeacherId = 1,
-                Teacher = await _teacherRepository.GetByIdAsync(1),
-            };
+            var subject = _converterHelper.ConvertToSubject(iefpsubject, 1, await _courseRepository.GetByIdAsync(1),
+                1, await _teacherRepository.GetByIdAsync(1), "0", true);
 
             if (subject == null)
             {
                 return NotFound();
             }
 
-            var course = await _courseRepository.GetByIdAsync(subject.CourseId);
-            subject.Course = course;
-
-            var teacher = await _teacherRepository.GetByIdAsync(subject.TeacherId);
-            subject.Teacher = teacher;
-
-            if (!await _subjectRepository.ExistsCodeAsync(subject.Code))
-                await _subjectRepository.CreateAsync(subject);
-
-            var model = _converterHelper.ToSubjectViewModel(subject);
-
-            model.Courses = _courseRepository.GetAll();
-
-            model.Teachers = _teacherRepository.GetAll();
+            var model = _converterHelper.ToSubjectViewModel(subject, _courseRepository.GetAll().Where(c => c.Id > 1), _teacherRepository.GetAll().Where(c => c.Id > 1));
 
             return View(model);
         }
@@ -138,28 +131,17 @@ namespace School.Web.Controllers
             {
                 var iefpsubject = await _iefpSubjectRepository.GetByIdAsync(model.Id);
 
-                var subject = new Subject
-                {
-                    Id = model.Id,
-                    Code = iefpsubject.Code,
-                    Name = iefpsubject.Name,
-                    Duration = iefpsubject.Duration,
-                    Credits = model.Credits,
-                    ReferenceCode = iefpsubject.ReferenceCode,
-                    FieldCode = iefpsubject.FieldCode,
-                    Field = iefpsubject.Field,
-                    Reference = iefpsubject.Reference,
-                    QNQLevel = iefpsubject.QNQLevel,
-                    QEQLevel = iefpsubject.QEQLevel,
-                    Component = iefpsubject.Component,
-                    CourseId = model.CourseId,
-                    Course = await _courseRepository.GetByIdAsync(model.CourseId),
-                    TeacherId = model.TeacherId,
-                    Teacher = await _teacherRepository.GetByIdAsync(model.TeacherId)
-                };
+                var subject = _converterHelper.ConvertToSubject(iefpsubject, model.CourseId, await _courseRepository.GetByIdAsync(model.CourseId),
+                model.TeacherId, await _teacherRepository.GetByIdAsync(model.TeacherId), model.Credits, true);
 
-                await _subjectRepository.CreateAsync(subject);
-                return RedirectToAction(nameof(Index));
+                if (!await _subjectRepository.ExistsCodeAsync(subject.Code))
+                {
+                    await _subjectRepository.CreateAsync(subject);
+                    return RedirectToAction(nameof(Index));
+                }
+
+                //await _subjectRepository.CreateAsync(subject);
+                //return RedirectToAction(nameof(Index));
             }
             return View(model);
         }
@@ -179,17 +161,14 @@ namespace School.Web.Controllers
                 return NotFound();
             }
 
-            var course = await _courseRepository.GetByIdAsync(subject.CourseId);
-            subject.Course = course;
+            subject.Course = await _courseRepository.GetByIdAsync(subject.CourseId);
+            subject.Teacher = await _teacherRepository.GetByIdAsync(subject.TeacherId);
 
-            var teacher = await _teacherRepository.GetByIdAsync(subject.TeacherId);
-            subject.Teacher = teacher;
+            var model = _converterHelper.ToSubjectViewModel(subject, _courseRepository.GetAll().Where(c => c.Id > 1), _teacherRepository.GetAll().Where(c => c.Id > 1));
 
-            var model = _converterHelper.ToSubjectViewModel(subject);
-
-            model.Courses = _courseRepository.GetAll();
-
-            model.Teachers = _teacherRepository.GetAll();
+            //var model = _converterHelper.ToSubjectViewModel(subject);
+            //model.Courses = _courseRepository.GetAll();
+            //model.Teachers = _teacherRepository.GetAll();
 
             return View(model);
         }
@@ -203,17 +182,14 @@ namespace School.Web.Controllers
             {
                 try
                 {
-                    var subject = await _subjectRepository.GetByIdAsync(model.Id);
+                    //var subject = await _subjectRepository.GetByIdAsync(model.Id);
+                    //subject.Course = await _courseRepository.GetByIdAsync(model.CourseId);
+                    //subject.Teacher = await _teacherRepository.GetByIdAsync(model.TeacherId);
 
-                    var course = await _courseRepository.GetByIdAsync(model.CourseId);
-                    subject.Course = course;
+                    var subject = _converterHelper.ToSubject(model, await _courseRepository.GetByIdAsync(model.CourseId),
+                        await _teacherRepository.GetByIdAsync(model.TeacherId), true);
 
-                    var teacher = await _teacherRepository.GetByIdAsync(model.TeacherId);
-                    subject.Teacher = teacher;
-
-                    //var subject = _converterHelper.ToSubject(model, true);
-
-                    //subject.Id = model.Id;
+                    subject.Id = model.Id;
 
                     await _subjectRepository.UpdateAsync(subject);
                     return RedirectToAction(nameof(Index));
@@ -267,11 +243,11 @@ namespace School.Web.Controllers
                     else
                     {
                         XSSFWorkbook hssfwb = new XSSFWorkbook(stream); //This will read 2007 Excel format  
-                        sheet = hssfwb.GetSheetAt(0); //get first sheet from workbook   
+                        sheet = hssfwb.GetSheetAt(0); //get first sheet from workbook
                     }
                     IRow headerRow = sheet.GetRow(0); //Get Header Row
                     int cellCount = headerRow.LastCellNum;
-                    sb.Append("<table class='table table-bordered'><tr>");
+                    sb.Append("<div class='panel-body'><table class='table table-hover table-responsive table-striped' style='width:100%; height:400px' id='MyTable'><tr>");
                     for (int j = 0; j < cellCount; j++)
                     {
                         NPOI.SS.UserModel.ICell cell = headerRow.GetCell(j);
@@ -324,7 +300,7 @@ namespace School.Web.Controllers
 
                         sb.AppendLine("</tr>");
                     }
-                    sb.Append("</table>");
+                    sb.Append("</table></div>");
                 }
             }
             return this.Content(sb.ToString());

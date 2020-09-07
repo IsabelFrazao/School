@@ -21,6 +21,9 @@
     <!-- Sync Stylesheet -->
     <link rel="stylesheet" href="~/sync.css" type="text/css">
 
+    <!-- DataTables Stylesheet -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+
 </head>
 <body>
     <partial name="_CookieConsentPartial" />
@@ -77,11 +80,11 @@
                                     <div>
                                         <a asp-area="" asp-controller="Home" asp-action="Index"><b>HOME</b></a>
                                     </div>
-                                    <div class="col-md-2"></div>
+                                    <div class="col-md-3"></div>
                                     <div class="col-md-2">
                                         <a asp-area="" asp-controller="Home" asp-action="About"><b>ABOUT</b></a>
                                     </div>
-                                    <div class="col-md-2"></div>
+                                    <div class="col-md-3"></div>
                                     <div class="col-md-2">
                                         <a asp-area="" asp-controller="Home" asp-action="Contact"><b>CONTACT</b></a>
                                     </div>
@@ -125,7 +128,7 @@
                     </nav>
                 </div>
             </div>
-            @*</div>*@
+            </div>
     </header>
     <!-- ##### Header Area End ##### -->
 
@@ -148,6 +151,13 @@
 
     <!-- Syncfusion Essential JS 2 Scripts -->
     <script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js"></script>
+
+    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable();
+        });
+    </script>
 
     @RenderSection("Scripts", required: false)
     <ejs-scripts></ejs-scripts>

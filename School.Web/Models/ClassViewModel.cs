@@ -12,5 +12,9 @@ namespace School.Web.Models
         public string[] Classrooms = new[] { "3.01", "3.02" };
 
         public IEnumerable<Student> Students { get; set; }
+
+        public IEnumerable<Teacher> Teachers { get; set; }
+
+        public IEnumerable<Subject> Subjects { get; set; }
     }
 }

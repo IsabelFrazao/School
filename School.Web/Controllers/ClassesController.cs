@@ -5,6 +5,7 @@ using School.Web.Data.Repositories;
 using School.Web.Helpers;
 using School.Web.Models;
 using Syncfusion.EJ2.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,14 +16,19 @@ namespace School.Web.Controllers
     {
         private readonly IClassRepository _classRepository;
         private readonly ICourseRepository _courseRepository;
+        private readonly ITeacherRepository _teacherRepository;
         private readonly IStudentRepository _studentRepository;
+        private readonly ISubjectRepository _subjectRepository;
         private readonly IConverterHelper _converterHelper;
 
-        public ClassesController(IClassRepository classRepository, ICourseRepository courseRepository, IStudentRepository studentRepository, IConverterHelper converterHelper)
+        public ClassesController(IClassRepository classRepository, ICourseRepository courseRepository, ITeacherRepository teacherRepository,
+            IStudentRepository studentRepository, ISubjectRepository subjectRepository, IConverterHelper converterHelper)
         {
             _classRepository = classRepository;
             _courseRepository = courseRepository;
+            _teacherRepository = teacherRepository;
             _studentRepository = studentRepository;
+            _subjectRepository = subjectRepository;
             _converterHelper = converterHelper;
         }
 
@@ -42,13 +48,19 @@ namespace School.Web.Controllers
 
             var classes = await _classRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
 
-            var course = await _courseRepository.GetByIdAsync(classes.CourseId);
-            classes.Course = course;
+            //classes.Course = await _courseRepository.GetByIdAsync(classes.CourseId);
 
-            var model = _converterHelper.ToClassViewModel(classes);
+            var model = _converterHelper.ToClassViewModel(classes, await _courseRepository.GetByIdAsync(classes.CourseId),
+                _studentRepository.GetAll().Where(e => e.ClassId == id.Value),
+                _subjectRepository.GetAll().Where(e => e.CourseId == classes.CourseId));
 
-            var students = _studentRepository.GetAll().Where(e => e.ClassId == id.Value);
-            model.Students = students;
+            //foreach (var subject in model.Subjects)
+            //{
+            //   model.Teachers = model.Teachers.All(e => e.Id == subject.TeacherId /*await _teacherRepository.GetByIdAsync(subject.TeacherId)*/);
+            //}
+
+            //var students = _studentRepository.GetAll().Where(e => e.ClassId == id.Value);
+            //model.Students = students;
 
             if (classes == null)
             {
@@ -61,7 +73,7 @@ namespace School.Web.Controllers
         // GET: ClassesController/Create
         public IActionResult Create()
         {
-            var model = new ClassViewModel { Courses = _courseRepository.GetAll(), Students = _studentRepository.GetAll() };
+            var model = new ClassViewModel { Courses = _courseRepository.GetAll().Where(c => c.Id > 1), Students = _studentRepository.GetAll() };
 
             //model.Students = _studentRepository.GetAll().Where(e => e.ClassId == 0);
 
@@ -75,10 +87,10 @@ namespace School.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var course = await _courseRepository.GetByIdAsync(model.CourseId);
-                model.Course = course;
+                //var course = await _courseRepository.GetByIdAsync(model.CourseId);
+                //model.Course = course;
 
-                var classes = _converterHelper.ToClass(model, true);
+                var classes = _converterHelper.ToClass(model, await _courseRepository.GetByIdAsync(model.CourseId), true);
 
                 //foreach(var student in model.Students)
                 //{
@@ -102,18 +114,17 @@ namespace School.Web.Controllers
 
             var classes = await _classRepository.GetByIdAsync(id.Value);
 
-            var course = await _courseRepository.GetByIdAsync(classes.CourseId);
-            classes.Course = course;
+            //classes.Course = await _courseRepository.GetByIdAsync(classes.CourseId);
 
             if (classes == null)
             {
                 return NotFound();
             }
 
-            var model = _converterHelper.ToClassViewModel(classes);
+            var model = _converterHelper.ToClassViewModel(classes, await _courseRepository.GetByIdAsync(classes.CourseId), _studentRepository.GetAll().Where(e => e.ClassId == id.Value), _subjectRepository.GetAll().Where(e => e.CourseId == classes.CourseId));
 
-            var students = _studentRepository.GetAll().Where(e => e.ClassId == id.Value);
-            model.Students = students;
+            //var students = _studentRepository.GetAll().Where(e => e.ClassId == id.Value);
+            //model.Students = students;
 
             return View(model);
         }
@@ -127,10 +138,9 @@ namespace School.Web.Controllers
             {
                 try
                 {
-                    var course = await _courseRepository.GetByIdAsync(model.CourseId);
-                    model.Course = course;
+                    //model.Course = await _courseRepository.GetByIdAsync(model.CourseId);
 
-                    var classes = _converterHelper.ToClass(model, true);
+                    var classes = _converterHelper.ToClass(model, await _courseRepository.GetByIdAsync(model.CourseId), true);
 
                     classes.Id = model.Id;
 

@@ -7,6 +7,7 @@ using School.Web.Models;
 using Syncfusion.EJ2.Linq;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace School.Web.Controllers
@@ -44,11 +45,9 @@ namespace School.Web.Controllers
 
             var student = await _studentRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
 
-            var course = await _courseRepository.GetByIdAsync(student.CourseId);            
-            student.Course = course;
+            student.Course = await _courseRepository.GetByIdAsync(student.CourseId);
 
-            var classes = await _classRepository.GetByIdAsync(student.ClassId);
-            student.Class = classes;
+            student.Class = await _classRepository.GetByIdAsync(student.ClassId);
 
             if (student == null)
             {
@@ -63,7 +62,7 @@ namespace School.Web.Controllers
         {
             ViewBag.idCount = (_studentRepository.GetAll().Count() + 1).ToString();
 
-            var model = new StudentViewModel{Courses = _courseRepository.GetAll(), Classes = _classRepository.GetAll()};
+            var model = new StudentViewModel{Courses = _courseRepository.GetAll().Where(c => c.Id > 1), Classes = _classRepository.GetAll()};
 
             var school = string.Empty;
 
@@ -90,13 +89,11 @@ namespace School.Web.Controllers
                     path = await _imageHelper.UploadImageAsync(model.ImageFile, "Students");
                 }
 
-                var course = await _courseRepository.GetByIdAsync(model.CourseId);
-                model.Course = course;
+                //model.Course = await _courseRepository.GetByIdAsync(model.CourseId);
 
-                var classes = await _classRepository.GetByIdAsync(model.ClassId);
-                model.Class = classes;
+                //model.Class = await _classRepository.GetByIdAsync(model.ClassId);
 
-                var student = _converterHelper.ToStudent(model, path, true);
+                var student = _converterHelper.ToStudent(model, path, await _courseRepository.GetByIdAsync(model.CourseId), await _classRepository.GetByIdAsync(model.ClassId), true);
                 
                 await _studentRepository.CreateAsync(student);
                 return RedirectToAction(nameof(Index));
@@ -114,22 +111,20 @@ namespace School.Web.Controllers
 
             var student = await _studentRepository.GetByIdAsync(id.Value);
 
-            var course = await _courseRepository.GetByIdAsync(student.CourseId);
-            student.Course = course;
+            //student.Course = await _courseRepository.GetByIdAsync(student.CourseId);
 
-            var classes = await _classRepository.GetByIdAsync(student.ClassId);
-            student.Class = classes;
+            //student.Class = await _classRepository.GetByIdAsync(student.ClassId);
 
             if (student == null)
             {
                 return NotFound();
             }
 
-            var model = _converterHelper.ToStudentViewModel(student);
+            var model = _converterHelper.ToStudentViewModel(student, await _courseRepository.GetByIdAsync(student.CourseId), _courseRepository.GetAll().Where(c => c.Id > 1), await _classRepository.GetByIdAsync(student.ClassId), _classRepository.GetAll());
 
-            model.Courses = _courseRepository.GetAll();
+            //model.Courses = _courseRepository.GetAll().Where(c => c.Id > 1);
 
-            model.Classes = _classRepository.GetAll();
+            //model.Classes = _classRepository.GetAll();
 
             var school = string.Empty;
 
@@ -158,13 +153,11 @@ namespace School.Web.Controllers
                         path = await _imageHelper.UploadImageAsync(model.ImageFile, "Students");
                     }
 
-                    var course = await _courseRepository.GetByIdAsync(model.CourseId);
-                    model.Course = course;
+                    //model.Course = await _courseRepository.GetByIdAsync(model.CourseId);
 
-                    var classes = await _classRepository.GetByIdAsync(model.ClassId);
-                    model.Class = classes;
+                    //model.Class = await _classRepository.GetByIdAsync(model.ClassId);
 
-                    var student = _converterHelper.ToStudent(model, path, true);
+                    var student = _converterHelper.ToStudent(model, path, await _courseRepository.GetByIdAsync(model.CourseId), await _classRepository.GetByIdAsync(model.ClassId), true);
 
                     student.Id = model.Id;
 
@@ -195,6 +188,10 @@ namespace School.Web.Controllers
             }
 
             var student = await _studentRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
+
+            student.Course = await _courseRepository.GetByIdAsync(student.CourseId);
+
+            student.Class = await _classRepository.GetByIdAsync(student.ClassId);
 
             if (student == null)
             {

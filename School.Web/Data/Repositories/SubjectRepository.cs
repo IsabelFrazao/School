@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using School.Web.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace School.Web.Data.Repositories
@@ -19,6 +16,11 @@ namespace School.Web.Data.Repositories
         public async Task<bool> ExistsCodeAsync(string code)
         {
             return await _context.Set<Subject>().AnyAsync(e => e.Code == code);
+        }
+
+        public async Task<Subject> GetByCodeAsync(string code)
+        {
+            return await _context.Set<Subject>().FirstOrDefaultAsync(e => e.Code == code);//e=Entity Genérica
         }
     }
 }

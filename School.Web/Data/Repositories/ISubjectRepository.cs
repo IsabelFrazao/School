@@ -9,5 +9,7 @@ namespace School.Web.Data.Repositories
     public interface ISubjectRepository : IGenericRepository<Subject>
     {
         Task<bool> ExistsCodeAsync(string code);
+
+        Task<Subject> GetByCodeAsync(string code);
     }
 }

@@ -35,7 +35,7 @@
                             </div>
                             <!--BANNER END-->
                             <br />
-                            <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:850px;">
+                            <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:450px;">
                                 <label asp-for="CourseId" class="form-label"><b>Course:</b></label>
                                 <span asp-validation-for="CourseId" class="text-danger"></span>
                                 <ejs-combobox id="courses" ejs-for="Course.Name" dataSource="Model.Courses" cssClass="e-filled" placeholder="Select a Course" index="2" popupHeight="230px" change="valueChange">
@@ -54,15 +54,15 @@
                                 <ejs-combobox id="classrooms" ejs-for="Room" dataSource="Model.Classrooms" cssClass="e-filled" placeholder="Select a Classroom" index="2" popupHeight="230px" change="valueChange">
                                     <e-combobox-fields text="Classroom" ></e-combobox-fields> @*dataSource="@ViewBag.data"*@
                                 </ejs-combobox>
-                                <div style="height:48px;"></div>
+                                <!--<div style="height:48px;"></div>
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-4">
                                         <label class="form-label"><b>Subjects:</b></label>
                                         <ejs-listbox id="subjects-select-listbox">
                                             <e-listbox-selectionsettings showCheckbox="true"></e-listbox-selectionsettings>
-                                        </ejs-listbox> @*dataSource="ViewBag.data"*@
-                                        <br />
+                                        </ejs-listbox>--> @*dataSource="ViewBag.data"*@
+                                        <!--<br />
                                         <label class="form-label"><b>Total:</b></label>
                                         <label class="form-label">2</label>
                                     </div>
@@ -72,13 +72,13 @@
                                         <ejs-listbox ejs-for="Students" dataSource="Model.Students" id="students-select-listbox">
                                             <e-listbox-selectionsettings showCheckbox="true" ></e-listbox-selectionsettings>
                                             <e-listbox-fields text="FullName" value="Id" ></e-listbox-fields>
-                                        </ejs-listbox> @*dataSource="ViewBag.data"*@
-                                        <br />
+                                        </ejs-listbox>--> @*dataSource="ViewBag.data"*@
+                                        <!--<br />
                                         <label class="form-label"><b>Total:</b></label>
                                         <label class="form-label">2</label>
                                     </div>
                                     <div class="col-md-1"></div>
-                                </div>
+                                </div>-->
                             </div>
                         </div>
                         <!-- ##### About Us Area End ##### -->

@@ -40,20 +40,12 @@
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-3">
-                                        @if (!string.IsNullOrEmpty(Model.PhotoUrl))
-                                        {
-                                            <picture>
-                                                <img src="@Url.Content(Model.PhotoUrl)" alt="image" style="width:200px; height:300px; max-width:100%; height:auto" />
-                                            </picture>
-                                        }
-                                        @*<picture>
-                                                <img src="~/img/bg-img/t1.jpg" alt="Girl1" style="width:auto; max-width:100%;">
-                                            </picture>*@
+                                        <img id="imgpreview" alt="image" style="width:200px; height:300px; max-width:100%; height:auto" />
                                     </div>
                                     <div class="col-md-8">
                                         <label asp-for="Id" class="form-label"><b>Student Number:</b></label>
                                         <label asp-for="Id" class="form-label">@ViewBag.idCount</label>
-                                        <input asp-for="ImageFile" class="form-control" type="file"/>
+                                        <input asp-for="ImageFile" class="form-control" type="file" onchange="previewimg(event)" />
                                     </div>
                                 </div>
                                 <label asp-for="FullName" class="form-label"><b>Name:</b></label>
@@ -81,7 +73,8 @@
                                 <input asp-for="Address" type="text" class="form-control" id="address" placeholder="Address">
                                 <label asp-for="ZipCode" class="form-label"><b>Zip-Code:</b></label>
                                 <span asp-validation-for="ZipCode" class="text-danger"></span>
-                                <input asp-for="ZipCode" type="text" class="form-control" id="zip-code" placeholder="Zip-Code">
+                                <ejs-maskedtextbox id="mask2" ejs-for="ZipCode" mask="[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9]" placeholder="0000-000" cssClass="e-filled" floatLabelType="Never"></ejs-maskedtextbox>
+                                @*<input asp-for="ZipCode" type="text" class="form-control" id="zip-code" placeholder="Zip-Code">*@
                                 <label asp-for="City" class="form-label"><b>City:</b></label>
                                 <span asp-validation-for="City" class="text-danger"></span>
                                 <input asp-for="City" type="text" class="form-control" id="city" placeholder="City">
@@ -159,30 +152,30 @@
                             <br />
                             <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
                                 <label asp-for="CourseId" class="form-label"><b>Course:</b></label>
-                                @*<span asp-validation-for="Course" class="text-danger"></span>*@
+                                <span asp-validation-for="Course" class="text-danger"></span>
                                 <ejs-combobox id="courses" ejs-for="CourseId" dataSource="Model.Courses" cssClass="e-filled" placeholder="Select a Course" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="Name" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
+                                    <e-combobox-fields text="Name" value="Id"></e-combobox-fields> 
                                 </ejs-combobox>
                                 <label class="form-label"><b>Schedule:</b></label>
-                                @*<span asp-validation-for="Course" class="text-danger"></span>*@
+                                <span asp-validation-for="Schedule" class="text-danger"></span>
                                 <ejs-combobox id="schedules" ejs-for="Schedule" dataSource="Model.Schedules" cssClass="e-filled" placeholder="Select a Schedule" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="Schedule"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
+                                    <e-combobox-fields text="Schedule"></e-combobox-fields> 
                                 </ejs-combobox>
                                 <label class="form-label"><b>Class:</b></label>
-                                @*<span asp-validation-for="Course" class="text-danger"></span>*@
+                                <span asp-validation-for="Class" class="text-danger"></span>
                                 <ejs-combobox id="classes" ejs-for="ClassId" dataSource="Model.Classes" cssClass="e-filled" placeholder="Select a Class" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="Name" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
+                                    <e-combobox-fields text="Name" value="Id"></e-combobox-fields> 
                                 </ejs-combobox>
                                 <label class="form-label"><b>School Year:</b></label>
-                                @*<span asp-validation-for="Course" class="text-danger"></span>*@
+                                <span asp-validation-for="SchoolYear" class="text-danger"></span>
                                 <ejs-combobox id="schoolyears" ejs-for="SchoolYear" dataSource="Model.SchoolYears" cssClass="e-filled" placeholder="Select a School Year" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="SchoolYear" ></e-combobox-fields> @*dataSource="@ViewBag.data"*@
+                                    <e-combobox-fields text="SchoolYear" ></e-combobox-fields> 
                                 </ejs-combobox>
                             </div>
                         </div>
                         <!-- ##### About Us Area End ##### -->
-                        <input asp-action="Create" class="btn academy-btn mt-30" type="submit" value="Create" style="margin-left:30%" />
-                        <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:5%">Back</a>
+                        <input asp-action="Create" class="btn academy-btn mt-30" type="submit" value="Create" style="margin-left:33%" />
+                        <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:3%">Back</a>
                     </div>
                 </form>
             </div>
@@ -192,4 +185,11 @@
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+<script>
+    var previewimg = function (event) {
+        var result = document.getElementById("imgpreview");
+        result.src = URL.createObjectURL(event.target.files[0]);
+    }
+</script>
 }

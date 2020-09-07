@@ -20,5 +20,10 @@ namespace School.Web.Data.Repositories
         {
             return await _context.Set<IEFPSubject>().AnyAsync(e => e.Code == code);
         }
+
+        public async Task<Subject> GetByCodeAsync(string code)
+        {
+            return await _context.Set<Subject>().FirstOrDefaultAsync(e => e.Code == code);//e=Entity Genérica
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace School.Web.Data.Entities
         public int Id { get; set; }
 
         [Display(Name = "Code")]
-        //[Required(ErrorMessage = "Field {0} is mandatory")]
+        [Required(ErrorMessage = "Field {0} is mandatory")]
         //[StringLength(50, ErrorMessage = "Field {0} must have between {2} and {1} characters", MinimumLength = 3)]
         public string Code { get; set; }
 

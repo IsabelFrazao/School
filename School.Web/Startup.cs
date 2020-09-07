@@ -45,6 +45,7 @@ namespace School.Web
             services.AddScoped<IIEFPSubjectRepository, IEFPSubjectRepository>();
             services.AddScoped<IImageHelper, ImageHelper>();
             services.AddScoped<IConverterHelper, ConverterHelper>();
+            services.AddScoped<IFileHelper, FileHelper>();
 
 
             services.Configure<CookiePolicyOptions>(options =>

@@ -1,8 +1,9 @@
-﻿@model School.Web.Data.Entities.Subject
-
+﻿@model School.Web.Models.SubjectViewModel
 @{
     ViewData["Title"] = "Upload";
 }
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
 
 <!-- ##### Breadcumb Area Start ##### -->
 <div class="breadcumb-area bg-img" style="background-image: url(../img/bg-img/breadcumb.jpg);">
@@ -23,8 +24,8 @@
         </div>
         <section class="contact-area">
             <div class="contact-content">
-                <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
-                    <form asp-controller="Subjects" asp-action="Upload">
+                <form asp-controller="Subjects" asp-action="Upload">
+                    <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
                         <div class="container">
                             <div class="row" style="align-items: start; justify-items: flex-start">
                                 <div class="col-md-8" style="height:95px; padding-top:35px">
@@ -33,9 +34,12 @@
                                 <div class="col-md-2">
                                     <input asp-action="Import" type="button" class="btn academy-btn mt-30" name="Upload" value="Upload" id="btnupload" style="margin-top:-10px;" />
                                 </div>
-                                <div class="col-md-2">
-                                    <input asp-action="Download" type="button" class="btn academy-btn mt-30" name="Download" value="Download" id="btndownload" style="margin-top:-20px;" />
-                                </div>
+                                @*<div class="col-md-2">
+                                        <input asp-action="Download" type="button" class="btn academy-btn mt-30" name="Download" value="Download" id="btndownload" style="margin-top:-20px;" />
+                                    </div>*@
+                                @*<div class="col-md-2">
+                                         <input asp-action="Save" type="submit" class="btn academy-btn mt-30" name="Save" value="Save" id="btnsave" style="margin-top:-20px;" />
+                                    </div>*@
                             </div>
                             <div class="clearfix">&nbsp;</div>
                             <div class="row">
@@ -45,8 +49,8 @@
                         <!-- ##### About Us Area End ##### -->
                         <input asp-action="CreateIndex" class="btn academy-btn mt-30" type="submit" value="Create" style="margin-left:30%" />
                         <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:5%">Back</a>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </section>
     </div>
@@ -106,3 +110,12 @@
         });
     });
 </script>
+
+@section Scripts{
+    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable();
+        });
+    </script>
+}

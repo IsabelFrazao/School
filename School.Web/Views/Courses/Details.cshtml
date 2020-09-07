@@ -62,8 +62,8 @@
                                     </div>
                                     <br />
                                     <label class="form-label"><b>Subjects:</b></label>
-                                    <ejs-listbox id="subjects-select-listbox">
-                                        <e-listbox-selectionsettings showCheckbox="true"></e-listbox-selectionsettings>
+                                    <ejs-listbox id="subjects-select-listbox" dataSource="Model.Subjects">
+                                        <e-listbox-selectionsettings showCheckbox="false"></e-listbox-selectionsettings>
                                         <e-listbox-fields text="Name" value="Id"></e-listbox-fields>
                                     </ejs-listbox>
                                 </div>
@@ -76,7 +76,7 @@
                                     <br />
                                     <label class="form-label"><b>Classes:</b></label>
                                     <ejs-listbox dataSource="Model.Classes" id="classes-select-listbox">
-                                        <e-listbox-selectionsettings showCheckbox="true"></e-listbox-selectionsettings>
+                                        <e-listbox-selectionsettings showCheckbox="false"></e-listbox-selectionsettings>
                                         <e-listbox-fields text="Name" value="Id"></e-listbox-fields>
                                     </ejs-listbox>
                                 </div>

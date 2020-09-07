@@ -31,7 +31,7 @@ namespace School.Web.Controllers
         // GET: CoursesController
         public IActionResult Index()
         {
-            return View(_courseRepository.GetAll());
+            return View(_courseRepository.GetAll().Where(c => c.Id > 1));
         }
 
         // GET: CoursesController/Details/5
@@ -44,13 +44,13 @@ namespace School.Web.Controllers
 
             var course = await _courseRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
 
-            var coordinator = await _teacherRepository.GetByIdAsync(course.CoordinatorId);
-            course.Coordinator = coordinator;
+            //course.Coordinator = await _teacherRepository.GetByIdAsync(course.CoordinatorId);
 
-            var model = _converterHelper.ToCourseViewModel(course);
+            var model = _converterHelper.ToCourseViewModel(course, await _teacherRepository.GetByIdAsync(course.CoordinatorId),
+                 _teacherRepository.GetAll().Where(c => c.Id > 1), _classRepository.GetAll().Where(e => e.CourseId == id.Value),
+                 _subjectRepository.GetAll().Where(e => e.CourseId == id.Value));
 
-            var classes = _classRepository.GetAll().Where(e => e.CourseId == id.Value);
-            model.Classes = classes;
+            //model.Classes = _classRepository.GetAll().Where(e => e.CourseId == id.Value);
 
             if (course == null)
             {
@@ -63,9 +63,9 @@ namespace School.Web.Controllers
         // GET: CoursesController/Create
         public IActionResult Create()
         {
-            var model = new CourseViewModel { Teachers = _teacherRepository.GetAll() };
+            var model = new CourseViewModel { Teachers = _teacherRepository.GetAll().Where(c => c.Id > 1), Subjects = _subjectRepository.GetAll().Where(e => e.Field == "Áudiovisuais e Produção dos Media" || e.Field == "Ciências Informáticas" || e.Field == "Eletrónica e Automação") };
 
-            model.IEFPSubjects = _iefpSubjectRepository.GetAll().Where(e => e.Field == "Áudiovisuais e Produção dos Media" || e.Field == "Ciências Informáticas" || e.Field == "Eletrónica e Automação");//Filter by Field
+            //model.IEFPSubjects = _iefpSubjectRepository.GetAll().Where(e => e.Field == "Áudiovisuais e Produção dos Media" || e.Field == "Ciências Informáticas" || e.Field == "Eletrónica e Automação");//Filter by Field
 
             return View(model);
         }
@@ -78,18 +78,17 @@ namespace School.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var coordinator = await _teacherRepository.GetByIdAsync(model.CoordinatorId);
-                model.Coordinator = coordinator;
+                model.Coordinator = await _teacherRepository.GetByIdAsync(model.CoordinatorId);
 
                 var course = _converterHelper.ToCourse(model, true);
 
                 await _courseRepository.CreateAsync(course);
 
-                foreach (var subject in model.Subjects)
-                {
-                    subject.Course = model;
-                    await _subjectRepository.UpdateAsync(subject);
-                }
+                //foreach (var subject in model.Subjects)
+                //{
+                //    subject.Course = model;
+                //    await _subjectRepository.UpdateAsync(subject);
+                //}
 
                 return RedirectToAction(nameof(Index));
             }
@@ -106,20 +105,20 @@ namespace School.Web.Controllers
 
             var course = await _courseRepository.GetByIdAsync(id.Value);
 
-            var coordinator = await _teacherRepository.GetByIdAsync(course.CoordinatorId);
-            course.Coordinator = coordinator;
+            //course.Coordinator = await _teacherRepository.GetByIdAsync(course.CoordinatorId);
 
             if (course == null)
             {
                 return NotFound();
             }
 
-            var model = _converterHelper.ToCourseViewModel(course);
+            var model = _converterHelper.ToCourseViewModel(course, await _teacherRepository.GetByIdAsync(course.CoordinatorId),
+                 _teacherRepository.GetAll().Where(c => c.Id > 1), _classRepository.GetAll().Where(e => e.CourseId == id.Value),
+                 _subjectRepository.GetAll().Where(e => e.CourseId == id.Value));
 
-            var classes = _classRepository.GetAll().Where(e => e.CourseId == id.Value);
-            model.Classes = classes;
+            //model.Classes = _classRepository.GetAll().Where(e => e.CourseId == id.Value);
 
-            model.Teachers = _teacherRepository.GetAll();
+            //model.Teachers = _teacherRepository.GetAll();
 
             return View(model);
         }
@@ -160,12 +159,16 @@ namespace School.Web.Controllers
 
             var course = await _courseRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
 
+            var model = _converterHelper.ToCourseViewModel(course, await _teacherRepository.GetByIdAsync(course.CoordinatorId),
+                 _teacherRepository.GetAll().Where(c => c.Id > 1), _classRepository.GetAll().Where(e => e.CourseId == id.Value),
+                 _subjectRepository.GetAll().Where(e => e.CourseId == id.Value));
+
             if (course == null)
             {
                 return NotFound();
             }
 
-            return View(course);
+            return View(model);
         }
 
         // POST: CoursesController/Delete/5

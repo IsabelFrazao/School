@@ -1,12 +1,14 @@
-﻿using School.Web.Data.Entities;
+﻿using School.Web.Controllers;
+using School.Web.Data.Entities;
 using School.Web.Models;
+using System.Collections.Generic;
 
 namespace School.Web.Helpers
 {
     public class ConverterHelper : IConverterHelper
     {
         #region STUDENT
-        public Student ToStudent(StudentViewModel model, string path, bool isNew)//Converts to Model
+        public Student ToStudent(StudentViewModel model, string path, Course course, Class classes, bool isNew)//Converts to Model
         {
             return new Student
             {
@@ -27,15 +29,15 @@ namespace School.Web.Helpers
                 Telephone = model.Telephone,
                 Email = model.Email,
                 Schedule = model.Schedule,
-                CourseId = model.Course.Id,
-                Course = model.Course,
-                ClassId = model.Class.Id,
-                Class = model.Class,
+                Course = course,
+                CourseId = model.CourseId,
+                Class = classes,
+                ClassId = model.ClassId,                
                 SchoolYear = model.SchoolYear
             };
         }
 
-        public StudentViewModel ToStudentViewModel(Student model)//Converts to ViewModel
+        public StudentViewModel ToStudentViewModel(Student model, Course course, IEnumerable<Course> courses, Class classes, IEnumerable<Class> listclasses)//Converts to ViewModel
         {
             return new StudentViewModel
             {
@@ -56,10 +58,12 @@ namespace School.Web.Helpers
                 Telephone = model.Telephone,
                 Email = model.Email,
                 Schedule = model.Schedule,
-                CourseId = model.Course.Id,
-                Course = model.Course,
-                ClassId = model.Class.Id,
-                Class = model.Class,
+                Course = course,
+                CourseId = model.CourseId,                
+                Courses = courses,
+                Class = classes,
+                ClassId = model.ClassId,                
+                Classes = listclasses,
                 SchoolYear = model.SchoolYear
             };
         }
@@ -89,7 +93,7 @@ namespace School.Web.Helpers
             };
         }
 
-        public TeacherViewModel ToTeacherViewModel(Teacher model)//Converts to ViewModel
+        public TeacherViewModel ToTeacherViewModel(Teacher model, IEnumerable<Subject> subjects)//Converts to ViewModel
         {
             return new TeacherViewModel
             {
@@ -108,13 +112,14 @@ namespace School.Web.Helpers
                 MaritalStatus = model.MaritalStatus,
                 Nationality = model.Nationality,
                 Telephone = model.Telephone,
-                Email = model.Email
+                Email = model.Email,
+                Subjects = subjects
             };
         }
         #endregion TEACHER
 
         #region CLASS
-        public Class ToClass(ClassViewModel model, bool isNew)//Converts to Model
+        public Class ToClass(ClassViewModel model, Course course, bool isNew)//Converts to Model
         {
             return new Class
             {
@@ -122,12 +127,12 @@ namespace School.Web.Helpers
                 Name = model.Name,
                 Schedule = model.Schedule,
                 Room = model.Room,
-                CourseId = model.Course.Id,
-                Course = model.Course
+                CourseId = course.Id,
+                Course = course
             };
         }
 
-        public ClassViewModel ToClassViewModel(Class model)//Converts to ViewModel
+        public ClassViewModel ToClassViewModel(Class model, Course course, IEnumerable<Student> students, IEnumerable<Subject> subjects)//Converts to ViewModel
         {
             return new ClassViewModel
             {
@@ -135,8 +140,10 @@ namespace School.Web.Helpers
                 Name = model.Name,
                 Schedule = model.Schedule,
                 Room = model.Room,
-                CourseId = model.Course.Id,
-                Course = model.Course
+                CourseId = model.CourseId,
+                Course = course,
+                Students = students,
+                Subjects = subjects
             };
         }
         #endregion CLASS
@@ -150,14 +157,14 @@ namespace School.Web.Helpers
                 Field = model.Field,
                 Name = model.Name,
                 Description = model.Description,
-                CoordinatorId = model.Coordinator.Id,
+                CoordinatorId = model.CoordinatorId,
                 Coordinator = model.Coordinator,
                 BeginDate = model.BeginDate.Date,
                 EndDate = model.EndDate.Date
             };
         }
 
-        public CourseViewModel ToCourseViewModel(Course model)//Converts to ViewModel
+        public CourseViewModel ToCourseViewModel(Course model, Teacher coordinator, IEnumerable<Teacher> teachers, IEnumerable<Class> classes, IEnumerable<Subject> subjects)//Converts to ViewModel
         {
             return new CourseViewModel
             {
@@ -165,16 +172,19 @@ namespace School.Web.Helpers
                 Field = model.Field,
                 Name = model.Name,
                 Description = model.Description,
-                CoordinatorId = model.Coordinator.Id,
-                Coordinator = model.Coordinator,
+                CoordinatorId = model.CoordinatorId,
+                Coordinator = coordinator,
                 BeginDate = model.BeginDate.Date,
-                EndDate = model.EndDate.Date
+                EndDate = model.EndDate.Date,
+                Teachers = teachers,
+                Classes = classes,
+                Subjects = subjects
             };
         }
         #endregion COURSE
 
         #region SUBJECT
-        public Subject ToSubject(SubjectViewModel model, bool isNew)//Converts to Model
+        public Subject ToSubject(SubjectViewModel model, Course course, Teacher teacher, bool isNew)//Converts to Model
         {
             return new Subject
             {
@@ -190,14 +200,14 @@ namespace School.Web.Helpers
                 QNQLevel = model.QNQLevel,
                 QEQLevel = model.QEQLevel,
                 Component = model.Component,
-                CourseId = model.Course.Id,
+                CourseId = model.CourseId,
                 Course = model.Course,
-                TeacherId = model.Teacher.Id,
+                TeacherId = model.TeacherId,
                 Teacher = model.Teacher
             };
         }
 
-        public SubjectViewModel ToSubjectViewModel(Subject model)//Converts to ViewModel
+        public SubjectViewModel ToSubjectViewModel(Subject model, IEnumerable<Course> courses, IEnumerable<Teacher> teachers)//Converts to ViewModel
         {
             return new SubjectViewModel
             {
@@ -213,12 +223,84 @@ namespace School.Web.Helpers
                 QNQLevel = model.QNQLevel,
                 QEQLevel = model.QEQLevel,
                 Component = model.Component,
-                CourseId = model.Course.Id,
+                CourseId = model.CourseId,
                 Course = model.Course,
-                TeacherId = model.Teacher.Id,
-                Teacher = model.Teacher
+                TeacherId = model.TeacherId,
+                Teacher = model.Teacher,
+                Courses = courses,
+                Teachers = teachers
+            };
+        }
+
+        public Subject ConvertToSubject(IEFPSubject model, int courseid, Course course, int teacherid, Teacher teacher, string credits, bool isNew)
+        {
+            return new Subject
+            {
+                Id = isNew ? 0 : model.Id,
+                Code = model.Code,
+                Name = model.Name,
+                Duration = model.Duration,
+                Credits = credits,
+                ReferenceCode = model.ReferenceCode,
+                FieldCode = model.FieldCode,
+                Field = model.Field,
+                Reference = model.Reference,
+                QNQLevel = model.QNQLevel,
+                QEQLevel = model.QEQLevel,
+                Component = model.Component,
+                CourseId = courseid,
+                Course = course,
+                TeacherId = teacherid,
+                Teacher = teacher
             };
         }
         #endregion SUBJECT
+
+        #region GRADE
+        public Grade ToGrade(GradeViewModel model, Course course, Class classes, Subject subject, Teacher teacher, Student student, bool isNew)//Converts to Model
+        {
+            return new Grade
+            {
+                Id = isNew ? 0 : model.Id, //Se o produto for novo => id = 0; senão apanhao o seu id                
+                Course = course,
+                CourseId = model.CourseId,
+                Class = classes,
+                ClassId = model.ClassId,
+                SubjectId = model.SubjectId,
+                Subject = subject,
+                TeacherId = model.TeacherId,
+                Teacher = teacher,
+                StudentId = model.StudentId,
+                Student = student,
+                FinalGrade = model.FinalGrade,
+                Approval = model.FinalGrade >= 10 ? model.Approval = "Approved" : model.Approval = "Reproved"
+            };
+        }
+
+        public GradeViewModel ToGradeViewModel(Grade model, Course course, IEnumerable<Course> courses, Class classes, IEnumerable<Class> listclasses, IEnumerable<Subject> subjects, IEnumerable<Teacher> teachers, IEnumerable<Student> students)//Converts to ViewModel
+        {
+            return new GradeViewModel
+            {
+                Id = model.Id,
+                Course = course,
+                CourseId = model.CourseId,
+                Courses = courses,
+                Class = classes,
+                ClassId = model.ClassId,
+                Classes = listclasses,
+                SubjectId = model.SubjectId,
+                Subject = model.Subject,
+                Subjects = subjects,
+                TeacherId = model.Subject.TeacherId,
+                Teacher = model.Subject.Teacher,
+                Teachers = teachers,
+                StudentId = model.StudentId,
+                Student = model.Student,
+                Students = students,
+                FinalGrade = model.FinalGrade,
+                Approval = model.FinalGrade >= 10 ? model.Approval = "Approved" : model.Approval = "Reproved"
+            };
+        }
+        #endregion GRADE
     }
 }

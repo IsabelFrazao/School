@@ -1,4 +1,4 @@
-﻿@model School.Web.Data.Entities.Teacher
+﻿@model School.Web.Models.TeacherViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -145,24 +145,25 @@
                         <br />
                         <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
                             <label class="form-label"><b>Subjects:</b></label>
-                            <!-- ListView element -->
-                            <ejs-listview enable="true" id="subjectchecklistview" showCheckBox="true">
-                            </ejs-listview>
+                            <ejs-listbox id="subjects-select-listbox" dataSource="Model.Subjects">
+                                <e-listbox-selectionsettings></e-listbox-selectionsettings>
+                                <e-listbox-fields text="Name" value="Id"></e-listbox-fields>
+                            </ejs-listbox>
                             <div style="height:48px;"></div>
                             <div class="row">
                                 <div class="col-md-1"></div>
                                 <div class="col-md-4">
                                     <label class="form-label"><b>Classes:</b></label>
-                                    <ejs-listbox id="classes-select-listbox">
-                                        <e-listbox-selectionsettings showCheckbox="false"></e-listbox-selectionsettings>
+                                    <ejs-listbox id="classes-select-listbox" dataSource="Model.Classes">
+                                        <e-listbox-selectionsettings ></e-listbox-selectionsettings>
                                         <e-listbox-fields text="Name" value="Id"></e-listbox-fields>
                                     </ejs-listbox>
                                 </div>
                                 <div class="col-md-2"></div>
                                 <div class="col-md-4">
                                     <label class="form-label"><b>Courses:</b></label>
-                                    <ejs-listbox id="courses-select-listbox">
-                                        <e-listbox-selectionsettings showCheckbox="false"></e-listbox-selectionsettings>
+                                    <ejs-listbox id="courses-select-listbox" dataSource="Model.Courses">
+                                        <e-listbox-selectionsettings ></e-listbox-selectionsettings>
                                         <e-listbox-fields text="Name" value="Id"></e-listbox-fields>
                                     </ejs-listbox>
                                 </div>
@@ -171,7 +172,7 @@
                         </div>
                     </div>
                     <!-- ##### About Us Area End ##### -->
-                    <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:40%">Back</a>
+                    <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:45%">Back</a>
                 </div>
             </div>
         </section>

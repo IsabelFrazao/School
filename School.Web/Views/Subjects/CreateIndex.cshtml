@@ -23,58 +23,57 @@
         </div>
         <section class="contact-area">
             <div class="contact-content">
-                <!--<div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">-->
-                @*<a asp-action="Upload" class="btn academy-btn mt-30" style="margin-left:40%">Upload Subjects</a>
-                    <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
-                        <h6><br /></h6>
-                    </div>
-                    <div class="blog-post-search-widget mb-30">
-                        <form action="#" method="post">
-                            <input type="search" name="search" id="Search" placeholder="Search">
-                            <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
-                        </form>
-                    </div>*@
-                <!--</div>-->
                 <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
-                    <table class="table" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Code)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Name)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Field)
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.IEFPSubjects)
-                            {
+                    <div class="panel-body">
+                        <table class="table table-hover table-responsive table-striped" style="width: 100%;height: 400px" id="MyTable">
+                            <thead>
                                 <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Code)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Name)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Field)
-                                    </td>
-                                    <td>
-                                        <a asp-action="Create" asp-route-id="@item.Id">Create</a> |
-                                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                                    </td>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Code)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Name)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Field)
+                                    </th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
-                    <!-- ##### About Us Area End ##### -->
-                    <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:40%">Back</a>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.IEFPSubjects)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Code)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Name)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Field)
+                                        </td>
+                                        <td>
+                                            <a asp-action="Create" asp-route-id="@item.Id">Create</a> @*|
+                                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>*@
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+                <!-- ##### About Us Area End ##### -->
+                <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:40%">Back</a>
             </div>
         </section>
     </div>
 </section>
+
+@section Scripts{
+    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable();
+        });
+    </script>
+}

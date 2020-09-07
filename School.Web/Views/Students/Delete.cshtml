@@ -48,8 +48,8 @@
                                         </picture>
                                     }
                                     @*<picture>
-            <img src="~/img/bg-img/t1.jpg" alt="Girl1" style="width:auto; max-width:100%;">
-        </picture>*@
+                                            <img src="~/img/bg-img/t1.jpg" alt="Girl1" style="width:auto; max-width:100%;">
+                                        </picture>*@
                                 </div>
                                 <div class="col-md-8">
                                     <br />
@@ -196,44 +196,44 @@
                                 </thead>
                                 <tbody>
                                     @*@foreach (var item in Model)
-                            {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Name)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Price)
-                                    </td>
-                                    <td>
-                                        @if (!string.IsNullOrEmpty(item.ImageUrl))
                                         {
-                                            <img src="@Url.Content(item.ImageUrl)" alt="image" style="width:100px; height:150px; max-width:100%; height:auto" />
-                                        }
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.LastPurchase)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.LastSale)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.IsAvailable)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Stock)
-                                    </td>
-                                </tr>
-                            }*@
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Name)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Price)
+                                                </td>
+                                                <td>
+                                                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                                    {
+                                                        <img src="@Url.Content(item.ImageUrl)" alt="image" style="width:100px; height:150px; max-width:100%; height:auto" />
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.LastPurchase)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.LastSale)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.IsAvailable)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Stock)
+                                                </td>
+                                            </tr>
+                                        }*@
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     <!-- ##### About Us Area End ##### -->
-                    <form asp-action="Delete" style="margin-left:30%">
+                    <form asp-action="Delete" style="margin-left:33%">
                         <input type="hidden" asp-for="Id" />
                         <input type="submit" value="Delete" class="btn academy-btn mt-30" />
                     </form>
-                    <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:5%">Back</a>
+                    <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:3%">Back</a>
                 </div>
             </div>
         </section>

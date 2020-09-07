@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NPOI.OpenXmlFormats.Spreadsheet;
 using School.Web.Data.Repositories;
 using School.Web.Helpers;
 using School.Web.Models;
@@ -30,7 +31,7 @@ namespace School.Web.Controllers
         // GET: TeachersController
         public IActionResult Index()
         {
-            return View(_teacherRepository.GetAll());
+            return View(_teacherRepository.GetAll().Where(c => c.Id > 1));
         }
 
         // GET: TeachersController/Details/5
@@ -43,7 +44,23 @@ namespace School.Web.Controllers
 
             var teacher = await _teacherRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
 
-            var model = _converterHelper.ToTeacherViewModel(teacher);
+            var model = _converterHelper.ToTeacherViewModel(teacher, _subjectRepository.GetAll().Where(c => c.TeacherId == id.Value));
+
+            if(model.Subjects != null)
+            {
+                foreach (var subject in model.Subjects)
+                {
+                    model.Courses = _courseRepository.GetAll().Where(c => c.Id == subject.CourseId);
+                }
+            }            
+
+            if(model.Courses != null)
+            {
+                foreach (var course in model.Courses)
+                {
+                    model.Classes = _classRepository.GetAll().Where(c => c.CourseId == course.Id);
+                }
+            }
 
             if (teacher == null)
             {
@@ -58,7 +75,7 @@ namespace School.Web.Controllers
         {
             ViewBag.idCount = (_teacherRepository.GetAll().Count() + 1).ToString();
 
-            var model = new TeacherViewModel { Courses = _courseRepository.GetAll(), Classes = _classRepository.GetAll(), Subjects = _subjectRepository.GetAll() };
+            var model = new TeacherViewModel { Courses = _courseRepository.GetAll().Where(c => c.Id > 1), Classes = _classRepository.GetAll(), Subjects = _subjectRepository.GetAll() };
 
             return View(model);
         }
@@ -101,7 +118,7 @@ namespace School.Web.Controllers
                 return NotFound();
             }
 
-            var model = _converterHelper.ToTeacherViewModel(teacher);
+            var model = _converterHelper.ToTeacherViewModel(teacher, _subjectRepository.GetAll().Where(c => c.TeacherId == id.Value));
 
             return View(model);
         }
@@ -127,6 +144,7 @@ namespace School.Web.Controllers
                     teacher.Id = model.Id;
 
                     await _teacherRepository.UpdateAsync(teacher);
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -153,12 +171,24 @@ namespace School.Web.Controllers
 
             var teacher = await _teacherRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
 
+            var model = _converterHelper.ToTeacherViewModel(teacher, _subjectRepository.GetAll());
+
+            foreach (var subject in model.Subjects)
+            {
+                model.Courses = _courseRepository.GetAll().Where(c => c.Id == subject.CourseId);
+            }
+
+            foreach (var course in model.Courses)
+            {
+                model.Classes = _classRepository.GetAll().Where(c => c.CourseId == course.Id);
+            }
+
             if (teacher == null)
             {
                 return NotFound();
             }
 
-            return View(teacher);
+            return View(model);
         }
 
         // POST: TeachersController/Delete/5

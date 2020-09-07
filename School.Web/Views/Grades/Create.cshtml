@@ -37,105 +37,123 @@
                             <!--BANNER END-->
                             <br />
                             <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:850px;">
-                                <label class="form-label"><b>Area:</b></label>
-                                @*<span asp-validation-for="FullName" class="text-danger"></span>*@
-                                <ejs-combobox id="areas" cssClass="e-filled" placeholder="Select an Area" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="Area" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
+                                <label class="form-label"><b>Field:</b></label>
+                                <span asp-validation-for="Fields" class="text-danger"></span>
+                                <ejs-combobox id="fields" cssClass="e-filled" placeholder="Select a Field" dataSource="Model.Fields" index="2" popupHeight="230px" change="fieldChange">
+                                    <e-combobox-fields text="Field"></e-combobox-fields>
                                 </ejs-combobox>
                                 <label class="form-label"><b>Course:</b></label>
-                                @*<span asp-validation-for="FullName" class="text-danger"></span>*@
-                                <ejs-combobox id="courses" cssClass="e-filled" placeholder="Select a Course" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="Course" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
+                                <span asp-validation-for="CourseId" class="text-danger"></span>
+                                <ejs-combobox id="courses" ejs-for="CourseId" dataSource="Model.Courses" enabled="false" cssClass="e-filled" placeholder="Select a Course" index="2" popupHeight="230px" change="courseChange">
+                                    <e-combobox-fields text="Name" value="Id"></e-combobox-fields>
                                 </ejs-combobox>
                                 <label class="form-label"><b>Class:</b></label>
-                                @*<span asp-validation-for="FullName" class="text-danger"></span>*@
-                                <ejs-combobox id="classes" cssClass="e-filled" placeholder="Select a Class" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="Class" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
+                                <span asp-validation-for="ClassId" class="text-danger"></span>
+                                <ejs-combobox id="classes" ejs-for="ClassId" dataSource="Model.Classes" enabled="false" cssClass="e-filled" placeholder="Select a Class" index="2" popupHeight="230px" change="valueChange">
+                                    <e-combobox-fields text="Name" value="Id"></e-combobox-fields>
                                 </ejs-combobox>
                                 <label class="form-label"><b>Subject:</b></label>
-                                @*<span asp-validation-for="FullName" class="text-danger"></span>*@
-                                <ejs-combobox id="subjects" cssClass="e-filled" placeholder="Select a Subject" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="Subject" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
+                                <span asp-validation-for="SubjectId" class="text-danger"></span>
+                                <ejs-combobox id="subjects" ejs-for="SubjectId" dataSource="Model.Subjects" enabled="false" cssClass="e-filled" placeholder="Select a Subject" index="2" popupHeight="230px" change="subjectChange">
+                                    <e-combobox-fields text="Name" value="Id"></e-combobox-fields>
                                 </ejs-combobox>
                                 <div style="height:48px;"></div>
                                 <label class="form-label"><b>Grades:</b></label>
                                 @*<span asp-validation-for="FullName" class="text-danger"></span>*@
-                                <table class="table" style="width:100%">
-                                    <thead>
+                                @*<div class="panel-body">*@
+                                <!--<table class="table">
+                                <thead>
+                                    <tr>-->
+                                @*<th>
+                                        @Html.DisplayNameFor(model => model.Course.Field)
+                                    </th>*@
+                                <!--<th>
+                                            @Html.DisplayNameFor(model => model.Course)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Class)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Subject)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Teacher)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Student)
+                                        </th>
+                                        <th>Insert Grade</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Grades)
+                                    {
                                         <tr>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.FinalGrade)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.FinalGrade)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.FinalGrade)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.FinalGrade)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.FinalGrade)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.FinalGrade)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.FinalGrade)
-                                            </th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @*@foreach (var item in Model)
-                                            {
-                                                <tr>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => item.Name)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => item.Price)
-                                                    </td>
-                                                    <td>
-                                                        @if (!string.IsNullOrEmpty(item.ImageUrl))
-                                                        {
-                                                            <img src="@Url.Content(item.ImageUrl)" alt="image" style="width:100px; height:150px; max-width:100%; height:auto" />
-                                                        }
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => item.LastPurchase)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => item.LastSale)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => item.IsAvailable)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => item.Stock)
-                                                    </td>
-                                                    <td>
-                                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
-                                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>
-                                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
-                                                    </td>
-                                                </tr>
-                                            }*@
-                                        <tr>
-                                            <td></td>
                                             <td>
-                                                @*<span asp-validation-for="FullName" class="text-danger"></span>*@
-                                                <ejs-textbox id="grade" placeholder="Insert Grade"></ejs-textbox>
+                                                @Html.DisplayFor(modelItem => item.CourseId)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.ClassId)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.SubjectId)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.TeacherId)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.StudentId)
+                                            </td>
+                                            <td>
+                                                <ejs-numerictextbox id="grade" ejs-for="FinalGrade" placeholder="Insert Grade" type="text"></ejs-numerictextbox>
+                                            </td>
+                                            <td>
+                                                <input asp-action="Create" type="submit" value="Create" style="margin-left:30%" />
                                             </td>
                                         </tr>
-                                    </tbody>
-                                </table>
+                                    }
+                                    <!--<tr>
+                                    <td></td>
+                                    <td>-->
+                                -->
+                                <!--@*<span asp-validation-for="FullName" class="text-danger"></span>*@-->
+                                <!--<ejs-textbox id="grade" placeholder="Insert Grade"></ejs-textbox>
+                                    </td>
+                                </tr>-->
+                                <!--</tbody>
+                                </table>-->
+                                <link href="~/styles/Grid/style.css" rel="stylesheet" />
+                                <div class="control-section">
+                                    <div id="default">
+                                        <ejs-dropdownlist id="DataRange" dataSource="Model.Grades" placeholder="Select a Data Range" index="0" change="valueChange" width="220px">
+                                            <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+                                        </ejs-dropdownlist>
+                                        <span id='msg'></span>
+                                    </div>
+                                    <ejs-grid id="GridOverview" allowFiltering="true" allowSorting="true" height="350" rowHeight="38" enableHover="false" load="load" queryCellInfo="queryCellInfo" dataBound="startTimer" actionComplete="complete" enableVirtualization="true" allowSelection="true">
+                                        <e-grid-filtersettings type="Menu"></e-grid-filtersettings>
+                                        <e-grid-selectionsettings persistSelection="true" type="Multiple" checkboxOnly="true"></e-grid-selectionsettings>
+                                        <e-grid-columns>
+                                            @*@foreach (var item in Model.Grades)
+                                            {*@
+                                                @*<e-grid-column field="" type="checkbox" width="60" allowFiltering="false" allowSorting="false"></e-grid-column>*@
+                                                <e-grid-column headerText="Course" field="@Html.DisplayFor(model => model.CourseId)" textAlign="Right" width="120"></e-grid-column>
+                                                <e-grid-column headerText="Class" field="@Html.DisplayFor(model => model.ClassId)" clipMode="EllipsisWithTooltip" width="200"></e-grid-column>
+                                                <e-grid-column headerText="Subject" field="@Html.DisplayFor(model => model.SubjectId)" clipMode="EllipsisWithTooltip" width="170"></e-grid-column>
+                                                <e-grid-column headerText="Teacher" field="@Html.DisplayFor(model => model.TeacherId)" filter="@(new { type = "Menu" })" width="230"></e-grid-column>
+                                                <ejs-textbox id="grade" placeholder="Insert Grade"></ejs-textbox>
+                                            @*}*@
+                                            </e-grid-columns>
+                                    </ejs-grid>
+
+                                </div>
+                                @*</div>*@
                             </div>
                         </div>
                         <!-- ##### About Us Area End ##### -->
-                        <input asp-action="Create" class="btn academy-btn mt-30" type="submit" value="Create" style="margin-left:30%" />
-                        <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:5%">Back</a>
+                        @*<input asp-action="Create" class="btn academy-btn mt-30" type="submit" value="Create" style="margin-left:30%" />*@
+                        <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:40%">Back</a>
                     </div>
                 </form>
             </div>
@@ -153,6 +171,506 @@
     }
 </script>
 
+@*<script>
+        function courseChange() {
+            // disable the doctor DropDownList
+            var courses = document.getElementById('courses').ej2_instances[0];
+            var classes = document.getElementById('classes').ej2_instances[0];
+            classes.enabled = true;
+            //frame the query based on selected value in specialty DropDownList.
+            var tempQuery = new ej.data.Query().where('CourseId', 'equal', courses.value);
+            // set the framed query based on selected value in specialty DropDownList.
+            classes.query = tempQuery;
+            // set null value to doctor DropDownList text property
+            classes.text = null;
+            //  bind the property changes to doctor DropDownList
+            classes.dataBind();
+        }
+    </script>*@
+
+<script type="text/javascript">
+    function fieldChange() {
+        var course = document.getElementById('courses').ej2_instances[0];
+        var classes = document.getElementById('classes').ej2_instances[0];
+        var subjects = document.getElementById('subjects').ej2_instances[0];
+        var field = document.getElementById('fields').ej2_instances[0];
+        // disable the state DropDownList
+        course.enabled = true;
+        // frame the query based on selected value in country DropDownList.
+        var tempQuery = new ej.data.Query().where('Field', 'equal', field.text);
+        // set the framed query based on selected value in country DropDownList.
+        course.query = tempQuery;
+        // set null value to state DropDownList text property
+        course.text = null;
+        // bind the property changes to state DropDownList
+        course.dataBind();
+        // set null value to city DropDownList text property
+        classes.text = null;
+        subjects.text = null;
+        // disable the city DropDownList
+        classes.enabled = false;
+        subjects.enabled = false;
+        // bind the property changes to City DropDownList
+        classes.dataBind();
+        subjects.dataBind();
+    }
+    function courseChange() {
+        var classes = document.getElementById('classes').ej2_instances[0];
+        var subjects = document.getElementById('subjects').ej2_instances[0];
+        var course = document.getElementById('courses').ej2_instances[0];
+        classes.enabled = true;
+        subjects.enabled = true;
+        // Query the data source based on state DropDownList selected value
+        var tempQuery1 = new ej.data.Query().where('CourseId', 'equal', course.value);
+        var tempQuery2 = new ej.data.Query().where('CourseId', 'equal', course.value);
+        // set the framed query based on selected value in city DropDownList.
+        classes.query = tempQuery1;
+        subjects.query = tempQuery2;
+        //clear the existing selection
+        classes.text = null;
+        subjects.text = null;
+        // bind the property change to city DropDownList
+        classes.dataBind();
+        subjects.dataBind();
+    }
+    function subjectChange() {
+        var subjects = document.getElementById('subjects').ej2_instances[0];
+
+        var table = document.getElementsByClassName('Course').ej2_instances[0];
+    }
+</script>
+
+@*https://ej2.syncfusion.com/aspnetcore/ComboBox/Cascading#/material*@
+
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<script type="text/x-jsrender" id="progessTemplate">
+    <div id="myProgress" class="pbar">
+        <div id="myBar" class="bar">
+            <div id="label" class="barlabel"></div>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-jsrender" id="empTemplate">
+    <div>
+        <div class="empimg">
+            <span class="e-userimg">
+            </span>
+        </div>
+        <span id="Emptext">${Employees}</span>
+    </div>
+</script>
+
+<script type="text/javascript">
+
+            var dReady = false;
+            var theme;
+            var dtTime = false;
+            var isDataBound = false;
+            var isDataChanged = true;
+            var intervalFun;
+            var clrIntervalFun;
+            var clrIntervalFun1;
+            var clrIntervalFun2;
+            var dropSlectedIndex = null;
+            var stTime;
+            stTime = performance.now();
+            function trustTemp(e) {
+                if (e.Trustworthiness == "Select All") {
+                    return '';
+                }
+                      var name = e.Trustworthiness;
+                var newsrcFolder = '@Url.Content("~/styles/images/grid/")';
+                var newsrc = newsrcFolder + name + '.png';
+                return '<img style="width: 31px; height: 24px" src="' + newsrc + '" /> <span id="Trusttext">' + e.Trustworthiness + '</span>'
+            }
+            function ratingDetail(e) {
+                var grid = document.querySelector(".e-grid").ej2_instances[0]
+                var div = document.createElement('div');
+                div.className = 'rating';
+                var span;
+                for (var i = 0; i < 5; i++) {
+                    if (i < e.Rating) {
+                        span = document.createElement('span');
+                        span.className = 'star checked';
+                        div.appendChild(span);
+                    } else {
+                        span = document.createElement('span');
+                        span.className = 'star';
+                        div.appendChild(span);
+                    }
+                }
+                return div.outerHTML;
+            }
+
+            function statusDetail(e) {
+                var grid = document.querySelector(".e-grid").ej2_instances[0]
+                var div = document.createElement('div');
+                var span;
+                span = document.createElement('span');
+                if (e.Status === "Active") {
+                    span.className = 'statustxt e-activecolor';
+                    span.textContent = "Active"
+                    div.className = 'statustemp e-activecolor'
+                }
+                if (e.Status === "Inactive") {
+                    span = document.createElement('span');
+                    span.className = 'statustxt e-inactivecolor';
+                    span.textContent = "Inactive"
+                    div.className = 'statustemp e-inactivecolor'
+                }
+                div.appendChild(span);
+                return div.outerHTML;
+            }
+            function load(args) {
+                this.dataSource = getTradeData(1000);
+                this.on('data-ready', function () {
+                    dReady = true;
+                });
+            }
+            function complete(args) {
+                if (args.requestType === "filterchoicerequest" && (args.filterModel.options.field === "Trustworthiness" || args.filterModel.options.field === "Rating"
+                    || args.filterModel.options.field === "Status")) {
+                    var span = args.filterModel.dialogObj.element.querySelectorAll('.e-selectall')[0];
+                    if (!ej.base.isNullOrUndefined(span)) {
+                        ej.base.closest(span, '.e-ftrchk').classList.add("e-hide");
+                    }
+                }
+            }
+            function queryCellInfo(args) {
+                if (args.column.field === 'Employees') {
+                    if (args.data.EmployeeImg === 'usermale') {
+                        args.cell.querySelector('.e-userimg').classList.add("sf-icon-Male");
+                    } else {
+                        args.cell.querySelector('.e-userimg').classList.add("sf-icon-FeMale");
+                    }
+                }
+                if (args.column.field === 'Status') {
+                    if (args.cell.textContent === "Active") {
+                        args.cell.querySelector(".statustxt").classList.add("e-activecolor");
+                        args.cell.querySelector(".statustemp").classList.add("e-activecolor");
+                    }
+                    if (args.cell.textContent === "Inactive") {
+                        args.cell.querySelector(".statustxt").classList.add("e-inactivecolor");
+                        args.cell.querySelector(".statustemp").classList.add("e-inactivecolor");
+                    }
+                }
+                if (args.column.field === 'Rating') {
+                    if (args.column.field === 'Rating') {
+                        for (var i = 0; i < args.data.Rating; i++) {
+                            args.cell.querySelectorAll("span")[i].classList.add("checked");
+                        }
+                    }
+                }
+                if (args.column.field === "Software") {
+                    if (args.data.Software <= 20) {
+                        args.data.Software = args.data.Software + 30;
+                    }
+                    args.cell.querySelector(".bar").style.width = args.data.Software + "%";
+                    args.cell.querySelector(".barlabel").textContent = args.data.Software + "%";
+                    if (args.data.Status === "Inactive") {
+                        args.cell.querySelector(".bar").classList.add("progressdisable");
+                    }
+                }
+            }
+            function startTimer(args) {
+                clearTimeout(clrIntervalFun);
+                clearInterval(intervalFun);
+                dtTime = true;
+            }
+            function valueChange() {
+                var grid = document.getElementById("GridOverview").ej2_instances[0];
+                this.closePopup();
+                grid.showSpinner();
+                dropSlectedIndex = null;
+                var index = this.value;
+                clearTimeout(clrIntervalFun2);
+                clrIntervalFun2 = setTimeout(function () {
+                    isDataChanged = true;
+                    stTime = null;
+                    var contentElement = grid.contentModule.getPanel().firstChild;
+                    contentElement.scrollLeft = 0;
+                    contentElement.scrollTop = 0;
+                    grid.pageSettings.currentPage = 1;
+                    stTime = performance.now();
+                    grid.dataSource = getTradeData(index);
+                    grid.hideSpinner();
+                }, 100);
+            }
+
+            document.getElementById('GridOverview').addEventListener('DOMSubtreeModified', function () {
+                if (dReady && stTime && isDataChanged) {
+                    var msgEle = document.getElementById('msg');
+                    var val = (performance.now() - stTime).toFixed(0);
+                    stTime = null;
+                    dtTime = false;
+                    dReady = false;
+                    isDataChanged = false;
+                    msgEle.innerHTML = 'Load Time: ' + "<b>" + val + "</b>" + '<b>ms</b>';
+                    msgEle.classList.remove('e-hide');
+                }
+            });
+            function getTradeData(dataCount) {
+                var check = [true, false];
+                var Employees = [
+                    'Michael', 'Kathryn', 'Tamer', 'Martin', 'Davolio', 'Nancy', 'Fuller', 'Leverling', 'Peacock',
+                    'Margaret', 'Buchanan', 'Janet', 'Andrew', 'Callahan', 'Laura', 'Dodsworth', 'Anne',
+                    'Bergs', 'Vinet', 'Anton', 'Fleet', 'Zachery', 'Van', 'King', 'Jack', 'Rose'
+                ];
+                var Designation = ['Manager', 'CFO', 'Designer', 'Developer', 'Program Directory', 'System Analyst', 'Project Lead'];
+                var Mail = ['sample.com', 'arpy.com', 'rpy.com', 'mail.com', 'jourrapide.com'];
+                var category = ['Energy', 'Financial', 'Technology', 'Industrial'];
+                var Location = ['UK', 'USA', 'Sweden', 'France', 'Canada', 'Argentina', 'Austria', 'Germany', 'Mexico'];
+                var Status = ['Active', 'Inactive'];
+                var Trustworthiness = ['Perfect', 'Sufficient', 'Insufficient'];
+                var tradeData = [];
+                var Address = ["59 rue de l'Abbaye", "Luisenstr. 48", "Rua do Paço, 67", "2, rue du Commerce", "Boulevard Tirou, 255",
+                    "Rua do Paço, 67", "Hauptstr. 31", "Starenweg 5", "Rua do Mercado, 12", "Carrera 22 con Ave. Carlos Soublette #8-35", "Kirchgasse 6",
+                    "Sierras de Granada 9993", "Mehrheimerstr. 369", "Rua da Panificadora, 12", "2817 Milton Dr.", "Kirchgasse 6", "Åkergatan 24", "24, place Kléber",
+                    "Torikatu 38", "Berliner Platz 43", "5ª Ave. Los Palos Grandes", "1029 - 12th Ave. S.",
+                    "Torikatu 38", "P.O. Box 555", "2817 Milton Dr.", "Taucherstraße 10", "59 rue de l'Abbaye", "Via Ludovico il Moro 22",
+                    "Avda. Azteca 123", "Heerstr. 22", "Berguvsvägen  8", "Magazinweg 7", "Berguvsvägen  8", "Gran Vía, 1", "Gran Vía, 1",
+                    "Carrera 52 con Ave. Bolívar #65-98 Llano Largo", "Magazinweg 7", "Taucherstraße 10", "Taucherstraße 10",
+                    "Av. Copacabana, 267", "Strada Provinciale 124", "Fauntleroy Circus", "Av. dos Lusíadas, 23",
+                    "Rua da Panificadora, 12", "Av. Inês de Castro, 414", "Avda. Azteca 123", "2817 Milton Dr."];
+                var EmployeeImg = ['usermale', 'userfemale'];
+                if (typeof dataCount === 'string') {
+                    dataCount = parseInt(dataCount);
+                }
+                for (var i = 1; i <= dataCount; i++) {
+                    var code = 10000;
+                    tradeData.push({
+                        'check': check[Math.floor(Math.random() * check.length)],
+                        'EmployeeID': code + i,
+                        'Employees': Employees[Math.floor(Math.random() * Employees.length)] + ' ' + Employees[Math.floor(Math.random() * Employees.length)],
+                        'Designation': Designation[Math.floor(Math.random() * Designation.length)],
+                        'Location': Location[Math.floor(Math.random() * Location.length)],
+                        'Status': Status[Math.floor(Math.random() * Status.length)],
+                        'Trustworthiness': Trustworthiness[Math.floor(Math.random() * Trustworthiness.length)],
+                        'Rating': Math.floor(Math.random() * 5),
+                        'Software': Math.floor(Math.random() * 100),
+                        'EmployeeImg': EmployeeImg[Math.floor(Math.random() * EmployeeImg.length)],
+                        'CurrentSalary': Math.floor((Math.random() * 100000)),
+                        'Address': Address[Math.floor(Math.random() * Address.length)],
+                    });
+                    var emp = tradeData[i - 1]["Employees"];
+                    var sName = emp.substr(0, emp.indexOf(' ')).toLowerCase();
+                    tradeData[i - 1]['Mail'] = sName + (Math.floor(Math.random() * 100) + 10) + '@@' + Mail[Math.floor(Math.random() * Mail.length)];
+                }
+                return tradeData;
+            }
+
+</script>
+
+<style>
+    .fabric .empimg {
+        background-color: #0078d6;
+    }
+
+    .material .empimg {
+        background-color: #e3165b;
+    }
+
+    .highcontrast .empimg {
+        background-color: #ffd939;
+    }
+
+    _:-ms-fullscreen, :root .highcontrast .e-userimg.sf-icon-Male::before,
+    _:-ms-fullscreen, :root .highcontrast .e-userimg.sf-icon-FeMale::before {
+        color: black;
+    }
+
+    .highcontrast .e-userimg.sf-icon-Male::before,
+    .highcontrast .e-userimg.sf-icon-FeMale::before {
+        color: black;
+    }
+
+    .bootstrap .empimg {
+        background-color: #0078d6;
+    }
+
+    .bootstrap4 .empimg {
+        background-color: #0078d6;
+    }
+
+    #Emptext {
+        top: -12px;
+        left: 41px;
+        position: relative;
+    }
+
+    .e-grid.e-rtl #Emptext {
+        top: -12px;
+        left: -41px;
+        position: relative;
+    }
+
+    .empimg {
+        height: 27px;
+        width: 29px;
+        border-radius: 14px;
+    }
+
+    .e-userimg.sf-icon-Male::before,
+    .e-userimg.sf-icon-FeMale::before {
+        font-size: 13px;
+    }
+
+    .e-userimg.sf-icon-Male, .e-userimg.sf-icon-FeMale {
+        margin: 0px 8px;
+        line-height: 26px;
+        color: white;
+        font-size: 13px;
+    }
+
+        .e-userimg.sf-icon-Male::before {
+            content: '\e700';
+        }
+
+        .e-userimg.sf-icon-FeMale::before {
+            content: '\e701';
+        }
+
+    .highcontrast .e-grid td.e-rowcell.e-selectionbackground.e-active {
+        background-color: transparent;
+        color: white;
+    }
+
+    td.e-rowcell.e-selectionbackground.e-active {
+        background-color: transparent;
+    }
+
+    .highcontrast #msg {
+        color: #FFFFFF
+    }
+
+    .e-bigger .e-grid .statustxt {
+        position: relative;
+        top: -2px;
+    }
+
+    .rating .star {
+        font-size: 132%;
+        color: lightgrey;
+    }
+
+        .rating .star.checked {
+            color: #ffa600;
+        }
+
+        .rating .star:before {
+            content: '★';
+        }
+
+    td.e-rowcell .statustxt.e-activecolor {
+        color: #00cc00;
+        position: relative;
+        top: 9px;
+    }
+
+    td.e-rowcell .statustxt.e-inactivecolor {
+        color: #e60000;
+        position: relative;
+        top: 9px;
+    }
+
+    .statustemp.e-inactivecolor {
+        background-color: #ffd7cc;
+    }
+
+    .statustemp.e-activecolor {
+        background-color: #ccffcc;
+    }
+
+    .statustxt.e-activecolor {
+        color: #00cc00;
+    }
+
+    .statustxt.e-inactivecolor {
+        color: #e60000;
+    }
+
+    #Trusttext {
+        position: relative;
+        top: 1px;
+    }
+
+    .e-image {
+        height: 13px;
+        width: 14px;
+    }
+
+    .statustemp.e-inactivecolor {
+        width: 64px;
+    }
+
+    .statustemp.e-activecolor {
+        width: 57px;
+    }
+
+    .statustemp {
+        position: relative;
+        height: 19px;
+        border-radius: 5px;
+        text-align: center
+    }
+
+    #msg {
+        font-family: "Segoe UI", "GeezaPro", "DejaVu Serif", sans-serif;
+        font-size: 14px;
+        font-weight: 400;
+        opacity: 0.95;
+        color: #333;
+        float: right;
+        margin-top: 3px;
+    }
+
+    @@media only screen and (max-width: 370px) {
+        #msg {
+            float: left;
+            margin-top: 3px;
+        }
+
+        #GridOverview {
+            margin-top: 36px;
+        }
+    }
+
+    #samplecontainer {
+        padding-top: 5px;
+    }
+
+    #myProgress {
+        position: relative;
+        height: 18px;
+        width: 10em;
+        text-align: left;
+        background-color: white;
+    }
+
+    .highcontrast .e-grid #myProgress {
+        background-color: black;
+    }
+
+    #myBar {
+        position: absolute;
+        width: 10%;
+        height: 100%;
+        background-color: #00b300;
+    }
+
+        #myBar.progressdisable {
+            background-color: #df2222;
+        }
+
+    #label {
+        position: relative;
+        left: 10px;
+        line-height: 18px;
+        font-size: 10px;
+        color: white;
+    }
+</style>

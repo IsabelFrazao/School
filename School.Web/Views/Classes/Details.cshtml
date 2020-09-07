@@ -55,41 +55,34 @@
                             <div class="row">
                                 <div class="col-md-1"></div>
                                 <div class="col-md-3">
-                                    <label class="form-label"><b>Subjects:</b></label>
-                                    <!--<ejs-listview enable="true" id="subjectschecklistview" showCheckBox="true">
-                                    </ejs-listview>-->
-                                    @*dataSource="ViewBag.dataSource"*@
-                                    <ejs-listbox id="subjects-select-listbox">
-                                        <e-listbox-selectionsettings showCheckbox="true"></e-listbox-selectionsettings>
-                                    </ejs-listbox> @*dataSource="ViewBag.data"*@
+                                    <label class="form-label"><b>Subjects:</b></label>                                    
+                                    <ejs-listbox id="subjects-select-listbox" dataSource="Model.Subjects">
+                                        <e-listbox-selectionsettings showCheckbox="false"></e-listbox-selectionsettings>
+                                        <e-listbox-fields text="Name" value="Id"></e-listbox-fields>
+                                    </ejs-listbox>
                                     <br />
                                     <label class="form-label"><b>Total:</b></label>
-                                    <label class="form-label">2</label>
+                                    <label class="form-label">@Model.Subjects.Count()</label>
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label"><b>Teachers:</b></label>
-                                    <!--<ejs-listview enable="true" id="teacherschecklistview" showCheckBox="true">
-                                    </ejs-listview>-->
-                                    @*dataSource="ViewBag.dataSource"*@
-                                    <ejs-listbox id="teachers-select-listbox">
-                                        <e-listbox-selectionsettings showCheckbox="true"></e-listbox-selectionsettings>
-                                    </ejs-listbox> @*dataSource="ViewBag.data"*@
+                                <ejs-listbox id="subjects-select-listbox" dataSource="Model.Teachers">
+                                    <e-listbox-selectionsettings showCheckbox="false"></e-listbox-selectionsettings>
+                                    <e-listbox-fields text="Name" value="Id"></e-listbox-fields>
+                                </ejs-listbox>
                                     <br />
                                     <label class="form-label"><b>Total:</b></label>
-                                    <label class="form-label">2</label>
+                                    <label class="form-label">@*@Model.Teachers.Count()*@</label>
                                 </div>
                                 <div class="col-md-3">
-                                    <label class="form-label"><b>Students:</b></label>
-                                    <!--<ejs-listview enable="true" id="studentschecklistview" showCheckBox="true">
-                                    </ejs-listview>-->
-                                    @*dataSource="ViewBag.dataSource"*@
+                                    <label class="form-label"><b>Students:</b></label>                                    
                                 <ejs-listbox dataSource="Model.Students" id="students-select-listbox">
                                     <e-listbox-selectionsettings showCheckbox="false" ></e-listbox-selectionsettings>
                                     <e-listbox-fields text="FullName" value="Id"></e-listbox-fields>
-                                </ejs-listbox> @*dataSource="ViewBag.data"*@
+                                </ejs-listbox>
                                     <br />
                                     <label class="form-label"><b>Total:</b></label>
-                                    <label class="form-label">2</label>
+                                    <label class="form-label">@Model.Students.Count()</label>
                                 </div>
                                 <div class="col-md-1"></div>
                             </div>
