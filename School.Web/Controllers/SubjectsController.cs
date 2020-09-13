@@ -23,6 +23,10 @@ namespace School.Web.Controllers
         private readonly IIEFPSubjectRepository _iefpSubjectRepository;
         private readonly ICourseRepository _courseRepository;
         private readonly ITeacherRepository _teacherRepository;
+        private readonly IStudentRepository _studentRepository;
+        private readonly IStudentSubjectRepository _studentSubjectRepository;
+        private readonly IClassRepository _classRepository;
+        private readonly IGradeRepository _gradeRepository;
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IConverterHelper _converterHelper;
         private readonly IFileHelper _fileHelper;
@@ -30,13 +34,18 @@ namespace School.Web.Controllers
         public object ExcelReaderFactory { get; private set; }
 
         public SubjectsController(ISubjectRepository subjectRepository, IIEFPSubjectRepository iefpSubjectRepository,
-            ICourseRepository courseRepository, ITeacherRepository teacherRepository, IHostingEnvironment hostingEnvironment,
-            IConverterHelper converterHelper, IFileHelper fileHelper)
+            ICourseRepository courseRepository, ITeacherRepository teacherRepository, IStudentRepository studentRepository,
+            IStudentSubjectRepository studentSubjectRepository, IClassRepository classRepository, IGradeRepository gradeRepository,
+            IHostingEnvironment hostingEnvironment, IConverterHelper converterHelper, IFileHelper fileHelper)
         {
             _subjectRepository = subjectRepository;
             _iefpSubjectRepository = iefpSubjectRepository;
             _courseRepository = courseRepository;
             _teacherRepository = teacherRepository;
+            _studentRepository = studentRepository;
+            _studentSubjectRepository = studentSubjectRepository;
+            _classRepository = classRepository;
+            _gradeRepository = gradeRepository;
             _hostingEnvironment = hostingEnvironment;
             _converterHelper = converterHelper;
             _fileHelper = fileHelper;
@@ -110,7 +119,7 @@ namespace School.Web.Controllers
             var iefpsubject = await _iefpSubjectRepository.GetByIdAsync(id.Value);
 
             var subject = _converterHelper.ConvertToSubject(iefpsubject, 1, await _courseRepository.GetByIdAsync(1),
-                1, await _teacherRepository.GetByIdAsync(1), "0", true);
+                1, await _teacherRepository.GetByIdAsync(1), "No Selection", true);
 
             if (subject == null)
             {
@@ -137,11 +146,84 @@ namespace School.Web.Controllers
                 if (!await _subjectRepository.ExistsCodeAsync(subject.Code))
                 {
                     await _subjectRepository.CreateAsync(subject);
-                    return RedirectToAction(nameof(Index));
                 }
 
-                //await _subjectRepository.CreateAsync(subject);
-                //return RedirectToAction(nameof(Index));
+                var Students = _studentRepository.GetAll().Where(s => s.CourseId == subject.CourseId);
+
+                List<StudentSubject> StudentSubjects = new List<StudentSubject>();
+
+                if (Students != null)
+                {
+                    foreach (var student in Students)
+                    {
+                        if (student.CourseId == subject.CourseId)
+                        {
+                            StudentSubjects.Add(new StudentSubject
+                            {
+                                StudentId = student.Id,
+                                SubjectId = subject.Id,
+                            });
+                        }
+                    }
+
+                    foreach (var ss in StudentSubjects)
+                    {
+                        await _studentSubjectRepository.CreateAsync(ss);
+                    }
+
+                    var stu = new Student();
+                    var sub = new Subject();
+                    var course = new Course();
+                    var classes = new Class();
+                    var teacher = new Teacher();
+
+                    var StudentsSubjects = new List<StudentSubject>(_studentSubjectRepository.GetAll());
+                    var Stus = new List<Student>(_studentRepository.GetAll());
+                    var Subjects = new List<Subject>(_subjectRepository.GetAll());
+                    var Courses = new List<Course>(_courseRepository.GetAll());
+                    var Classes = new List<Class>(_classRepository.GetAll());
+                    var Teachers = new List<Teacher>(_teacherRepository.GetAll());
+
+                    foreach (var ss in StudentsSubjects)
+                    {
+                        foreach (var s in Stus)
+                        {
+                            if (s.Id == ss.StudentId)
+                                stu = s;
+
+                            foreach (var c in Courses)
+                            {
+                                if (s.CourseId == c.Id)
+                                    course = c;
+                            }
+
+                            foreach (var cl in Classes)
+                            {
+                                if (s.ClassId == cl.Id)
+                                {
+                                    classes = cl;
+                                }                                    
+                            }
+                        }
+
+                        foreach (var subj in Subjects)
+                        {
+                            if (sub.Id == ss.SubjectId)
+                                sub = subj;
+
+                            foreach (var t in Teachers)
+                            {
+                                if (t.Id == subj.TeacherId)
+                                    teacher = t;
+                            }
+                        }
+
+                        var grade = _converterHelper.CreateGrade(ss, stu, sub, course, classes, teacher, true);
+
+                        await _gradeRepository.CreateAsync(grade);
+                    }
+                }
+                return RedirectToAction(nameof(Index));
             }
             return View(model);
         }

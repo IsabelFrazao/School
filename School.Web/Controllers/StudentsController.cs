@@ -5,8 +5,7 @@ using School.Web.Data.Repositories;
 using School.Web.Helpers;
 using School.Web.Models;
 using Syncfusion.EJ2.Linq;
-using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,14 +16,24 @@ namespace School.Web.Controllers
         private readonly IStudentRepository _studentRepository;
         private readonly ICourseRepository _courseRepository;
         private readonly IClassRepository _classRepository;
+        private readonly ISubjectRepository _subjectRepository;
+        private readonly IStudentSubjectRepository _studentSubjectRepository;
+        private readonly ITeacherRepository _teacherRepository;
+        private readonly IGradeRepository _gradeRepository;
         private readonly IImageHelper _imageHelper;
         private readonly IConverterHelper _converterHelper;
 
-        public StudentsController(IStudentRepository studentRepository, ICourseRepository courseRepository, IClassRepository classRepository, IImageHelper imageHelper, IConverterHelper converterHelper)
+        public StudentsController(IStudentRepository studentRepository, ICourseRepository courseRepository, IClassRepository classRepository,
+            ISubjectRepository subjectRepository, IStudentSubjectRepository studentSubjectRepository, ITeacherRepository teacherRepository,
+            IGradeRepository gradeRepository, IImageHelper imageHelper, IConverterHelper converterHelper)
         {
             _studentRepository = studentRepository;
             _courseRepository = courseRepository;
             _classRepository = classRepository;
+            _subjectRepository = subjectRepository;
+            _studentSubjectRepository = studentSubjectRepository;
+            _teacherRepository = teacherRepository;
+            _gradeRepository = gradeRepository;
             _imageHelper = imageHelper;
             _converterHelper = converterHelper;
         }
@@ -43,18 +52,25 @@ namespace School.Web.Controllers
                 return NotFound();
             }
 
-            var student = await _studentRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
+            var student = await _studentRepository.GetByIdAsync(id.Value);
 
-            student.Course = await _courseRepository.GetByIdAsync(student.CourseId);
+            var model = _converterHelper.ToStudentViewModel(student, await _courseRepository.GetByIdAsync(student.CourseId),
+                _courseRepository.GetAll().Where(c => c.Id > 1), await _classRepository.GetByIdAsync(student.ClassId), _classRepository.GetAll());
 
-            student.Class = await _classRepository.GetByIdAsync(student.ClassId);
+            model.Grades = _gradeRepository.GetAll()
+                .Where(g => g.StudentId == model.Id)
+                .Include(g => g.Course)
+                .Include(g => g.Class)
+                .Include(g => g.Subject)
+                .Include(g => g.Teacher)
+                .Where(g => g.FinalGrade >= 0);
 
             if (student == null)
             {
                 return NotFound();
             }
 
-            return View(student);
+            return View(model);
         }
 
         // GET: StudentsController/Create
@@ -62,11 +78,11 @@ namespace School.Web.Controllers
         {
             ViewBag.idCount = (_studentRepository.GetAll().Count() + 1).ToString();
 
-            var model = new StudentViewModel{Courses = _courseRepository.GetAll().Where(c => c.Id > 1), Classes = _classRepository.GetAll()};
+            var model = new StudentViewModel { Courses = _courseRepository.GetAll().Where(c => c.Id > 1), Classes = _classRepository.GetAll() };
 
             var school = string.Empty;
 
-            foreach(var year in model.Courses)
+            foreach (var year in model.Courses)
             {
                 school = $"{ year.BeginDate.Year} / {year.EndDate.Year}";
                 model.SchoolYears.Add(school);
@@ -89,13 +105,99 @@ namespace School.Web.Controllers
                     path = await _imageHelper.UploadImageAsync(model.ImageFile, "Students");
                 }
 
-                //model.Course = await _courseRepository.GetByIdAsync(model.CourseId);
+                var student = _converterHelper.ToStudent(model, path, await _courseRepository.GetByIdAsync(model.CourseId),
+                    await _classRepository.GetByIdAsync(model.ClassId), true);
 
-                //model.Class = await _classRepository.GetByIdAsync(model.ClassId);
-
-                var student = _converterHelper.ToStudent(model, path, await _courseRepository.GetByIdAsync(model.CourseId), await _classRepository.GetByIdAsync(model.ClassId), true);
-                
                 await _studentRepository.CreateAsync(student);
+
+                //STUDENTSUBJECT
+
+                var Subjects = _subjectRepository.GetAll().Where(s => s.CourseId == student.CourseId);
+
+                List<StudentSubject> StudentSubjects = new List<StudentSubject>();
+
+                if (Subjects != null)
+                {
+                    foreach (var subject in Subjects)
+                    {
+                        if (student.CourseId == subject.CourseId)
+                        {
+                            StudentSubjects.Add(new StudentSubject
+                            {
+                                StudentId = student.Id,
+                                SubjectId = subject.Id,
+                            });
+                        }
+                    }
+
+                    foreach (var ss in StudentSubjects)
+                    {
+                        await _studentSubjectRepository.CreateAsync(ss);
+                    }
+
+                    var stu = new Student();
+                    var sub = new Subject();
+                    var course = new Course();
+                    var classes = new Class();
+                    var teacher = new Teacher();
+
+                    var StudentsSubjects = new List<StudentSubject>(_studentSubjectRepository.GetAll());
+                    var Stus = new List<Student>(_studentRepository.GetAll());
+                    var Subs = new List<Subject>(_subjectRepository.GetAll());
+                    var Courses = new List<Course>(_courseRepository.GetAll());
+                    var Classes = new List<Class>(_classRepository.GetAll());
+                    var Teachers = new List<Teacher>(_teacherRepository.GetAll());
+
+                    foreach (var ss in StudentsSubjects)
+                    {
+                        foreach (var s in Stus)
+                        {
+                            if (s.Id == ss.StudentId)
+                            {
+                                stu = s;
+                            }
+
+                            foreach (var c in Courses)
+                            {
+                                if (s.CourseId == c.Id)
+                                {
+                                    course = c;
+                                }
+                            }
+
+                            foreach (var cl in Classes)
+                            {
+                                if (s.ClassId == cl.Id)
+                                {
+                                    classes = cl;
+                                }
+                            }
+                        }
+
+                        foreach (var subj in Subs)
+                        {
+                            if (sub.Id == ss.SubjectId)
+                            {
+                                sub = subj;
+                            }
+
+                            foreach (var t in Teachers)
+                            {
+                                if (t.Id == subj.TeacherId)
+                                {
+                                    teacher = t;
+                                }
+                            }
+                        }
+
+                        var grade = _converterHelper.CreateGrade(ss, stu, sub, course, classes, teacher, true);
+
+                        if (!await _gradeRepository.ExistsAsync(ss.Id))
+                        {
+                            await _gradeRepository.CreateAsync(grade);
+                        }
+                    }
+                }
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
@@ -111,20 +213,13 @@ namespace School.Web.Controllers
 
             var student = await _studentRepository.GetByIdAsync(id.Value);
 
-            //student.Course = await _courseRepository.GetByIdAsync(student.CourseId);
-
-            //student.Class = await _classRepository.GetByIdAsync(student.ClassId);
-
             if (student == null)
             {
                 return NotFound();
             }
 
-            var model = _converterHelper.ToStudentViewModel(student, await _courseRepository.GetByIdAsync(student.CourseId), _courseRepository.GetAll().Where(c => c.Id > 1), await _classRepository.GetByIdAsync(student.ClassId), _classRepository.GetAll());
-
-            //model.Courses = _courseRepository.GetAll().Where(c => c.Id > 1);
-
-            //model.Classes = _classRepository.GetAll();
+            var model = _converterHelper.ToStudentViewModel(student, await _courseRepository.GetByIdAsync(student.CourseId),
+                _courseRepository.GetAll().Where(c => c.Id > 1), await _classRepository.GetByIdAsync(student.ClassId), _classRepository.GetAll());
 
             var school = string.Empty;
 
@@ -153,11 +248,8 @@ namespace School.Web.Controllers
                         path = await _imageHelper.UploadImageAsync(model.ImageFile, "Students");
                     }
 
-                    //model.Course = await _courseRepository.GetByIdAsync(model.CourseId);
-
-                    //model.Class = await _classRepository.GetByIdAsync(model.ClassId);
-
-                    var student = _converterHelper.ToStudent(model, path, await _courseRepository.GetByIdAsync(model.CourseId), await _classRepository.GetByIdAsync(model.ClassId), true);
+                    var student = _converterHelper.ToStudent(model, path, await _courseRepository.GetByIdAsync(model.CourseId),
+                        await _classRepository.GetByIdAsync(model.ClassId), true);
 
                     student.Id = model.Id;
 
@@ -187,18 +279,25 @@ namespace School.Web.Controllers
                 return NotFound();
             }
 
-            var student = await _studentRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
+            var student = await _studentRepository.GetByIdAsync(id.Value);
 
-            student.Course = await _courseRepository.GetByIdAsync(student.CourseId);
+            var model = _converterHelper.ToStudentViewModel(student, await _courseRepository.GetByIdAsync(student.CourseId),
+                _courseRepository.GetAll().Where(c => c.Id > 1), await _classRepository.GetByIdAsync(student.ClassId), _classRepository.GetAll());
 
-            student.Class = await _classRepository.GetByIdAsync(student.ClassId);
+            model.Grades = _gradeRepository.GetAll()
+                .Where(g => g.StudentId == model.Id)
+                .Include(g => g.Course)
+                .Include(g => g.Class)
+                .Include(g => g.Subject)
+                .Include(g => g.Teacher)
+                .Where(g => g.FinalGrade >= 0);
 
             if (student == null)
             {
                 return NotFound();
             }
 
-            return View(student);
+            return View(model);
         }
 
         // POST: StudentsController/Delete/5
@@ -207,6 +306,18 @@ namespace School.Web.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var student = await _studentRepository.GetByIdAsync(id);
+            var s = new StudentSubject();
+            var g = new Grade();
+            foreach (var stu in _studentSubjectRepository.GetAll().Where(t => t.StudentId == student.Id))
+            {
+                s.StudentId = 0;
+                await _studentSubjectRepository.UpdateAsync(s);
+            }
+            foreach (var stu in _gradeRepository.GetAll().Where(t => t.StudentId == student.Id))
+            {
+                g.StudentId = 0;
+                await _gradeRepository.UpdateAsync(g);
+            }
             await _studentRepository.DeleteAsync(student);
             return RedirectToAction(nameof(Index));
         }

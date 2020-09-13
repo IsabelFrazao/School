@@ -24,43 +24,16 @@
         <section class="contact-area">
             <div class="contact-content">
                 <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
-                    <div class="panel-body">
-                        <table class="table table-hover table-responsive table-striped" style="width: 100%;height: 400px" id="MyTable">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Code)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Name)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Field)
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model.IEFPSubjects)
-                                {
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Code)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Name)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Field)
-                                        </td>
-                                        <td>
-                                            <a asp-action="Create" asp-route-id="@item.Id">Create</a> @*|
-                                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>*@
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                    <ejs-grid id="Grid" dataSource="@Model.IEFPSubjects" allowSorting="true" allowFiltering="true" allowPaging="true">
+                        <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
+                        <e-grid-columns>
+                            <e-grid-column field="Id" headerText="Id" visible="false" textAlign="Right" width="auto" type="number" isPrimaryKey="true"></e-grid-column>
+                            <e-grid-column field="Code" headerText="Code" width="auto" type="string"></e-grid-column>
+                            <e-grid-column field="Name" headerText="Name" textAlign="Right" width="auto" type="string"></e-grid-column>
+                            <e-grid-column field="Field" headerText="Field" textAlign="Right" width="auto" type="string"></e-grid-column>                            
+                            <e-grid-column template="#template" textAlign="Right" width="auto"></e-grid-column>
+                        </e-grid-columns>
+                    </ejs-grid>
                 </div>
                 <!-- ##### About Us Area End ##### -->
                 <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:40%">Back</a>
@@ -69,11 +42,8 @@
     </div>
 </section>
 
-@section Scripts{
-    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#MyTable').DataTable();
-        });
-    </script>
-}
+<script id="template" type="text/x-template">
+    <div>
+        <a href='/Subjects/Create/${Id}'>Create</a>
+    </div>
+</script>

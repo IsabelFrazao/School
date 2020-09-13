@@ -38,9 +38,5 @@ namespace School.Web.Data.Entities
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
         public DateTime EndDate { get; set; }
 
-
-        //Turma
-        //UFCD
-        //public virtual ICollection<Student> Student { get; set; }
     }
 }

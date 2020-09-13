@@ -45,9 +45,6 @@
                                             <img src="@Url.Content(Model.PhotoUrl)" alt="image" style="width:200px; height:300px; max-width:100%; height:auto" />
                                         </picture>
                                     }
-                                    @*<picture>
-            <img src="~/img/bg-img/t1.jpg" alt="Girl1" style="width:auto; max-width:100%;">
-        </picture>*@
                                 </div>
                                 <div class="col-md-8">
                                     <br />
@@ -145,7 +142,7 @@
                         <br />
                         <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
                             <label class="form-label"><b>Subjects:</b></label>
-                            <ejs-listbox id="subjects-select-listbox" dataSource="Model.Subjects">
+                            <ejs-listbox id="subjects-select-listbox" dataSource="Model.Subjects" height="200px">
                                 <e-listbox-selectionsettings></e-listbox-selectionsettings>
                                 <e-listbox-fields text="Name" value="Id"></e-listbox-fields>
                             </ejs-listbox>
@@ -154,7 +151,7 @@
                                 <div class="col-md-1"></div>
                                 <div class="col-md-4">
                                     <label class="form-label"><b>Classes:</b></label>
-                                    <ejs-listbox id="classes-select-listbox" dataSource="Model.Classes">
+                                    <ejs-listbox id="classes-select-listbox" dataSource="Model.Classes" height="200px">
                                         <e-listbox-selectionsettings ></e-listbox-selectionsettings>
                                         <e-listbox-fields text="Name" value="Id"></e-listbox-fields>
                                     </ejs-listbox>
@@ -162,7 +159,7 @@
                                 <div class="col-md-2"></div>
                                 <div class="col-md-4">
                                     <label class="form-label"><b>Courses:</b></label>
-                                    <ejs-listbox id="courses-select-listbox" dataSource="Model.Courses">
+                                    <ejs-listbox id="courses-select-listbox" dataSource="Model.Courses" height="200px">
                                         <e-listbox-selectionsettings ></e-listbox-selectionsettings>
                                         <e-listbox-fields text="Name" value="Id"></e-listbox-fields>
                                     </ejs-listbox>

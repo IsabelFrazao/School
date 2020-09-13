@@ -1,6 +1,4 @@
 ﻿using School.Web.Data.Entities;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -37,9 +35,9 @@ namespace School.Web.Data
             if (!_context.Courses.Any())
             {
                 this.AddCourses("Not Selected");
-                
+
                 await _context.SaveChangesAsync();
-            }            
+            }
         }
 
         //private void AddStudents(string name)

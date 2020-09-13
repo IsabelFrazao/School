@@ -53,9 +53,9 @@
                                         }
                                     </div>
                                     <div class="col-md-8">
-                                        <label asp-for="Id" class="form-label"><b>Teacher Number:</b></label>
+                                        <label asp-for="Id" class="form-label"><b>Student Number:</b></label>
                                         <label asp-for="Id" class="form-label">@Html.DisplayFor(model => model.Id)</label>
-                                        <input asp-for="ImageFile" class="form-control" type="file" onchange="previewimg(event)"/>
+                                        <input asp-for="ImageFile" class="form-control" type="file" onchange="previewimg(event)" />
                                     </div>
                                 </div>
                                 <label asp-for="FullName" class="form-label"><b>Name:</b></label>
@@ -76,6 +76,11 @@
                                     </div>
                                 </div>
                                 <br />
+                                @*@{
+                                        var minDate = DateTime.Now.Year - 18;
+                                        var maxDate = DateTime.Now.Date;
+                                        var defaultDate = DateTime.Now.Date;
+                                    }*@
                                 <label asp-for="DateOfBirth" class="form-label"><b>Date of Birth:</b></label>
                                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                                 <input asp-for="DateOfBirth" type="date" class="form-control" id="dateofbirth">
@@ -84,7 +89,8 @@
                                 <input asp-for="Address" type="text" class="form-control" id="address" placeholder="Address">
                                 <label asp-for="ZipCode" class="form-label"><b>Zip-Code:</b></label>
                                 <span asp-validation-for="ZipCode" class="text-danger"></span>
-                                <input asp-for="ZipCode" type="text" class="form-control" id="zip-code" placeholder="Zip-Code">
+                                <ejs-maskedtextbox id="mask1" ejs-for="ZipCode" mask="0000-000" placeholder="0000-000" cssClass="e-filled" floatLabelType="Never"></ejs-maskedtextbox>
+                                <div style="height:3px;"><h6></h6></div>
                                 <label asp-for="City" class="form-label"><b>City:</b></label>
                                 <span asp-validation-for="City" class="text-danger"></span>
                                 <input asp-for="City" type="text" class="form-control" id="city" placeholder="City">
@@ -105,15 +111,19 @@
                                 <label asp-for="IdentificationNumber" class="form-label"><b>Identification Number:</b></label>
                                 <span asp-validation-for="IdentificationNumber" class="text-danger"></span>
                                 <input asp-for="IdentificationNumber" type="text" class="form-control" id="idnumber" placeholder="Identification Number">
+                                <div style="height:3px;"><h6></h6></div>
                                 <label asp-for="TaxNumber" class="form-label"><b>Tax Number:</b></label>
                                 <span asp-validation-for="TaxNumber" class="text-danger"></span>
                                 <input asp-for="TaxNumber" type="text" class="form-control" id="taxnumber" placeholder="Tax Number">
+                                <div style="height:3px;"><h6></h6></div>
                                 <label asp-for="SSNumber" class="form-label"><b>Social Security Number:</b></label>
                                 <span asp-validation-for="SSNumber" class="text-danger"></span>
                                 <input asp-for="SSNumber" type="text" class="form-control" id="ssnumber" placeholder="Social Security Number">
+                                <div style="height:3px;"><h6></h6></div>
                                 <label asp-for="NHSNumber" class="form-label"><b>National Health Service Number:</b></label>
                                 <span asp-validation-for="NHSNumber" class="text-danger"></span>
                                 <input asp-for="NHSNumber" type="text" class="form-control" id="nhsnumber" placeholder="National Health Service Number">
+                                <div style="height:3px;"><h6></h6></div>
                                 <label asp-for="MaritalStatus" class="form-label"><b>Marital Status:</b></label>
                                 <span asp-validation-for="MaritalStatus" class="text-danger"></span>
                                 <div class="form-check" style="height:48px;">
@@ -140,53 +150,12 @@
                                 <label asp-for="Telephone" class="form-label"><b>Telephone Number:</b></label>
                                 <span asp-validation-for="Telephone" class="text-danger"></span>
                                 <input asp-for="Telephone" type="text" class="form-control" id="phone" placeholder="Telephone Number">
+                                <div style="height:3px;"><h6></h6></div>
                                 <label asp-for="Email" class="form-label"><b>E-mail:</b></label>
                                 <span asp-validation-for="Email" class="text-danger"></span>
                                 <input asp-for="Email" type="email" class="form-control" id="email" placeholder="E-mail">
                             </div>
                         </div>
-                        @*<div class="col-12 wow fadeInUp" data-wow-delay="500ms">
-                            <h6><br /></h6>
-                        </div>
-                        <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
-                            BANNER START
-                            <div class="panel single-accordion">
-                                <h6>
-                                    <a class="collapsed" style="text-align:center;">
-                                        School Information
-                                    </a>
-                                </h6>
-                            </div>
-                            BANNER END
-                            <br />
-                            <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
-                                <label class="form-label"><b>Subjects:</b></label>
-                                <span asp-validation-for="Subjects" class="text-danger"></span>
-                                <ejs-listbox id="subjects-select-listbox">
-                                    <e-listbox-selectionsettings showCheckbox="true"></e-listbox-selectionsettings>
-                                </ejs-listbox>
-                                <div style="height:48px;"></div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-4">
-                                        <label class="form-label"><b>Classes:</b></label>
-                                        <ejs-listbox ejs-for="Classes" dataSource="Model.Classes" id="classes-select-listbox">
-                                            <e-listbox-selectionsettings showCheckbox="true"></e-listbox-selectionsettings>
-                                            <e-listbox-fields text="Name" value="Id"></e-listbox-fields>
-                                        </ejs-listbox>
-                                    </div>
-                                    <div class="col-md-2"></div>
-                                    <div class="col-md-4">
-                                        <label class="form-label"><b>Courses:</b></label>
-                                        <ejs-listbox ejs-for="Courses" dataSource="Model.Courses" id="courses-select-listbox">
-                                            <e-listbox-selectionsettings showCheckbox="true"></e-listbox-selectionsettings>
-                                            <e-listbox-fields text="Name" value="Id"></e-listbox-fields>
-                                        </ejs-listbox>
-                                    </div>
-                                    <div class="col-md-1"></div>
-                                </div>
-                            </div>
-                        </div>*@
                         <!-- ##### About Us Area End ##### -->
                         <input asp-action="Edit" class="btn academy-btn mt-30" type="submit" value="Edit" style="margin-left:33%" />
                         <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:3%">Back</a>
@@ -200,10 +169,16 @@
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-<script>
-    var previewimg = function (event) {
-        var result = document.getElementById("imgpreview");
-        result.src = URL.createObjectURL(event.target.files[0]);
-    }
-</script>
+    <script>
+        var previewimg = function (event) {
+            var result = document.getElementById("imgpreview");
+            result.src = URL.createObjectURL(event.target.files[0]);
+        }
+    </script>
+
+    <style>
+        .e-mask.e-filled .e-control.e-maskedtextbox {
+            height: 54px;
+        }
+    </style>
 }

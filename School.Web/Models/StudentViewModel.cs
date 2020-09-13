@@ -17,5 +17,7 @@ namespace School.Web.Models
         public IEnumerable<Class> Classes { get; set; }
 
         public List<string> SchoolYears = new List<string>();
+
+        public IEnumerable<Grade> Grades { get; set; }
     }
 }

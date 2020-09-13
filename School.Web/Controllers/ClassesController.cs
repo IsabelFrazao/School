@@ -35,7 +35,7 @@ namespace School.Web.Controllers
         // GET: ClassesController
         public IActionResult Index()
         {
-            return View(_classRepository.GetAll());
+            return View(_classRepository.GetAll().Include(c => c.Course));
         }
 
         // GET: ClassesController/Details/5
@@ -48,19 +48,51 @@ namespace School.Web.Controllers
 
             var classes = await _classRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
 
-            //classes.Course = await _courseRepository.GetByIdAsync(classes.CourseId);
-
             var model = _converterHelper.ToClassViewModel(classes, await _courseRepository.GetByIdAsync(classes.CourseId),
                 _studentRepository.GetAll().Where(e => e.ClassId == id.Value),
                 _subjectRepository.GetAll().Where(e => e.CourseId == classes.CourseId));
 
-            //foreach (var subject in model.Subjects)
-            //{
-            //   model.Teachers = model.Teachers.All(e => e.Id == subject.TeacherId /*await _teacherRepository.GetByIdAsync(subject.TeacherId)*/);
-            //}
+            model.Teachers = new List<Teacher>();
 
-            //var students = _studentRepository.GetAll().Where(e => e.ClassId == id.Value);
-            //model.Students = students;
+            IEnumerable<Teacher> Teachers = _teacherRepository.GetAll();
+
+            var Subjects = new List<Subject>(model.Subjects);
+
+            int rep = 0;
+
+            foreach (var subject in Subjects)
+            {
+                foreach(var teacher in Teachers)
+                {
+                    if(teacher.Id == subject.TeacherId && teacher.Id != rep)
+                    {
+                        model.Teachers.Add(new Teacher
+                        {
+                            Id = teacher.Id,
+                            PhotoUrl = teacher.PhotoUrl,
+                            FullName = teacher.FullName,
+                            Gender = teacher.Gender,
+                            DateOfBirth = teacher.DateOfBirth,
+                            Address = teacher.Address,
+                            ZipCode = teacher.ZipCode,
+                            City = teacher.City,
+                            IdentificationNumber = teacher.IdentificationNumber,
+                            TaxNumber = teacher.TaxNumber,
+                            SSNumber = teacher.SSNumber,
+                            NHSNumber = teacher.NHSNumber,
+                            MaritalStatus = teacher.MaritalStatus,
+                            Nationality = teacher.Nationality,
+                            Telephone = teacher.Telephone,
+                            Email = teacher.Email
+                        });
+
+                        rep = teacher.Id;
+                    }
+                }                
+            }
+
+            var students = _studentRepository.GetAll().Where(e => e.ClassId == id.Value);
+            model.Students = students;
 
             if (classes == null)
             {
@@ -172,12 +204,58 @@ namespace School.Web.Controllers
 
             var classes = await _classRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
 
+            var model = _converterHelper.ToClassViewModel(classes, await _courseRepository.GetByIdAsync(classes.CourseId),
+                _studentRepository.GetAll().Where(e => e.ClassId == id.Value),
+                _subjectRepository.GetAll().Where(e => e.CourseId == classes.CourseId));
+
+            model.Teachers = new List<Teacher>();
+
+            IEnumerable<Teacher> Teachers = _teacherRepository.GetAll();
+
+            var Subjects = new List<Subject>(model.Subjects);
+
+            int rep = 0;
+
+            foreach (var subject in Subjects)
+            {
+                foreach (var teacher in Teachers)
+                {
+                    if (teacher.Id == subject.TeacherId && teacher.Id != rep)
+                    {
+                        model.Teachers.Add(new Teacher
+                        {
+                            Id = teacher.Id,
+                            PhotoUrl = teacher.PhotoUrl,
+                            FullName = teacher.FullName,
+                            Gender = teacher.Gender,
+                            DateOfBirth = teacher.DateOfBirth,
+                            Address = teacher.Address,
+                            ZipCode = teacher.ZipCode,
+                            City = teacher.City,
+                            IdentificationNumber = teacher.IdentificationNumber,
+                            TaxNumber = teacher.TaxNumber,
+                            SSNumber = teacher.SSNumber,
+                            NHSNumber = teacher.NHSNumber,
+                            MaritalStatus = teacher.MaritalStatus,
+                            Nationality = teacher.Nationality,
+                            Telephone = teacher.Telephone,
+                            Email = teacher.Email
+                        });
+
+                        rep = teacher.Id;
+                    }
+                }
+            }
+
+            var students = _studentRepository.GetAll().Where(e => e.ClassId == id.Value);
+            model.Students = students;
+
             if (classes == null)
             {
                 return NotFound();
             }
 
-            return View(classes);
+            return View(model);
         }
 
         // POST: ClassesController/Delete/5

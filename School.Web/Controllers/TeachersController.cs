@@ -200,5 +200,7 @@ namespace School.Web.Controllers
             await _teacherRepository.DeleteAsync(teacher);
             return RedirectToAction(nameof(Index));
         }
+
+
     }
 }

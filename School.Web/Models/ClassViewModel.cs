@@ -13,7 +13,7 @@ namespace School.Web.Models
 
         public IEnumerable<Student> Students { get; set; }
 
-        public IEnumerable<Teacher> Teachers { get; set; }
+        public ICollection<Teacher> Teachers { get; set; }
 
         public IEnumerable<Subject> Subjects { get; set; }
     }

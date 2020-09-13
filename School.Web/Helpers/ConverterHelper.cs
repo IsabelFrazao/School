@@ -273,7 +273,7 @@ namespace School.Web.Helpers
                 StudentId = model.StudentId,
                 Student = student,
                 FinalGrade = model.FinalGrade,
-                Approval = model.FinalGrade >= 10 ? model.Approval = "Approved" : model.Approval = "Reproved"
+                Approval = model.FinalGrade >= 10 ? model.Approval = "Approved" : model.Approval = "Disapproved"
             };
         }
 
@@ -298,7 +298,22 @@ namespace School.Web.Helpers
                 Student = model.Student,
                 Students = students,
                 FinalGrade = model.FinalGrade,
-                Approval = model.FinalGrade >= 10 ? model.Approval = "Approved" : model.Approval = "Reproved"
+                Approval = model.FinalGrade >= 10 ? model.Approval = "Approved" : model.Approval = "Disapproved"
+            };
+        }
+
+        public Grade CreateGrade(StudentSubject studentsubject, Student student, Subject subject, Course course, Class classes, Teacher teacher, bool isNew)
+        {
+            return new Grade
+            {
+                Id = isNew ? 0 : studentsubject.Id,
+                CourseId = course.Id,
+                ClassId = classes.Id,
+                SubjectId = studentsubject.SubjectId,
+                TeacherId = teacher.Id,
+                StudentId = studentsubject.StudentId,      
+                FinalGrade = -1,
+                //Approval = model.FinalGrade >= 10 ? model.Approval = "Approved" : model.Approval = "Disapproved"
             };
         }
         #endregion GRADE

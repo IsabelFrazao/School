@@ -1,9 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using School.Web.Data.Entities;
 using School.Web.Data.Repositories;
 using School.Web.Helpers;
 using School.Web.Models;
+using Syncfusion.EJ2.Linq;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace School.Web.Controllers
@@ -16,10 +24,12 @@ namespace School.Web.Controllers
         private readonly ISubjectRepository _subjectRepository;
         private readonly ITeacherRepository _teacherRepository;
         private readonly IStudentRepository _studentRepository;
+        private readonly IStudentSubjectRepository _studentSubjectRepository;
         private readonly IConverterHelper _converterHelper;
 
         public GradesController(IGradeRepository gradeRepository, ICourseRepository courseRepository, IClassRepository classRepository,
-            ISubjectRepository subjectRepository, ITeacherRepository teacherRepository, IStudentRepository studentRepository, IConverterHelper converterHelper)
+            ISubjectRepository subjectRepository, ITeacherRepository teacherRepository, IStudentRepository studentRepository,
+            IStudentSubjectRepository studentSubjectRepository, IConverterHelper converterHelper)
         {
             _gradeRepository = gradeRepository;
             _courseRepository = courseRepository;
@@ -27,13 +37,20 @@ namespace School.Web.Controllers
             _subjectRepository = subjectRepository;
             _teacherRepository = teacherRepository;
             _studentRepository = studentRepository;
+            _studentSubjectRepository = studentSubjectRepository;
             _converterHelper = converterHelper;
         }
 
         // GET: GradesController
         public IActionResult Index()
         {
-            return View(_gradeRepository.GetAll());
+            return View(_gradeRepository.GetAll()
+                .Include(c => c.Course)
+                .Include(c => c.Class)
+                .Include(c => c.Subject)
+                .Include(c => c.Teacher)
+                .Include(c => c.Student)
+                .Where(g => g.FinalGrade >= 0));
         }
 
         // GET: GradesController/Details/5
@@ -57,35 +74,33 @@ namespace School.Web.Controllers
         // GET: GradesController/Create
         public IActionResult Create()
         {
-            var model = new GradeViewModel
-            {
-                Courses = _courseRepository.GetAll(),
-                Classes = _classRepository.GetAll(),
-                Subjects = _subjectRepository.GetAll(),
-                Teachers = _teacherRepository.GetAll(),
-                Students = _studentRepository.GetAll(),
-                Grades = _gradeRepository.GetAll()
-            };
-
-            return View(model);
+            return View(_gradeRepository.GetAll().Include(c => c.Course)
+                .Include(c => c.Class)
+                .Include(c => c.Subject)
+                .Include(c => c.Teacher)
+                .Include(c => c.Student));
         }
-
 
         // POST: GradesController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(GradeViewModel model)
+        public async Task Create([FromBody] GradeViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var grade = _converterHelper.ToGrade(model, await _courseRepository.GetByIdAsync(model.CourseId), await _classRepository.GetByIdAsync(model.ClassId),
-                    await _subjectRepository.GetByIdAsync(model.SubjectId), await _teacherRepository.GetByIdAsync(model.TeacherId),
-                    await _studentRepository.GetByIdAsync(model.StudentId), true);
+                var grade = await _gradeRepository.GetByIdAsync(model.Id);
+                //grade.Id = model.Id;
 
-                await _gradeRepository.CreateAsync(grade);
-                return RedirectToAction(nameof(Index));
+                grade.FinalGrade = model.FinalGrade;
+                grade.Approval = model.FinalGrade >= 10 ? model.Approval = "Approved" : model.Approval = "Disapproved";
+                //var grade = _converterHelper.ToGrade(model, await _courseRepository.GetByIdAsync(model.CourseId), await _classRepository.GetByIdAsync(model.ClassId),
+                //   await _subjectRepository.GetByIdAsync(model.SubjectId), await _teacherRepository.GetByIdAsync(model.TeacherId),
+                //   await _studentRepository.GetByIdAsync(model.StudentId), true);
+
+                await _gradeRepository.UpdateAsync(grade);
+                //return RedirectToAction(nameof(Index));
             }
-            return View(model);
+            //return response;
         }
 
         // GET: GradesController/Edit/5

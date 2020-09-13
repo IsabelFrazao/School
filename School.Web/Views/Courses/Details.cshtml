@@ -60,9 +60,8 @@
                                     <div style="height:48px;">
                                         <label class="form-label">@Html.DisplayFor(model => model.BeginDate)</label> <br />
                                     </div>
-                                    <br />
                                     <label class="form-label"><b>Subjects:</b></label>
-                                    <ejs-listbox id="subjects-select-listbox" dataSource="Model.Subjects">
+                                    <ejs-listbox id="subjects-select-listbox" dataSource="Model.Subjects" height="200px">
                                         <e-listbox-selectionsettings showCheckbox="false"></e-listbox-selectionsettings>
                                         <e-listbox-fields text="Name" value="Id"></e-listbox-fields>
                                     </ejs-listbox>
@@ -72,15 +71,15 @@
                                     <label class="form-label"><b>End Date:</b></label>
                                     <div style="height:48px;">
                                         <label class="form-label">@Html.DisplayFor(model => model.EndDate)</label> <br />
+                                        <br />
+                                        <label class="form-label"><b>Classes:</b></label>
+                                        <ejs-listbox dataSource="Model.Classes" id="classes-select-listbox" height="200px">
+                                            <e-listbox-selectionsettings showCheckbox="false"></e-listbox-selectionsettings>
+                                            <e-listbox-fields text="Name" value="Id"></e-listbox-fields>
+                                        </ejs-listbox>
                                     </div>
-                                    <br />
-                                    <label class="form-label"><b>Classes:</b></label>
-                                    <ejs-listbox dataSource="Model.Classes" id="classes-select-listbox">
-                                        <e-listbox-selectionsettings showCheckbox="false"></e-listbox-selectionsettings>
-                                        <e-listbox-fields text="Name" value="Id"></e-listbox-fields>
-                                    </ejs-listbox>
+                                    <div class="col-md-1"></div>
                                 </div>
-                                <div class="col-md-1"></div>
                             </div>
                         </div>
                     </div>

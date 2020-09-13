@@ -35,7 +35,7 @@
                         </div>
                         <!--BANNER END-->
                         <br />
-                        <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:850px;">
+                        <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:680px;">
                             <label class="form-label"><b>Course:</b></label>
                             <div style="height:48px;">
                                 <label class="form-label">@Html.DisplayFor(model => model.Course.Name)</label><br />
@@ -56,7 +56,7 @@
                                 <div class="col-md-1"></div>
                                 <div class="col-md-3">
                                     <label class="form-label"><b>Subjects:</b></label>                                    
-                                    <ejs-listbox id="subjects-select-listbox" dataSource="Model.Subjects">
+                                    <ejs-listbox id="subjects-select-listbox" dataSource="Model.Subjects" height="200px">
                                         <e-listbox-selectionsettings showCheckbox="false"></e-listbox-selectionsettings>
                                         <e-listbox-fields text="Name" value="Id"></e-listbox-fields>
                                     </ejs-listbox>
@@ -66,17 +66,17 @@
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label"><b>Teachers:</b></label>
-                                <ejs-listbox id="subjects-select-listbox" dataSource="Model.Teachers">
+                                <ejs-listbox id="teachers-select-listbox" dataSource="Model.Teachers" height="200px">
                                     <e-listbox-selectionsettings showCheckbox="false"></e-listbox-selectionsettings>
-                                    <e-listbox-fields text="Name" value="Id"></e-listbox-fields>
+                                    <e-listbox-fields text="FullName" value="Id"></e-listbox-fields>
                                 </ejs-listbox>
                                     <br />
                                     <label class="form-label"><b>Total:</b></label>
-                                    <label class="form-label">@*@Model.Teachers.Count()*@</label>
+                                    <label class="form-label">@Model.Teachers.Count()</label>
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label"><b>Students:</b></label>                                    
-                                <ejs-listbox dataSource="Model.Students" id="students-select-listbox">
+                                <ejs-listbox dataSource="Model.Students" id="students-select-listbox" height="200px">
                                     <e-listbox-selectionsettings showCheckbox="false" ></e-listbox-selectionsettings>
                                     <e-listbox-fields text="FullName" value="Id"></e-listbox-fields>
                                 </ejs-listbox>

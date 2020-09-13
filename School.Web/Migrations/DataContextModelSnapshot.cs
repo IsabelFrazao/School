@@ -80,7 +80,7 @@ namespace School.Web.Migrations
 
                     b.Property<int>("CourseId");
 
-                    b.Property<string>("FinalGrade");
+                    b.Property<decimal>("FinalGrade");
 
                     b.Property<int>("StudentId");
 
@@ -188,6 +188,21 @@ namespace School.Web.Migrations
                     b.HasIndex("CourseId");
 
                     b.ToTable("Students");
+                });
+
+            modelBuilder.Entity("School.Web.Data.Entities.StudentSubject", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("StudentId");
+
+                    b.Property<int>("SubjectId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StudentSubjects");
                 });
 
             modelBuilder.Entity("School.Web.Data.Entities.Subject", b =>

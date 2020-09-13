@@ -53,7 +53,7 @@
                                     <div class="col-md-8">
                                         <label asp-for="Id" class="form-label"><b>Student Number:</b></label>
                                         <label asp-for="Id" class="form-label">@Html.DisplayFor(model => model.Id)</label>
-                                        <input asp-for="ImageFile" class="form-control" type="file" onchange="previewimg(event)"/>
+                                        <input asp-for="ImageFile" class="form-control" type="file" onchange="previewimg(event)" />
                                     </div>
                                 </div>
                                 <label asp-for="FullName" class="form-label"><b>Name:</b></label>
@@ -74,6 +74,11 @@
                                     </div>
                                 </div>
                                 <br />
+                                @*@{
+                                        var minDate = DateTime.Now.Year - 18;
+                                        var maxDate = DateTime.Now.Date;
+                                        var defaultDate = DateTime.Now.Date;
+                                    }*@
                                 <label asp-for="DateOfBirth" class="form-label"><b>Date of Birth:</b></label>
                                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                                 <input asp-for="DateOfBirth" type="date" class="form-control" id="dateofbirth">
@@ -82,7 +87,8 @@
                                 <input asp-for="Address" type="text" class="form-control" id="address" placeholder="Address">
                                 <label asp-for="ZipCode" class="form-label"><b>Zip-Code:</b></label>
                                 <span asp-validation-for="ZipCode" class="text-danger"></span>
-                                <input asp-for="ZipCode" type="text" class="form-control" id="zip-code" placeholder="Zip-Code">
+                                <ejs-maskedtextbox id="mask1" ejs-for="ZipCode" mask="0000-000" placeholder="0000-000" cssClass="e-filled" floatLabelType="Never"></ejs-maskedtextbox>
+                                <div style="height:3px;"><h6></h6></div>
                                 <label asp-for="City" class="form-label"><b>City:</b></label>
                                 <span asp-validation-for="City" class="text-danger"></span>
                                 <input asp-for="City" type="text" class="form-control" id="city" placeholder="City">
@@ -103,15 +109,19 @@
                                 <label asp-for="IdentificationNumber" class="form-label"><b>Identification Number:</b></label>
                                 <span asp-validation-for="IdentificationNumber" class="text-danger"></span>
                                 <input asp-for="IdentificationNumber" type="text" class="form-control" id="idnumber" placeholder="Identification Number">
+                                <div style="height:3px;"><h6></h6></div>
                                 <label asp-for="TaxNumber" class="form-label"><b>Tax Number:</b></label>
                                 <span asp-validation-for="TaxNumber" class="text-danger"></span>
                                 <input asp-for="TaxNumber" type="text" class="form-control" id="taxnumber" placeholder="Tax Number">
+                                <div style="height:3px;"><h6></h6></div>
                                 <label asp-for="SSNumber" class="form-label"><b>Social Security Number:</b></label>
                                 <span asp-validation-for="SSNumber" class="text-danger"></span>
                                 <input asp-for="SSNumber" type="text" class="form-control" id="ssnumber" placeholder="Social Security Number">
+                                <div style="height:3px;"><h6></h6></div>
                                 <label asp-for="NHSNumber" class="form-label"><b>National Health Service Number:</b></label>
                                 <span asp-validation-for="NHSNumber" class="text-danger"></span>
                                 <input asp-for="NHSNumber" type="text" class="form-control" id="nhsnumber" placeholder="National Health Service Number">
+                                <div style="height:3px;"><h6></h6></div>
                                 <label asp-for="MaritalStatus" class="form-label"><b>Marital Status:</b></label>
                                 <span asp-validation-for="MaritalStatus" class="text-danger"></span>
                                 <div class="form-check" style="height:48px;">
@@ -138,6 +148,7 @@
                                 <label asp-for="Telephone" class="form-label"><b>Telephone Number:</b></label>
                                 <span asp-validation-for="Telephone" class="text-danger"></span>
                                 <input asp-for="Telephone" type="text" class="form-control" id="phone" placeholder="Telephone Number">
+                                <div style="height:3px;"><h6></h6></div>
                                 <label asp-for="Email" class="form-label"><b>E-mail:</b></label>
                                 <span asp-validation-for="Email" class="text-danger"></span>
                                 <input asp-for="Email" type="email" class="form-control" id="email" placeholder="E-mail">
@@ -180,73 +191,6 @@
                                 </ejs-combobox>
                             </div>
                         </div>
-                        <!----<div class="col-12 wow fadeInUp" data-wow-delay="500ms">
-                            <h6><br /></h6>
-                        </div>
-                        <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
-                            <!--BANNER START-->
-                            <!--<div class="panel single-accordion">
-                                <h6>
-                                    <a class="collapsed" style="text-align:center;">
-                                        Grades
-                                    </a>
-                                </h6>
-                            </div>-->
-                            <!--BANNER END-->
-                            <!--<br />
-                            <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
-                                <div>
-                                    <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
-                                        <table class="table" style="width:100%">
-                                            <thead>
-                                                <tr>-->
-                                                    <!--@*<th>
-                                                        @Html.DisplayNameFor(model => model.FullName) Subject
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayNameFor(model => model.FullName) Teacher
-                                                    </th>
-                                                    <th>
-                                                        @Html.DisplayNameFor(model => model.FullName) Grade
-                                                    </th>*@-->
-                                                <!--<!--</tr>
-                                            </thead>
-                                            <tbody>-->
-                                                <!--@*@foreach (var item in Model)
-                                                    {
-                                                        <tr>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.Name)
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.Price)
-                                                            </td>
-                                                            <td>
-                                                                @if (!string.IsNullOrEmpty(item.ImageUrl))
-                                                                {
-                                                                    <img src="@Url.Content(item.ImageUrl)" alt="image" style="width:100px; height:150px; max-width:100%; height:auto" />
-                                                                }
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.LastPurchase)
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.LastSale)
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.IsAvailable)
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.Stock)
-                                                            </td>
-                                                        </tr>
-                                                    }*@
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>-->
                         <!-- ##### About Us Area End ##### -->
                         <input asp-action="Edit" class="btn academy-btn mt-30" type="submit" value="Edit" style="margin-left:33%" />
                         <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:3%">Back</a>
@@ -260,10 +204,16 @@
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-<script>
-    var previewimg = function (event) {
-        var result = document.getElementById("imgpreview");
-        result.src = URL.createObjectURL(event.target.files[0]);
-    }
-</script>
+    <script>
+        var previewimg = function (event) {
+            var result = document.getElementById("imgpreview");
+            result.src = URL.createObjectURL(event.target.files[0]);
+        }
+    </script>
+
+    <style>
+        .e-mask.e-filled .e-control.e-maskedtextbox {
+            height: 54px;
+        }
+    </style>
 }

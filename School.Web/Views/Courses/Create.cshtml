@@ -53,47 +53,28 @@
                                 <ejs-combobox id="coordinator" ejs-for="CoordinatorId" dataSource="Model.Teachers" cssClass="e-filled" placeholder="Select a Coordinator" index="2" popupHeight="230px" change="valueChange">
                                     <e-combobox-fields text="FullName" value="Id"></e-combobox-fields>
                                 </ejs-combobox>
+                                @{
+                                    var maxDate = DateTime.Now.Year + 5;
+                                    var minDate = DateTime.Now.Date;
+                                    var defaultDate = DateTime.Now.Date;
+                                }
                                 <div style="height:48px;"></div>
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-4">
                                         <label asp-for="BeginDate" class="form-label"><b>Begin Date:</b></label>
                                         <span asp-validation-for="BeginDate" class="text-danger"></span>
-                                        <span asp-validation-for="BeginDate" class="text-danger"></span>
-                                        <input asp-for="BeginDate" type="date" class="form-control" id="begin-date" placeholder="Begin Date">
+                                        <input asp-for="BeginDate" type="date" min=@minDate max=@maxDate value=@defaultDate class="form-control" id="begindate" placeholder="Begin Date">
                                     </div>
                                     <div class="col-md-2"></div>
                                     <div class="col-md-4">
                                         <label asp-for="EndDate" class="form-label"><b>End Date:</b></label>
                                         <span asp-validation-for="EndDate" class="text-danger"></span>
-                                        <span asp-validation-for="EndDate" class="text-danger"></span>
-                                        <input asp-for="EndDate" type="date" class="form-control" id="end-date" placeholder="End Date">
+                                        <input asp-for="EndDate" type="date" min=@minDate max=@maxDate value=@defaultDate class="form-control" id="enddate" placeholder="End Date">
                                     </div>
                                     <div class="col-md-1"></div>
-                                </div>
-                                @*<div style="height:48px;"></div>
-                                <label class="form-label"><b>Subjects:</b></label>
-                                <span asp-validation-for="Subjects" class="text-danger"></span>*@
-                                @*<ejs-listbox ejs-for="Subject" dataSource="Model.Subjects" id="subjects-select-listbox" change="OnChange">
-                                        <e-listbox-selectionsettings for="Subject" showCheckbox="true"></e-listbox-selectionsettings>
-                                        <e-listbox-fields for="Subject" text="Name" value="Id"></e-listbox-fields>
-                                    </ejs-listbox>*@
-                                @*<ejs-multiselect id="games" ejs-for="Subjects" dataSource="Model.Subjects" placeholder="Favorite Sports"
-                                                     mode="CheckBox" showSelectAll="true" selectAllText="Select All" unSelectAllText="unSelect All">
-                                        <e-multiselect-fields value="Id" text="Name"></e-multiselect-fields>
-                                    </ejs-multiselect>*@
-                                @*@foreach (var item in Model.Subjects)
-                                {*@
-                                    @*<input type="checkbox" id="subjects" value="@item.Id" />
-                                        <label class="form-label"><b>@item.Name</b></label><br/>*@
-
-                                    @*@Html.CheckBoxFor(m => m.isActive, @item.Id)<b> @item.Name</b>*@
-
-                                    @*@Html.EditorFor(x => x.Subject.CourseId, Model.Id)<b> @item.Name</b>*@
-                                @*}*@
-
-                            @*</div>*@
-                        </div>
+                                </div>                               
+                            </div>
                         <!-- ##### About Us Area End ##### -->
                         <input asp-action="Create" id="button" class="btn academy-btn mt-30" type="submit" value="Create" style="margin-left:30%" />
                         <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:5%">Back</a>
@@ -113,5 +94,4 @@
             console.log(multiselectObj.value);
         }
     </script>
-
 }

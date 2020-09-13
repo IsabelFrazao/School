@@ -17,6 +17,8 @@ namespace School.Web.Models
 
         public IEnumerable<Student> Students { get; set; }
 
-        public IEnumerable<Grade> Grades { get; set; }
+        public ICollection<Grade> Grades { get; set; }
+
+        public IEnumerable<StudentSubject> StudentSubjects { get; set; }
     }
 }

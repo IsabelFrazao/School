@@ -27,74 +27,32 @@
                     <a asp-action="Create" class="btn academy-btn mt-30" style="margin-left:40%">Create New</a>
                     <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
                         <h6><br /></h6>
-                    </div>
-                    @*<div class="blog-post-search-widget mb-30">
-                        <form action="#" method="post">
-                            <input type="search" name="search" id="Search" placeholder="Search">
-                            <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
-                        </form>
-                    </div>*@
+                    </div>                    
                 </div>
                 <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
-                    <div class="panel-body">
-                        <table class="table table-hover table-responsive table-striped" style="width: 100%;" id="MyTable">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.FullName)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.DateOfBirth)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Address)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.IdentificationNumber)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Telephone)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Email)
-                                    </th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model)
-                                {
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.FullName)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.DateOfBirth)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Address)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.IdentificationNumber)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Telephone)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Email)
-                                        </td>
-                                        <td>
-                                            <a asp-area="" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                                            <a asp-area="" asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                                            <a asp-area="" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                    <ejs-grid id="Grid" dataSource="Model" allowSorting="true" allowFiltering="true" allowPaging="true">
+                        <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
+                        <e-grid-columns>
+                            <e-grid-column field="Id" headerText="Id" visible="false" textAlign="Right" width="auto" type="number" isPrimaryKey="true"></e-grid-column>
+                            <e-grid-column field="FullName" headerText="FullName" width="auto" type="string"></e-grid-column>
+                            <e-grid-column field="DateOfBirth" headerText="Date Of Birth" textAlign="Right" width="auto" type="string"></e-grid-column>
+                            @*<e-grid-column field="Address" headerText="Address" textAlign="Right" width="120" type="string"></e-grid-column>*@
+                            <e-grid-column field="IdentificationNumber" headerText="IdentificationNumber" textAlign="Right" width="auto" type="string"></e-grid-column>
+                            <e-grid-column field="Telephone" headerText="Telephone" textAlign="Right" width="auto" type="string"></e-grid-column>
+                            <e-grid-column field="Email" headerText="Email" textAlign="Right" width="auto" type="string"></e-grid-column>
+                            <e-grid-column template="#template" textAlign="Right" width="auto"></e-grid-column>
+                        </e-grid-columns>
+                    </ejs-grid>
                 </div>
             </div>
         </section>
     </div>
 </section>
+
+<script id="template" type="text/x-template">   
+    <div>
+        <a href='/Teachers/Edit/${Id}'>Edit</a> |
+        <a href='/Teachers/Details/${Id}'>Details</a> |
+        <a href='/Teachers/Delete/${Id}'>Delete</a>
+    </div>   
+</script> 

@@ -43,6 +43,7 @@ namespace School.Web
             services.AddScoped<ISubjectRepository, SubjectRepository>();
             services.AddScoped<IGradeRepository, GradeRepository>();
             services.AddScoped<IIEFPSubjectRepository, IEFPSubjectRepository>();
+            services.AddScoped<IStudentSubjectRepository, StudentSubjectRepository>();
             services.AddScoped<IImageHelper, ImageHelper>();
             services.AddScoped<IConverterHelper, ConverterHelper>();
             services.AddScoped<IFileHelper, FileHelper>();
