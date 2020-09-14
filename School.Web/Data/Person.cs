@@ -22,6 +22,7 @@ namespace School.Web.Data
 
         [DataType(DataType.Date)]
         [Display(Name = "Date of Birth")]
+        [Range(typeof(DateTime), "1/1/1966", "1/1/2020")]
         //[Required(ErrorMessage = "Field {0} is mandatory")]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
         public DateTime DateOfBirth { get; set; }
@@ -33,7 +34,6 @@ namespace School.Web.Data
 
         [Display(Name = "Zip Code")]
         //[Required(ErrorMessage = "Field {0} is mandatory")]
-        [DisplayFormat(DataFormatString = "{0:0000-000}", ApplyFormatInEditMode = true)]
         //[StringLength(30, ErrorMessage = "Field {0} must have between {2} and {1} characters", MinimumLength = 9)]
         public string ZipCode { get; set; }
 
@@ -82,29 +82,5 @@ namespace School.Web.Data
         //[Required(ErrorMessage = "Field {0} is mandatory")]
         //[StringLength(30, ErrorMessage = "Field {0} must have between {2} and {1} characters", MinimumLength = 3)]
         public string Email { get; set; }
-
-
-
-        //public Person(int id, /*string photoURL, */string fullName, string gender, DateTime dateOfBirth, string address, string zipCode, string city,
-        //    string identificationNumber, string taxNumber, string sSNumber, string nHSNumber, string maritalStatus, string nationality,
-        //    string telephone, string email)
-        //{
-        //    Id = id;
-        //    //PhotoURL = photoURL;
-        //    FullName = fullName;
-        //    Gender = gender;
-        //    DateOfBirth = dateOfBirth;
-        //    Address = address;
-        //    ZipCode = zipCode;
-        //    City = city;
-        //    IdentificationNumber = identificationNumber;
-        //    TaxNumber = taxNumber;
-        //    SSNumber = sSNumber;
-        //    NHSNumber = nHSNumber;
-        //    MaritalStatus = maritalStatus;
-        //    Nationality = nationality;
-        //    Telephone = telephone;
-        //    Email = email;
-        //}
     }
 }

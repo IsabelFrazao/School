@@ -45,7 +45,11 @@
                                         <picture>
                                             <img src="@Url.Content(Model.PhotoUrl)" alt="image" style="width:200px; height:300px; max-width:100%; height:auto" />
                                         </picture>
-                                    }                                   
+                                    }
+                                    @if (string.IsNullOrEmpty(Model.PhotoUrl))
+                                    {
+                                        <img id="imgpreview" src="~/images/notavailable.jpg" alt="image" style="width:200px; height:300px; max-width:100%; height:auto" />
+                                    }
                                 </div>
                                 <div class="col-md-8">
                                     <br />

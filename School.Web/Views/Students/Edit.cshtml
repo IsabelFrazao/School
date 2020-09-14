@@ -39,46 +39,36 @@
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-3">
-                                        @if (!string.IsNullOrEmpty(Model.PhotoUrl))
-                                        {
-                                            <picture>
-                                                <img src="@Url.Content(Model.PhotoUrl)" id="imgpreview" alt="image" style="width:200px; height:300px; max-width:100%; height:auto" />
-                                            </picture>
-                                        }
-                                        @if (string.IsNullOrEmpty(Model.PhotoUrl))
-                                        {
-                                            <img id="imgpreview" alt="image" style="width:200px; height:300px; max-width:100%; height:auto" />
-                                        }
+                                        <img id="imgpreview" src="~/images/blank.jpg" alt="image" style="width:200px; height:300px; max-width:100%; height:auto" />
                                     </div>
                                     <div class="col-md-8">
                                         <label asp-for="Id" class="form-label"><b>Student Number:</b></label>
-                                        <label asp-for="Id" class="form-label">@Html.DisplayFor(model => model.Id)</label>
+                                        <label asp-for="Id" class="form-label">@ViewBag.idCount</label>
                                         <input asp-for="ImageFile" class="form-control" type="file" onchange="previewimg(event)" />
                                     </div>
                                 </div>
                                 <label asp-for="FullName" class="form-label"><b>Name:</b></label>
                                 <span asp-validation-for="FullName" class="text-danger"></span>
-                                <input asp-for="FullName" type="text" class="form-control" id="name" placeholder="Name">
+                                <input asp-for="FullName" class="form-control" id="name" placeholder="Name">
                                 <label asp-for="Gender" class="form-label"><b>Gender:</b></label>
                                 <span asp-validation-for="Gender" class="text-danger"></span>
                                 <div class="form-check" style="height:48px;">
                                     <div class="row">
                                         <div class="col-md-4">
                                             <br />
-                                            @Html.RadioButtonFor(model => model.Gender, "Male", Model.Gender == "Male" ? "checked" : string.Empty) <b> Male</b>
+                                            @Html.RadioButtonFor(model => model.Gender, "Male")<b> Male</b>
                                         </div>
                                         <div class="col-md-8">
                                             <br />
-                                            @Html.RadioButtonFor(model => model.Gender, "Female", Model.Gender == "Female" ? "checked" : string.Empty) <b> Female</b>
+                                            @Html.RadioButtonFor(model => model.Gender, "Female")<b> Female</b>
                                         </div>
                                     </div>
-                                </div>
-                                <br />
-                                @*@{
-                                        var minDate = DateTime.Now.Year - 18;
-                                        var maxDate = DateTime.Now.Date;
-                                        var defaultDate = DateTime.Now.Date;
-                                    }*@
+                                </div><br />
+                                @{
+                                    var minDate = new DateTime(DateTime.Now.Year - 65, DateTime.Now.Month, DateTime.Now.Day);
+                                    var maxDate = new DateTime(DateTime.Now.Year - 18, DateTime.Now.Month, DateTime.Now.Day);
+                                    var defaultDate = DateTime.Now.Date;
+                                }
                                 <label asp-for="DateOfBirth" class="form-label"><b>Date of Birth:</b></label>
                                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                                 <input asp-for="DateOfBirth" type="date" class="form-control" id="dateofbirth">
@@ -88,7 +78,8 @@
                                 <label asp-for="ZipCode" class="form-label"><b>Zip-Code:</b></label>
                                 <span asp-validation-for="ZipCode" class="text-danger"></span>
                                 <ejs-maskedtextbox id="mask1" ejs-for="ZipCode" mask="0000-000" placeholder="0000-000" cssClass="e-filled" floatLabelType="Never"></ejs-maskedtextbox>
-                                <div style="height:3px;"><h6></h6></div>
+                                @*<input asp-for="ZipCode" type="text" class="form-control" id="zip-code" placeholder="Zip-Code">*@
+                                <div style="height:2px;"><h6></h6></div>
                                 <label asp-for="City" class="form-label"><b>City:</b></label>
                                 <span asp-validation-for="City" class="text-danger"></span>
                                 <input asp-for="City" type="text" class="form-control" id="city" placeholder="City">
@@ -108,37 +99,38 @@
                             <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:850px;">
                                 <label asp-for="IdentificationNumber" class="form-label"><b>Identification Number:</b></label>
                                 <span asp-validation-for="IdentificationNumber" class="text-danger"></span>
-                                <input asp-for="IdentificationNumber" type="text" class="form-control" id="idnumber" placeholder="Identification Number">
-                                <div style="height:3px;"><h6></h6></div>
+                                <br />
+                                <ejs-maskedtextbox id="mask2" ejs-for="IdentificationNumber" mask="00000000-0-LL0" placeholder="00000000-0-XX0" cssClass="e-filled" floatLabelType="Never"></ejs-maskedtextbox>
+                                <div style="height:2px;"><h6></h6></div>
                                 <label asp-for="TaxNumber" class="form-label"><b>Tax Number:</b></label>
                                 <span asp-validation-for="TaxNumber" class="text-danger"></span>
-                                <input asp-for="TaxNumber" type="text" class="form-control" id="taxnumber" placeholder="Tax Number">
-                                <div style="height:3px;"><h6></h6></div>
+                                <ejs-maskedtextbox id="mask3" ejs-for="TaxNumber" mask="000000000" placeholder="000000000" cssClass="e-filled" floatLabelType="Never"></ejs-maskedtextbox>
+                                <div style="height:2px;"><h6></h6></div>
                                 <label asp-for="SSNumber" class="form-label"><b>Social Security Number:</b></label>
                                 <span asp-validation-for="SSNumber" class="text-danger"></span>
-                                <input asp-for="SSNumber" type="text" class="form-control" id="ssnumber" placeholder="Social Security Number">
+                                <ejs-maskedtextbox id="mask4" ejs-for="SSNumber" mask="00000000000" placeholder="00000000000" cssClass="e-filled" floatLabelType="Never"></ejs-maskedtextbox>
                                 <div style="height:3px;"><h6></h6></div>
                                 <label asp-for="NHSNumber" class="form-label"><b>National Health Service Number:</b></label>
                                 <span asp-validation-for="NHSNumber" class="text-danger"></span>
-                                <input asp-for="NHSNumber" type="text" class="form-control" id="nhsnumber" placeholder="National Health Service Number">
-                                <div style="height:3px;"><h6></h6></div>
+                                <ejs-maskedtextbox id="mask5" ejs-for="NHSNumber" mask="000000000" placeholder="000000000" cssClass="e-filled" floatLabelType="Never"></ejs-maskedtextbox>
+                                <div style="height:4px;"><h6></h6></div>
                                 <label asp-for="MaritalStatus" class="form-label"><b>Marital Status:</b></label>
                                 <span asp-validation-for="MaritalStatus" class="text-danger"></span>
                                 <div class="form-check" style="height:48px;">
                                     <div class="row">
                                         <div class="col-md-4">
-                                            @Html.RadioButtonFor(model => model.MaritalStatus, "Single", Model.Gender == "Single" ? "checked" : string.Empty) <b> Single</b>
+                                            @Html.RadioButtonFor(model => model.MaritalStatus, "Single")<b> Single</b>
                                         </div>
                                         <div class="col-md-8">
-                                            @Html.RadioButtonFor(model => model.MaritalStatus, "Married", Model.Gender == "Married" ? "checked" : string.Empty) <b> Married</b>
+                                            @Html.RadioButtonFor(model => model.MaritalStatus, "Married")<b> Married</b>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4">
-                                            @Html.RadioButtonFor(model => model.MaritalStatus, "Divorced", Model.Gender == "Divorced" ? "checked" : string.Empty) <b> Divorced</b>
+                                            @Html.RadioButtonFor(model => model.MaritalStatus, "Divorced")<b> Divorced</b>
                                         </div>
                                         <div class="col-md-8">
-                                            @Html.RadioButtonFor(model => model.MaritalStatus, "Widowed", Model.Gender == "Widowed" ? "checked" : string.Empty) <b> Widowed</b>
+                                            @Html.RadioButtonFor(model => model.MaritalStatus, "Widowed")<b> Widowed</b>
                                         </div>
                                     </div>
                                 </div><br />
@@ -147,8 +139,8 @@
                                 <input asp-for="Nationality" type="text" class="form-control" id="nationality" placeholder="Nationality">
                                 <label asp-for="Telephone" class="form-label"><b>Telephone Number:</b></label>
                                 <span asp-validation-for="Telephone" class="text-danger"></span>
-                                <input asp-for="Telephone" type="text" class="form-control" id="phone" placeholder="Telephone Number">
-                                <div style="height:3px;"><h6></h6></div>
+                                <ejs-maskedtextbox id="mask6" ejs-for="Telephone" mask="000000000" placeholder="000000000" cssClass="e-filled" floatLabelType="Never"></ejs-maskedtextbox>
+                                <div style="height:2px;"><h6></h6></div>
                                 <label asp-for="Email" class="form-label"><b>E-mail:</b></label>
                                 <span asp-validation-for="Email" class="text-danger"></span>
                                 <input asp-for="Email" type="email" class="form-control" id="email" placeholder="E-mail">

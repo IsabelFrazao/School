@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using School.Web.Data.Entities;
 using School.Web.Data.Repositories;
@@ -7,6 +8,8 @@ using School.Web.Models;
 using Syncfusion.EJ2.Linq;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mime;
 using System.Threading.Tasks;
 
 namespace School.Web.Controllers
@@ -22,10 +25,11 @@ namespace School.Web.Controllers
         private readonly IGradeRepository _gradeRepository;
         private readonly IImageHelper _imageHelper;
         private readonly IConverterHelper _converterHelper;
+        private readonly ICombosHelper _combosHelper;
 
         public StudentsController(IStudentRepository studentRepository, ICourseRepository courseRepository, IClassRepository classRepository,
             ISubjectRepository subjectRepository, IStudentSubjectRepository studentSubjectRepository, ITeacherRepository teacherRepository,
-            IGradeRepository gradeRepository, IImageHelper imageHelper, IConverterHelper converterHelper)
+            IGradeRepository gradeRepository, IImageHelper imageHelper, IConverterHelper converterHelper, ICombosHelper combosHelper)
         {
             _studentRepository = studentRepository;
             _courseRepository = courseRepository;
@@ -36,6 +40,7 @@ namespace School.Web.Controllers
             _gradeRepository = gradeRepository;
             _imageHelper = imageHelper;
             _converterHelper = converterHelper;
+            _combosHelper = combosHelper;
         }
 
         // GET: StudentsController
@@ -108,7 +113,12 @@ namespace School.Web.Controllers
                 var student = _converterHelper.ToStudent(model, path, await _courseRepository.GetByIdAsync(model.CourseId),
                     await _classRepository.GetByIdAsync(model.ClassId), true);
 
-                await _studentRepository.CreateAsync(student);
+                var validate = await _studentRepository.ValidationAsync(student.IdentificationNumber, student.TaxNumber, student.SSNumber,
+                    student.NHSNumber, student.Telephone, student.Email);
+
+                if (await _studentRepository.ValidationAsync(student.IdentificationNumber, student.TaxNumber, student.SSNumber,
+                    student.NHSNumber, student.Telephone, student.Email))
+                    await _studentRepository.CreateAsync(student);
 
                 //STUDENTSUBJECT
 
@@ -192,11 +202,21 @@ namespace School.Web.Controllers
 
                         var grade = _converterHelper.CreateGrade(ss, stu, sub, course, classes, teacher, true);
 
-                        if (!await _gradeRepository.ExistsAsync(ss.Id))
-                        {
-                            await _gradeRepository.CreateAsync(grade);
-                        }
+                        //if (!await _gradeRepository.ExistsAsync(ss.Id))
+                        //{
+                        //    await _gradeRepository.CreateAsync(grade);
+                        //}
                     }
+                    //if (!validate)
+                    //{
+                    //    Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    //    return Json(new { responseText = "Error" });
+                    //}
+                    //else
+                    //{
+                    //    Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    //    return Json(new { responseText = "Success" });
+                    //}
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -220,6 +240,8 @@ namespace School.Web.Controllers
 
             var model = _converterHelper.ToStudentViewModel(student, await _courseRepository.GetByIdAsync(student.CourseId),
                 _courseRepository.GetAll().Where(c => c.Id > 1), await _classRepository.GetByIdAsync(student.ClassId), _classRepository.GetAll());
+
+            model.ComboCourse = _combosHelper.GetComboCourses();
 
             var school = string.Empty;
 
@@ -320,6 +342,12 @@ namespace School.Web.Controllers
             }
             await _studentRepository.DeleteAsync(student);
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<bool> Validate([FromBody]Student student)
+        {
+            return await _studentRepository.ValidationAsync(student.IdentificationNumber, student.TaxNumber, student.SSNumber,
+                    student.NHSNumber, student.Telephone, student.Email);
         }
     }
 }

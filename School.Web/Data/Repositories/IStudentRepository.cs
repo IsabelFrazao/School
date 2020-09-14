@@ -9,6 +9,7 @@ namespace School.Web.Data.Repositories
 {
     public interface IStudentRepository : IGenericRepository<Student>
     {
-        
+        Task<bool> ValidationAsync(string identificationNumber, string taxNumber, string ssNumber, string nhsNumber,
+            string telephone, string email);
     }
 }

@@ -40,7 +40,7 @@
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-3">
-                                        <img id="imgpreview" alt="image" style="width:200px; height:300px; max-width:100%; height:auto" />
+                                        <img id="imgpreview" src="~/images/blank.jpg" alt="image" style="width:200px; height:300px; max-width:100%; height:auto" />
                                     </div>
                                     <div class="col-md-8">
                                         <label asp-for="Id" class="form-label"><b>Student Number:</b></label>
@@ -66,13 +66,13 @@
                                     </div>
                                 </div><br />
                                 @{
-                                    var minDate = DateTime.Now.Year - 18;
-                                    var maxDate = DateTime.Now.Date;
+                                    var minDate = new DateTime(DateTime.Now.Year - 65, DateTime.Now.Month, DateTime.Now.Day);
+                                    var maxDate = new DateTime(DateTime.Now.Year - 18, DateTime.Now.Month, DateTime.Now.Day);
                                     var defaultDate = DateTime.Now.Date;
                                 }
                                 <label asp-for="DateOfBirth" class="form-label"><b>Date of Birth:</b></label>
                                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
-                                <input asp-for="DateOfBirth" type="date" min=@minDate max=@maxDate value=@defaultDate class="form-control" id="dateofbirth">
+                                <input asp-for="DateOfBirth" type="date" value=@defaultDate class="form-control" id="dateofbirth">
                                 <label asp-for="Address" class="form-label"><b>Address:</b></label>
                                 <span asp-validation-for="Address" class="text-danger"></span>
                                 <input asp-for="Address" type="text" class="form-control" id="address" placeholder="Address">
@@ -80,7 +80,7 @@
                                 <span asp-validation-for="ZipCode" class="text-danger"></span>
                                 <ejs-maskedtextbox id="mask1" ejs-for="ZipCode" mask="0000-000" placeholder="0000-000" cssClass="e-filled" floatLabelType="Never"></ejs-maskedtextbox>
                                 @*<input asp-for="ZipCode" type="text" class="form-control" id="zip-code" placeholder="Zip-Code">*@
-                                <div style="height:3px;"><h6></h6></div>
+                                <div style="height:2px;"><h6></h6></div>
                                 <label asp-for="City" class="form-label"><b>City:</b></label>
                                 <span asp-validation-for="City" class="text-danger"></span>
                                 <input asp-for="City" type="text" class="form-control" id="city" placeholder="City">
@@ -101,12 +101,12 @@
                                 <label asp-for="IdentificationNumber" class="form-label"><b>Identification Number:</b></label>
                                 <span asp-validation-for="IdentificationNumber" class="text-danger"></span>
                                 <br />
-                                <ejs-maskedtextbox id="mask2" ejs-for="IdentificationNumber" mask="00000000-0-LL0" placeholder="00000000-0-XX0" cssClass="e-filled" floatLabelType="Never"></ejs-maskedtextbox>
-                                <div style="height:3px;"><h6></h6></div>
+                                <ejs-maskedtextbox ejs-for="IdentificationNumber" mask="00000000-0-LL0" placeholder="00000000-0-XX0" cssClass="e-filled" floatLabelType="Never"></ejs-maskedtextbox>                           
+                                <div style="height:2px;"><h6></h6></div>
                                 <label asp-for="TaxNumber" class="form-label"><b>Tax Number:</b></label>
                                 <span asp-validation-for="TaxNumber" class="text-danger"></span>
                                 <ejs-maskedtextbox id="mask3" ejs-for="TaxNumber" mask="000000000" placeholder="000000000" cssClass="e-filled" floatLabelType="Never"></ejs-maskedtextbox>
-                                <div style="height:3px;"><h6></h6></div>
+                                <div style="height:2px;"><h6></h6></div>
                                 <label asp-for="SSNumber" class="form-label"><b>Social Security Number:</b></label>
                                 <span asp-validation-for="SSNumber" class="text-danger"></span>
                                 <ejs-maskedtextbox id="mask4" ejs-for="SSNumber" mask="00000000000" placeholder="00000000000" cssClass="e-filled" floatLabelType="Never"></ejs-maskedtextbox>
@@ -114,7 +114,7 @@
                                 <label asp-for="NHSNumber" class="form-label"><b>National Health Service Number:</b></label>
                                 <span asp-validation-for="NHSNumber" class="text-danger"></span>
                                 <ejs-maskedtextbox id="mask5" ejs-for="NHSNumber" mask="000000000" placeholder="000000000" cssClass="e-filled" floatLabelType="Never"></ejs-maskedtextbox>
-                                <div style="height:3px;"><h6></h6></div>
+                                <div style="height:4px;"><h6></h6></div>
                                 <label asp-for="MaritalStatus" class="form-label"><b>Marital Status:</b></label>
                                 <span asp-validation-for="MaritalStatus" class="text-danger"></span>
                                 <div class="form-check" style="height:48px;">
@@ -141,7 +141,7 @@
                                 <label asp-for="Telephone" class="form-label"><b>Telephone Number:</b></label>
                                 <span asp-validation-for="Telephone" class="text-danger"></span>
                                 <ejs-maskedtextbox id="mask6" ejs-for="Telephone" mask="000000000" placeholder="000000000" cssClass="e-filled" floatLabelType="Never"></ejs-maskedtextbox>
-                                <div style="height:3px;"><h6></h6></div>
+                                <div style="height:2px;"><h6></h6></div>
                                 <label asp-for="Email" class="form-label"><b>E-mail:</b></label>
                                 <span asp-validation-for="Email" class="text-danger"></span>
                                 <input asp-for="Email" type="email" class="form-control" id="email" placeholder="E-mail">

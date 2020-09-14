@@ -15,7 +15,6 @@ namespace School.Web.Data.Entities
         public Course Course { get; set; }
 
         public int CourseId { get; set; }
-
         
         public Class Class { get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using School.Web.Data.Entities;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -19,5 +20,7 @@ namespace School.Web.Models
         public List<string> SchoolYears = new List<string>();
 
         public IEnumerable<Grade> Grades { get; set; }
+
+        public IEnumerable<SelectListItem> ComboCourse { get; set; }
     }
 }
