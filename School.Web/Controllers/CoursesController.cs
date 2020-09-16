@@ -18,7 +18,8 @@ namespace School.Web.Controllers
         private readonly ISubjectRepository _subjectRepository;
         private readonly IConverterHelper _converterHelper;
 
-        public CoursesController(ICourseRepository courseRepository, ITeacherRepository teacherRepository, IClassRepository classRepository, IIEFPSubjectRepository iefpSubjectRepository, ISubjectRepository subjectRepository, IConverterHelper converterHelper)
+        public CoursesController(ICourseRepository courseRepository, ITeacherRepository teacherRepository, IClassRepository classRepository,
+            IIEFPSubjectRepository iefpSubjectRepository, ISubjectRepository subjectRepository, IConverterHelper converterHelper)
         {
             _courseRepository = courseRepository;
             _teacherRepository = teacherRepository;
@@ -63,7 +64,11 @@ namespace School.Web.Controllers
         // GET: CoursesController/Create
         public IActionResult Create()
         {
-            var model = new CourseViewModel { Teachers = _teacherRepository.GetAll().Where(c => c.Id > 1), Subjects = _subjectRepository.GetAll().Where(e => e.Field == "Áudiovisuais e Produção dos Media" || e.Field == "Ciências Informáticas" || e.Field == "Eletrónica e Automação") };
+            var model = new CourseViewModel { Teachers = _teacherRepository.GetAll().Where(c => c.Id > 1).ToList(),
+                Subjects = _subjectRepository.GetAll()
+                .Where(e => e.Field == "Áudiovisuais e Produção dos Media" || e.Field == "Ciências Informáticas" ||
+                e.Field == "Eletrónica e Automação").ToList()
+            };
 
             //model.IEFPSubjects = _iefpSubjectRepository.GetAll().Where(e => e.Field == "Áudiovisuais e Produção dos Media" || e.Field == "Ciências Informáticas" || e.Field == "Eletrónica e Automação");//Filter by Field
 
@@ -83,12 +88,6 @@ namespace School.Web.Controllers
                 var course = _converterHelper.ToCourse(model, true);
 
                 await _courseRepository.CreateAsync(course);
-
-                //foreach (var subject in model.Subjects)
-                //{
-                //    subject.Course = model;
-                //    await _subjectRepository.UpdateAsync(subject);
-                //}
 
                 return RedirectToAction(nameof(Index));
             }

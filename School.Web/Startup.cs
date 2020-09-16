@@ -33,7 +33,6 @@ namespace School.Web
                 cfg.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection"));
             });
 
-
             services.AddTransient<SeedDb>(); //Instances only once and disposes it afterwards
 
             services.AddScoped<IStudentRepository, StudentRepository>();
@@ -44,6 +43,8 @@ namespace School.Web
             services.AddScoped<IGradeRepository, GradeRepository>();
             services.AddScoped<IIEFPSubjectRepository, IEFPSubjectRepository>();
             services.AddScoped<IStudentSubjectRepository, StudentSubjectRepository>();
+            services.AddScoped<IClassroomRepository, ClassroomRepository>();
+            services.AddScoped<IScheduleRepository, ScheduleRepository>();
             services.AddScoped<IImageHelper, ImageHelper>();
             services.AddScoped<IConverterHelper, ConverterHelper>();
             services.AddScoped<IFileHelper, FileHelper>();

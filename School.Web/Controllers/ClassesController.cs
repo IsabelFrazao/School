@@ -19,23 +19,31 @@ namespace School.Web.Controllers
         private readonly ITeacherRepository _teacherRepository;
         private readonly IStudentRepository _studentRepository;
         private readonly ISubjectRepository _subjectRepository;
+        private readonly IScheduleRepository _scheduleRepository;
+        private readonly IClassroomRepository _classroomRepository;
         private readonly IConverterHelper _converterHelper;
 
         public ClassesController(IClassRepository classRepository, ICourseRepository courseRepository, ITeacherRepository teacherRepository,
-            IStudentRepository studentRepository, ISubjectRepository subjectRepository, IConverterHelper converterHelper)
+            IStudentRepository studentRepository, ISubjectRepository subjectRepository, IScheduleRepository scheduleRepository,
+            IClassroomRepository classroomRepository, IConverterHelper converterHelper)
         {
             _classRepository = classRepository;
             _courseRepository = courseRepository;
             _teacherRepository = teacherRepository;
             _studentRepository = studentRepository;
             _subjectRepository = subjectRepository;
+            _scheduleRepository = scheduleRepository;
+            _classroomRepository = classroomRepository;
             _converterHelper = converterHelper;
         }
 
         // GET: ClassesController
         public IActionResult Index()
         {
-            return View(_classRepository.GetAll().Include(c => c.Course));
+            return View(_classRepository.GetAll()
+                .Include(c => c.Course)
+                .Include(c => c.Classroom)
+                .Include(c => c.Schedule));
         }
 
         // GET: ClassesController/Details/5
@@ -105,7 +113,9 @@ namespace School.Web.Controllers
         // GET: ClassesController/Create
         public IActionResult Create()
         {
-            var model = new ClassViewModel { Courses = _courseRepository.GetAll().Where(c => c.Id > 1), Students = _studentRepository.GetAll() };
+            var model = new ClassViewModel { Courses = _courseRepository.GetAll().Where(c => c.Id > 1).ToList(), Students = _studentRepository.GetAll().ToList(),
+            Classrooms = _classroomRepository.GetAll().ToList(), Schedules = _scheduleRepository.GetAll().ToList()
+            };
 
             //model.Students = _studentRepository.GetAll().Where(e => e.ClassId == 0);
 

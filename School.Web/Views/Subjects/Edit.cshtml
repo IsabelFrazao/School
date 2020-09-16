@@ -45,14 +45,14 @@
                                 <input asp-for="Field" type="text" class="form-control" id="field" readonly="readonly">
                                 <label asp-for="CourseId" class="form-label"><b>Course:</b></label>
                                 <span asp-validation-for="CourseId" class="text-danger"></span>
-                                <ejs-combobox id="courses" ejs-for="CourseId" dataSource="Model.Courses" cssClass="e-filled" placeholder="Select a Course" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="Name" value="Id"></e-combobox-fields>
-                                </ejs-combobox>
+                                <ejs-dropdownlist id="courses" ejs-for="CourseId" dataSource="Model.Courses" cssClass="e-filled" placeholder="Select a Course" index="2" popupHeight="230px" change="valueChange">
+                                    <e-dropdownlist-fields text="Name" value="Id"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
                                 <label asp-for="TeacherId" class="form-label"><b>Teacher:</b></label>
                                 <span asp-validation-for="TeacherId" class="text-danger"></span>
-                                <ejs-combobox id="teachers" ejs-for="TeacherId" dataSource="Model.Teachers" cssClass="e-filled" placeholder="Select a Teacher" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="FullName" value="Id"></e-combobox-fields>
-                                </ejs-combobox>
+                                <ejs-dropdownlist id="teachers" ejs-for="TeacherId" dataSource="Model.Teachers" cssClass="e-filled" placeholder="Select a Teacher" index="2" popupHeight="230px" change="valueChange">
+                                    <e-dropdownlist-fields text="FullName" value="Id"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
                             </div>
                         </div>
                         <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
@@ -80,10 +80,6 @@
                                 <input asp-for="QNQLevel" type="text" class="form-control" id="qnqlevel" readonly="readonly">
                                 <label asp-for="Component" class="form-label"><b>Component:</b></label>
                                 <input asp-for="Component" type="text" class="form-control" id="component" readonly="readonly">
-                                @*<label class="form-label"><b>For more Information, visit:</b></label>
-                                <div style="height:48px;">
-                                    <label class="form-label">Put link here</label><br />
-                                </div>*@
                             </div>
                         </div>
                         <!-- ##### About Us Area End ##### -->

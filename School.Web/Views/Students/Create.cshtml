@@ -66,20 +66,21 @@
                                     </div>
                                 </div><br />
                                 @{
-                                    var minDate = new DateTime(DateTime.Now.Year - 65, DateTime.Now.Month, DateTime.Now.Day);
-                                    var maxDate = new DateTime(DateTime.Now.Year - 18, DateTime.Now.Month, DateTime.Now.Day);
+                                    var minDate = new DateTime(DateTime.Now.Year - 65, DateTime.Now.Month - (65 / 13), DateTime.Now.Day - (65 / 365));
+                                    var maxDate = new DateTime(DateTime.Now.Year - 18, DateTime.Now.Month - (18 / 13), DateTime.Now.Day - (18 / 365));
                                     var defaultDate = DateTime.Now.Date;
                                 }
                                 <label asp-for="DateOfBirth" class="form-label"><b>Date of Birth:</b></label>
                                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
-                                <input asp-for="DateOfBirth" type="date" value=@defaultDate class="form-control" id="dateofbirth">
+                                @*<input asp-for="DateOfBirth" type="date" value=@defaultDate class="form-control" id="dateofbirth">*@
+                                <ejs-datetimepicker id="datetimepicker" value="@defaultDate" min="@minDate" max="@maxDate" format="dd-MM-yyyy" cssClass="e-filled"></ejs-datetimepicker>
+                                <div style="height:3px;"><h6></h6></div>
                                 <label asp-for="Address" class="form-label"><b>Address:</b></label>
                                 <span asp-validation-for="Address" class="text-danger"></span>
                                 <input asp-for="Address" type="text" class="form-control" id="address" placeholder="Address">
                                 <label asp-for="ZipCode" class="form-label"><b>Zip-Code:</b></label>
                                 <span asp-validation-for="ZipCode" class="text-danger"></span>
                                 <ejs-maskedtextbox id="mask1" ejs-for="ZipCode" mask="0000-000" placeholder="0000-000" cssClass="e-filled" floatLabelType="Never"></ejs-maskedtextbox>
-                                @*<input asp-for="ZipCode" type="text" class="form-control" id="zip-code" placeholder="Zip-Code">*@
                                 <div style="height:2px;"><h6></h6></div>
                                 <label asp-for="City" class="form-label"><b>City:</b></label>
                                 <span asp-validation-for="City" class="text-danger"></span>
@@ -101,7 +102,7 @@
                                 <label asp-for="IdentificationNumber" class="form-label"><b>Identification Number:</b></label>
                                 <span asp-validation-for="IdentificationNumber" class="text-danger"></span>
                                 <br />
-                                <ejs-maskedtextbox ejs-for="IdentificationNumber" mask="00000000-0-LL0" placeholder="00000000-0-XX0" cssClass="e-filled" floatLabelType="Never"></ejs-maskedtextbox>                           
+                                <ejs-maskedtextbox id="mask2" ejs-for="IdentificationNumber" mask="00000000-0-LL0" placeholder="00000000-0-XX0" cssClass="e-filled" floatLabelType="Never"></ejs-maskedtextbox>
                                 <div style="height:2px;"><h6></h6></div>
                                 <label asp-for="TaxNumber" class="form-label"><b>Tax Number:</b></label>
                                 <span asp-validation-for="TaxNumber" class="text-danger"></span>
@@ -110,7 +111,7 @@
                                 <label asp-for="SSNumber" class="form-label"><b>Social Security Number:</b></label>
                                 <span asp-validation-for="SSNumber" class="text-danger"></span>
                                 <ejs-maskedtextbox id="mask4" ejs-for="SSNumber" mask="00000000000" placeholder="00000000000" cssClass="e-filled" floatLabelType="Never"></ejs-maskedtextbox>
-                                <div style="height:3px;"><h6></h6></div>
+                                <div style="height:4px;"><h6></h6></div>
                                 <label asp-for="NHSNumber" class="form-label"><b>National Health Service Number:</b></label>
                                 <span asp-validation-for="NHSNumber" class="text-danger"></span>
                                 <ejs-maskedtextbox id="mask5" ejs-for="NHSNumber" mask="000000000" placeholder="000000000" cssClass="e-filled" floatLabelType="Never"></ejs-maskedtextbox>
@@ -163,25 +164,25 @@
                             <br />
                             <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
                                 <label asp-for="CourseId" class="form-label"><b>Course:</b></label>
-                                <span asp-validation-for="Course" class="text-danger"></span>
-                                <ejs-combobox id="courses" ejs-for="CourseId" dataSource="Model.Courses" cssClass="e-filled" placeholder="Select a Course" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="Name" value="Id"></e-combobox-fields>
-                                </ejs-combobox>
+                                <span asp-validation-for="CourseId" class="text-danger"></span>
+                                <ejs-dropdownlist id="courses" ejs-for="CourseId" dataSource="Model.Courses" cssClass="e-filled" placeholder="Select a Course" popupHeight="230px">
+                                    <e-dropdownlist-fields text="Name" value="Id"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
                                 <label class="form-label"><b>Schedule:</b></label>
-                                <span asp-validation-for="Schedule" class="text-danger"></span>
-                                <ejs-combobox id="schedules" ejs-for="Schedule" dataSource="Model.Schedules" cssClass="e-filled" placeholder="Select a Schedule" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="Schedule"></e-combobox-fields>
-                                </ejs-combobox>
+                                <span asp-validation-for="ScheduleId" class="text-danger"></span>
+                                <ejs-dropdownlist id="schedules" ejs-for="ScheduleId" dataSource="Model.Schedules" cssClass="e-filled" placeholder="Select a Schedule" popupHeight="230px" change="scheduleChange">
+                                    <e-dropdownlist-fields text="Shift" value="Id"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
                                 <label class="form-label"><b>Class:</b></label>
-                                <span asp-validation-for="Class" class="text-danger"></span>
-                                <ejs-combobox id="classes" ejs-for="ClassId" dataSource="Model.Classes" cssClass="e-filled" placeholder="Select a Class" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="Name" value="Id"></e-combobox-fields>
-                                </ejs-combobox>
+                                <span asp-validation-for="ClassId" class="text-danger"></span>
+                                <ejs-dropdownlist id="classes" ejs-for="ClassId" dataSource="Model.Classes" cssClass="e-filled" placeholder="Select a Class" popupHeight="230px">
+                                    <e-dropdownlist-fields text="Name" value="Id"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
                                 <label class="form-label"><b>School Year:</b></label>
                                 <span asp-validation-for="SchoolYear" class="text-danger"></span>
-                                <ejs-combobox id="schoolyears" ejs-for="SchoolYear" dataSource="Model.SchoolYears" cssClass="e-filled" placeholder="Select a School Year" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="SchoolYear"></e-combobox-fields>
-                                </ejs-combobox>
+                                <ejs-dropdownlist id="schoolyears" ejs-for="SchoolYear" dataSource="Model.SchoolYears" cssClass="e-filled" placeholder="Select a School Year" popupHeight="230px">
+                                    <e-dropdownlist-fields text="SchoolYear"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
                             </div>
                         </div>
                         <!-- ##### About Us Area End ##### -->
@@ -203,9 +204,41 @@
             result.src = URL.createObjectURL(event.target.files[0]);
         }
     </script>
-    <style>
-        .e-mask.e-filled .e-control.e-maskedtextbox {
-            height: 54px;
-        }
-    </style>
 }
+<style>
+    .e-mask.e-filled .e-control.e-maskedtextbox {
+        height: 54px;
+    }
+
+    #datetimepicker {
+        height: 54px;
+    }
+</style>
+
+<script type="text/javascript">
+    function scheduleChange() {
+        var course = document.getElementById('courses').ej2_instances[0];
+        var schedule = document.getElementById('schedules').ej2_instances[0];
+        var classes = document.getElementById('classes').ej2_instances[0];
+        var schoolyear = document.getElementById('schoolyears').ej2_instances[0];
+        // disable the state DropDownList
+        course.enabled = true;
+        // frame the query based on selected value in country DropDownList.
+        //var tempQuery1 = new ej.data.Query().where('CourseId', 'equal', courses.value).ej.data.Query()/*.where('ScheduleId', 'equal', schedule.value)*/;
+        //var tempQuery2 = new ej.data['SchoolYear'].Query();
+        debugger
+        // set the framed query based on selected value in country DropDownList.
+        //classes.query = tempQuery1;
+        schoolyear.value = course.listData[0]['SchoolYear'].value;
+        
+
+        debugger
+        // set null value to state DropDownList text property
+        classes.text = null;
+        schoolyear.text = null;
+        schoolyear.enabled = true;
+        // bind the property changes to City DropDownList
+        classes.dataBind();
+        schoolyear.dataBind();
+    }
+</script>

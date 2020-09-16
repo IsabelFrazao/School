@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using School.Web.Data;
 
 namespace School.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200915150936_ClassroomSchedule")]
+    partial class ClassroomSchedule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,22 +27,18 @@ namespace School.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ClassroomId");
-
                     b.Property<int>("CourseId");
 
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<int>("ScheduleId");
+                    b.Property<string>("Room");
+
+                    b.Property<string>("Schedule");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClassroomId");
-
                     b.HasIndex("CourseId");
-
-                    b.HasIndex("ScheduleId");
 
                     b.ToTable("Classes");
                 });
@@ -77,8 +75,6 @@ namespace School.Web.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50);
-
-                    b.Property<string>("SchoolYear");
 
                     b.HasKey("Id");
 
@@ -202,7 +198,8 @@ namespace School.Web.Migrations
 
                     b.Property<string>("SSNumber");
 
-                    b.Property<int>("ScheduleId");
+                    b.Property<string>("Schedule")
+                        .IsRequired();
 
                     b.Property<string>("SchoolYear");
 
@@ -217,8 +214,6 @@ namespace School.Web.Migrations
                     b.HasIndex("ClassId");
 
                     b.HasIndex("CourseId");
-
-                    b.HasIndex("ScheduleId");
 
                     b.ToTable("Students");
                 });
@@ -325,19 +320,9 @@ namespace School.Web.Migrations
 
             modelBuilder.Entity("School.Web.Data.Entities.Class", b =>
                 {
-                    b.HasOne("School.Web.Data.Entities.Classroom", "Classroom")
-                        .WithMany()
-                        .HasForeignKey("ClassroomId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("School.Web.Data.Entities.Course", "Course")
                         .WithMany()
                         .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("School.Web.Data.Entities.Schedule", "Schedule")
-                        .WithMany()
-                        .HasForeignKey("ScheduleId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -387,11 +372,6 @@ namespace School.Web.Migrations
                     b.HasOne("School.Web.Data.Entities.Course", "Course")
                         .WithMany()
                         .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("School.Web.Data.Entities.Schedule", "Schedule")
-                        .WithMany()
-                        .HasForeignKey("ScheduleId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

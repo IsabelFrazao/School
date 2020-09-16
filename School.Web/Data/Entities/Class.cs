@@ -12,12 +12,16 @@ namespace School.Web.Data.Entities
         [Display(Name = "Schedule")]
         //[Required(ErrorMessage = "Field {0} is mandatory")]
         //[Range(1, double.MaxValue, ErrorMessage = "You must select a {0}")]
-        public string Schedule { get; set; }
+        public Schedule Schedule { get; set; }
 
-        [Display(Name = "Room")]
+        public int ScheduleId { get; set; }
+
+        [Display(Name = "Classroom")]
         //[Required(ErrorMessage = "Field {0} is mandatory")]
         //[Range(1, double.MaxValue, ErrorMessage = "You must select a {0}")]
-        public string Room { get; set; }
+        public Classroom Classroom { get; set; }
+
+        public int ClassroomId { get; set; }
 
         [Display(Name = "Course")]
         //[Required(ErrorMessage = "Field {0} is mandatory")]
@@ -25,10 +29,6 @@ namespace School.Web.Data.Entities
         public Course Course { get; set; }
 
         public int CourseId { get;set; }
-
-        //public UFCD UFCDdaTurma { get; set; }
-
-        //public Student Student { get; set; }
 
         public override string ToString()
         {

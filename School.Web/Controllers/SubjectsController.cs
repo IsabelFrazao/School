@@ -82,22 +82,24 @@ namespace School.Web.Controllers
         {
             var model = new SubjectViewModel
             {
-                Courses = _courseRepository.GetAll().Where(c => c.Id > 1),
-                Teachers = _teacherRepository.GetAll().Where(c => c.Id > 1),
+                Courses = _courseRepository.GetAll().Where(c => c.Id > 1).ToList(),
+                Teachers = _teacherRepository.GetAll().Where(c => c.Id > 1).ToList(),
                 IEFPSubjects = _iefpSubjectRepository.GetAll().Where(e => e.Field == "Áudiovisuais e Produção dos Media" ||
-                e.Field == "Ciências Informáticas" || e.Field == "Eletrónica e Automação").ToList()//Filter by Field                
+                e.Field == "Ciências Informáticas" || e.Field == "Eletrónica e Automação").ToList()
             };
 
-            IEnumerable<Subject> Subjects = _subjectRepository.GetAll();
+            IEnumerable<Subject> Subjects = _subjectRepository.GetAll().ToList();
 
             List<IEFPSubject> ISubjects = new List<IEFPSubject>(model.IEFPSubjects);
 
-            foreach(var iefpsubject in ISubjects)
+            foreach (var iefpsubject in ISubjects)
             {
                 foreach (var subject in Subjects)
                 {
                     if (iefpsubject.Code == subject.Code)
+                    {
                         model.IEFPSubjects.Remove(iefpsubject);
+                    }
                 }
             }
 
@@ -189,12 +191,16 @@ namespace School.Web.Controllers
                         foreach (var s in Stus)
                         {
                             if (s.Id == ss.StudentId)
+                            {
                                 stu = s;
+                            }
 
                             foreach (var c in Courses)
                             {
                                 if (s.CourseId == c.Id)
+                                {
                                     course = c;
+                                }
                             }
 
                             foreach (var cl in Classes)
@@ -202,25 +208,32 @@ namespace School.Web.Controllers
                                 if (s.ClassId == cl.Id)
                                 {
                                     classes = cl;
-                                }                                    
+                                }
                             }
                         }
 
                         foreach (var subj in Subjects)
                         {
                             if (sub.Id == ss.SubjectId)
+                            {
                                 sub = subj;
+                            }
 
                             foreach (var t in Teachers)
                             {
                                 if (t.Id == subj.TeacherId)
+                                {
                                     teacher = t;
+                                }
                             }
                         }
 
                         var grade = _converterHelper.CreateGrade(ss, stu, sub, course, classes, teacher, true);
 
-                        await _gradeRepository.CreateAsync(grade);
+                        if (!await _gradeRepository.ExistsAsync(ss.Id))
+                        {
+                            await _gradeRepository.CreateAsync(grade);
+                        }
                     }
                 }
                 return RedirectToAction(nameof(Index));
@@ -327,9 +340,24 @@ namespace School.Web.Controllers
                         XSSFWorkbook hssfwb = new XSSFWorkbook(stream); //This will read 2007 Excel format  
                         sheet = hssfwb.GetSheetAt(0); //get first sheet from workbook
                     }
-                    IRow headerRow = sheet.GetRow(0); //Get Header Row
-                    int cellCount = headerRow.LastCellNum;
-                    sb.Append("<div class='panel-body'><table class='table table-hover table-responsive table-striped' style='width:100%; height:400px' id='MyTable'><tr>");
+                    IRow headerRow = sheet.GetRow(0);//Get Header Row
+                    if (headerRow == null)
+                    {
+                        int rowNumber = 0;
+
+                        foreach (IRow r in sheet)
+                        {
+                            rowNumber++;
+
+                            if (r.Cells[0].ToString() == "Código\nUFCD")
+                            {
+                                headerRow = sheet.GetRow(rowNumber + 1);
+                                break;
+                            }
+                        }
+                    }
+                    int cellCount = headerRow.LastCellNum;                    
+                    sb.Append("<div class='panel-body' onloadeddata='StopProgress()'><table class='table table-hover table-responsive table-striped' style='width:100%; height:400px' id='MyTable'><tr>");
                     for (int j = 0; j < cellCount; j++)
                     {
                         NPOI.SS.UserModel.ICell cell = headerRow.GetCell(j);
@@ -337,7 +365,6 @@ namespace School.Web.Controllers
                         {
                             continue;
                         }
-
                         sb.Append("<th>" + cell.ToString() + "</th>");
                     }
                     sb.Append("</tr>");
@@ -378,11 +405,13 @@ namespace School.Web.Controllers
                         };
 
                         if (!await _iefpSubjectRepository.ExistsCodeAsync(iefpsubject.Code))
+                        {
                             await _iefpSubjectRepository.CreateAsync(iefpsubject);
+                        }
 
                         sb.AppendLine("</tr>");
                     }
-                    sb.Append("</table></div>");
+                    sb.Append("</table></div><script>function StopProgress(){$('div.modal').hide();var loading = $('.loading');loading.hide();}</script>");
                 }
             }
             return this.Content(sb.ToString());
@@ -398,3 +427,4 @@ namespace School.Web.Controllers
         }
     }
 }
+

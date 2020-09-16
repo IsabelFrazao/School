@@ -7,9 +7,9 @@ namespace School.Web.Models
     {
         public IEnumerable<Course> Courses { get; set; }
 
-        public string[] Schedules = new[] { "Day", "Night" };
+        public IEnumerable<Schedule> Schedules { get; set; }
 
-        public string[] Classrooms = new[] { "3.01", "3.02" };
+        public IEnumerable<Classroom> Classrooms { get; set; }
 
         public IEnumerable<Student> Students { get; set; }
 

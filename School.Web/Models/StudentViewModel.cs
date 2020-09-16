@@ -13,11 +13,11 @@ namespace School.Web.Models
 
         public IEnumerable<Course> Courses { get; set; }
 
-        public string[] Schedules = new[] { "Day", "Night" };
+        public IEnumerable<Schedule> Schedules { get; set; }
 
         public IEnumerable<Class> Classes { get; set; }
 
-        public List<string> SchoolYears = new List<string>();
+        public List<string> SchoolYears { get; set; }
 
         public IEnumerable<Grade> Grades { get; set; }
 

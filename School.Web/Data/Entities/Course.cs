@@ -38,5 +38,6 @@ namespace School.Web.Data.Entities
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
         public DateTime EndDate { get; set; }
 
+        public string SchoolYear { get; set; }
     }
 }

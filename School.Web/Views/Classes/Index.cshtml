@@ -33,11 +33,11 @@
                     <ejs-grid id="Grid" dataSource="Model" allowSorting="true" allowFiltering="true" allowPaging="true">
                         <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
                         <e-grid-columns>
-                            <e-grid-column field="Id" headerText="Id" visible="false" textAlign="Right" width="auto" type="number" isPrimaryKey="true"></e-grid-column>
+                            <e-grid-column field="Id" headerText="Id" visible="false" width="auto" type="number" isPrimaryKey="true"></e-grid-column>
                             <e-grid-column field="Course.Name" headerText="Course" width="auto" type="string"></e-grid-column>
-                            <e-grid-column field="Name" headerText="Name" textAlign="Right" width="auto" type="string"></e-grid-column>
-                            <e-grid-column field="Schedule" headerText="Schedule" textAlign="Right" width="auto" type="string"></e-grid-column>
-                            <e-grid-column field="Room" headerText="Room" textAlign="Right" width="auto" type="string"></e-grid-column>                            
+                            <e-grid-column field="Name" headerText="Name" width="auto" type="string"></e-grid-column>
+                            <e-grid-column field="Schedule.Shift" headerText="Schedule" width="auto" type="string"></e-grid-column>
+                            <e-grid-column field="Classroom.Room" headerText="Classroom" width="auto" type="string"></e-grid-column>                            
                             <e-grid-column template="#template" textAlign="Right" width="auto"></e-grid-column>
                         </e-grid-columns>
                     </ejs-grid>

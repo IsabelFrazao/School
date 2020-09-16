@@ -32,18 +32,18 @@
                                     <input type="file" id="fileupload" name="files" class="form-control" />
                                 </div>
                                 <div class="col-md-2">
-                                    <input asp-action="Import" type="button" class="btn academy-btn mt-30" name="Upload" value="Upload" id="btnupload" style="margin-top:-10px;" />
+                                    <input asp-action="Import" onclick="ShowSendingProgress()" type="button" class="btn academy-btn mt-30" name="Upload" value="Upload" id="btnupload" style="margin-top:-10px;" />
+                                    @*<span class="no-display smallLoader"><img src="~/images/icon-loading.gif"/></span>*@
                                 </div>
-                                @*<div class="col-md-2">
-                                        <input asp-action="Download" type="button" class="btn academy-btn mt-30" name="Download" value="Download" id="btndownload" style="margin-top:-20px;" />
-                                    </div>*@
-                                @*<div class="col-md-2">
-                                         <input asp-action="Save" type="submit" class="btn academy-btn mt-30" name="Save" value="Save" id="btnsave" style="margin-top:-20px;" />
-                                    </div>*@
+                                <div class="col-md-2">
+                                    <div class="loading" align="center" style="display:none" id="modalSending">
+                                        <img src="~/images/icon-loading.gif" style="height:120px"/>
+                                    </div>
+                                </div>
                             </div>
                             <div class="clearfix">&nbsp;</div>
                             <div class="row">
-                                <div id="divPrint" style="margin-left:-19px;"></div>
+                                <div id="divPrint"  style="margin-left:-19px;"></div>
                             </div>
                         </div>
                         <!-- ##### About Us Area End ##### -->
@@ -56,6 +56,23 @@
     </div>
 </section>
 
+<script>
+    function ShowSendingProgress() {
+        var modal = $('< div />');
+        modal.addClass("modal");
+        modal.attr("id", "modalSending");
+        $('body').append(modal);
+        var loading = $("#modalSending.loading");
+        loading.show();
+    }
+    function StopProgress() {
+
+        $("div.modal").hide();
+
+        var loading = $(".loading");
+        loading.hide();
+    }
+</script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
     $(function () {
@@ -100,22 +117,9 @@
                 }
             });
         })
-        $('#btnExport').on('click', function () {
-            var fileExtension = ['xls', 'xlsx'];
-            var filename = $('#fileupload').val();
-            if (filename.length == 0) {
-                alert("Please select a file then Import");
-                return false;
-            }
-        });
     });
 </script>
 
 @section Scripts{
     <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#MyTable').DataTable();
-        });
-    </script>
 }

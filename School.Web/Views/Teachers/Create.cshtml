@@ -43,7 +43,7 @@
                                         <img id="imgpreview" src="~/images/blank.jpg" alt="image" style="width:200px; height:300px; max-width:100%; height:auto" />
                                     </div>
                                     <div class="col-md-8">
-                                        <label asp-for="Id" class="form-label"><b>Student Number:</b></label>
+                                        <label asp-for="Id" class="form-label"><b>Teacher Number:</b></label>
                                         <label asp-for="Id" class="form-label">@ViewBag.idCount</label>
                                         <input asp-for="ImageFile" class="form-control" type="file" onchange="previewimg(event)" />
                                     </div>
@@ -79,7 +79,6 @@
                                 <label asp-for="ZipCode" class="form-label"><b>Zip-Code:</b></label>
                                 <span asp-validation-for="ZipCode" class="text-danger"></span>
                                 <ejs-maskedtextbox id="mask1" ejs-for="ZipCode" mask="0000-000" placeholder="0000-000" cssClass="e-filled" floatLabelType="Never"></ejs-maskedtextbox>
-                                @*<input asp-for="ZipCode" type="text" class="form-control" id="zip-code" placeholder="Zip-Code">*@
                                 <div style="height:2px;"><h6></h6></div>
                                 <label asp-for="City" class="form-label"><b>City:</b></label>
                                 <span asp-validation-for="City" class="text-danger"></span>

@@ -23,13 +23,15 @@ namespace School.Web.Controllers
         private readonly IStudentSubjectRepository _studentSubjectRepository;
         private readonly ITeacherRepository _teacherRepository;
         private readonly IGradeRepository _gradeRepository;
+        private readonly IScheduleRepository _scheduleRepository;
         private readonly IImageHelper _imageHelper;
         private readonly IConverterHelper _converterHelper;
         private readonly ICombosHelper _combosHelper;
 
         public StudentsController(IStudentRepository studentRepository, ICourseRepository courseRepository, IClassRepository classRepository,
             ISubjectRepository subjectRepository, IStudentSubjectRepository studentSubjectRepository, ITeacherRepository teacherRepository,
-            IGradeRepository gradeRepository, IImageHelper imageHelper, IConverterHelper converterHelper, ICombosHelper combosHelper)
+            IGradeRepository gradeRepository, IScheduleRepository scheduleRepository, IImageHelper imageHelper, IConverterHelper converterHelper,
+            ICombosHelper combosHelper)
         {
             _studentRepository = studentRepository;
             _courseRepository = courseRepository;
@@ -38,6 +40,7 @@ namespace School.Web.Controllers
             _studentSubjectRepository = studentSubjectRepository;
             _teacherRepository = teacherRepository;
             _gradeRepository = gradeRepository;
+            _scheduleRepository = scheduleRepository;
             _imageHelper = imageHelper;
             _converterHelper = converterHelper;
             _combosHelper = combosHelper;
@@ -83,14 +86,15 @@ namespace School.Web.Controllers
         {
             ViewBag.idCount = (_studentRepository.GetAll().Count() + 1).ToString();
 
-            var model = new StudentViewModel { Courses = _courseRepository.GetAll().Where(c => c.Id > 1), Classes = _classRepository.GetAll() };
+            var model = new StudentViewModel { Courses = _courseRepository.GetAll().Where(c => c.Id > 1).ToList(), Classes = _classRepository.GetAll().ToList(),
+            Schedules = _scheduleRepository.GetAll().ToList()
+            };
 
-            var school = string.Empty;
+            model.SchoolYears = new List<string>();
 
-            foreach (var year in model.Courses)
+            foreach(var course in model.Courses)
             {
-                school = $"{ year.BeginDate.Year} / {year.EndDate.Year}";
-                model.SchoolYears.Add(school);
+                model.SchoolYears.Add(course.SchoolYear);
             }
 
             return View(model);
@@ -113,12 +117,13 @@ namespace School.Web.Controllers
                 var student = _converterHelper.ToStudent(model, path, await _courseRepository.GetByIdAsync(model.CourseId),
                     await _classRepository.GetByIdAsync(model.ClassId), true);
 
-                var validate = await _studentRepository.ValidationAsync(student.IdentificationNumber, student.TaxNumber, student.SSNumber,
-                    student.NHSNumber, student.Telephone, student.Email);
+                //var validate = await _studentRepository.ValidationAsync(student.IdentificationNumber, student.TaxNumber, student.SSNumber,
+                //    student.NHSNumber, student.Telephone, student.Email);
 
-                if (await _studentRepository.ValidationAsync(student.IdentificationNumber, student.TaxNumber, student.SSNumber,
+                if (!await _studentRepository.ValidationAsync(student.IdentificationNumber, student.TaxNumber, student.SSNumber,
                     student.NHSNumber, student.Telephone, student.Email))
                     await _studentRepository.CreateAsync(student);
+
 
                 //STUDENTSUBJECT
 
@@ -202,10 +207,10 @@ namespace School.Web.Controllers
 
                         var grade = _converterHelper.CreateGrade(ss, stu, sub, course, classes, teacher, true);
 
-                        //if (!await _gradeRepository.ExistsAsync(ss.Id))
-                        //{
-                        //    await _gradeRepository.CreateAsync(grade);
-                        //}
+                        if (!await _gradeRepository.ExistsAsync(ss.Id))
+                        {
+                            await _gradeRepository.CreateAsync(grade);
+                        }
                     }
                     //if (!validate)
                     //{

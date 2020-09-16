@@ -22,7 +22,6 @@ namespace School.Web.Data
 
         [DataType(DataType.Date)]
         [Display(Name = "Date of Birth")]
-        [Range(typeof(DateTime), "1/1/1966", "1/1/2020")]
         //[Required(ErrorMessage = "Field {0} is mandatory")]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
         public DateTime DateOfBirth { get; set; }

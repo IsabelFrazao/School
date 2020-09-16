@@ -38,9 +38,9 @@
                             <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:650px;">
                                 <label class="form-label"><b>Area:</b></label>
                                 <span asp-validation-for="Field" class="text-danger"></span>
-                                <ejs-combobox id="areas" ejs-for="Field" dataSource="Model.Fields" cssClass="e-filled" placeholder="@Model.Field" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="Field" ></e-combobox-fields>
-                                </ejs-combobox>
+                                <ejs-dropdownlist id="areas" ejs-for="Field" dataSource="Model.Fields" cssClass="e-filled" placeholder="@Model.Field" popupHeight="230px" change="valueChange">
+                                    <e-dropdownlist-fields text="Field"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
                                 <label asp-for="Name" class="form-label"><b><br />Name:</b></label>
                                 <span asp-validation-for="Name" class="text-danger"></span>
                                 <input asp-for="Name" type="text" class="form-control" id="name" placeholder="Name">
@@ -49,15 +49,14 @@
                                 <input asp-for="Description" type="text" class="form-control" id="description" placeholder="Description">
                                 <label class="form-label"><b>Coordinator:</b></label>
                                 <span asp-validation-for="CoordinatorId" class="text-danger"></span>
-                                <ejs-combobox id="coordinator" ejs-for="CoordinatorId" dataSource="Model.Teachers" cssClass="e-filled" placeholder="@Model.Coordinator" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="Name" value="Id"></e-combobox-fields>
-                                </ejs-combobox>
+                                <ejs-dropdownlist id="coordinator" ejs-for="CoordinatorId" dataSource="Model.Teachers" cssClass="e-filled" placeholder="@Model.Coordinator" popupHeight="230px" change="valueChange">
+                                    <e-dropdownlist-fields text="Name" value="Id"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
                                 <div style="height:48px;"></div>
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-4">
                                         <label asp-for="BeginDate" class="form-label"><b>Begin Date:</b></label>
-                                        <span asp-validation-for="BeginDate" class="text-danger"></span>
                                         <span asp-validation-for="BeginDate" class="text-danger"></span>
                                         <input asp-for="BeginDate" type="date" class="form-control" id="begin-date" placeholder="Begin Date">
                                     </div>
@@ -65,41 +64,20 @@
                                     <div class="col-md-4">
                                         <label asp-for="EndDate" class="form-label"><b>End Date:</b></label>
                                         <span asp-validation-for="EndDate" class="text-danger"></span>
-                                        <span asp-validation-for="EndDate" class="text-danger"></span>
                                         <input asp-for="EndDate" type="date" class="form-control" id="end-date" placeholder="End Date">
                                     </div>
                                     <div class="col-md-1"></div>
                                 </div>
-                                @*<div style="height:48px;"></div>
-                                <label class="form-label"><b>Subjects:</b></label>
-                                <span asp-validation-for="Subjects" class="text-danger"></span>
-                            <ejs-listbox id="courses-select-listbox">
-                                <e-listbox-selectionsettings showCheckbox="false"></e-listbox-selectionsettings>
-                                <e-listbox-fields text="Name" value="Id"></e-listbox-fields>
-                            </ejs-listbox>
-                            </div>*@
+                            </div>
+                            <!-- ##### About Us Area End ##### -->
+                            <input asp-action="Edit" class="btn academy-btn mt-30" type="submit" value="Edit" style="margin-left:30%" />
+                            <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:5%">Back</a>
                         </div>
-                        <!-- ##### About Us Area End ##### -->
-                        <input asp-action="Edit" class="btn academy-btn mt-30" type="submit" value="Edit" style="margin-left:30%" />
-                        <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:5%">Back</a>
-                    </div>
                 </form>
             </div>
         </section>
     </div>
 </section>
-
-@*<script>
-        function valueChange() {
-            var courses = document.getElementById('courses').ej2_instances[0];
-            var value = document.getElementById('value');
-            var text = document.getElementById('text');
-            value.innerHTML = courses.value === null ? 'null' : courses.value.toString();
-            text.innerHTML = courses.text === null ? 'null' : courses.text.toString();
-        }
-    </script>*@
-
-@*<script src="~/js/sync.js"></script>*@
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");

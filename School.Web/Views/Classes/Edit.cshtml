@@ -38,47 +38,22 @@
                             <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:450px;">
                                 <label asp-for="CourseId" class="form-label"><b>Course:</b></label>
                                 <span asp-validation-for="CourseId" class="text-danger"></span>
-                                <ejs-combobox id="courses" ejs-for="Course.Name" dataSource="Model.Courses" cssClass="e-filled" placeholder="Select a Course" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="Name" value="Id"></e-combobox-fields> @*dataSource="@ViewBag.data"*@
-                                </ejs-combobox>
+                                <ejs-dropdownlist id="courses" ejs-for="Course.Name" dataSource="Model.Courses" cssClass="e-filled" placeholder="Select a Course" popupHeight="230px" change="valueChange">
+                                    <e-dropdownlist-fields text="Name" value="Id"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
                                 <label asp-for="Name" class="form-label"><b>Name:</b></label>
-                                @*<span asp-validation-for="Course" class="text-danger"></span>*@
+                                <span asp-validation-for="Name" class="text-danger"></span>
                                 <input asp-for="Name" type="text" class="form-control" id="name" placeholder="Name">
                                 <label class="form-label"><b>Schedule:</b></label>
-                                @*<span asp-validation-for="Course" class="text-danger"></span>*@
-                                <ejs-combobox id="schedules" ejs-for="Schedule" dataSource="Model.Schedules" cssClass="e-filled" placeholder="Select a Schedule" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="Schedule" ></e-combobox-fields> @*dataSource="@ViewBag.data"*@
-                                </ejs-combobox>
+                                <span asp-validation-for="ScheduleId" class="text-danger"></span>
+                                <ejs-dropdownlist id="schedules" ejs-for="ScheduleId" dataSource="Model.Schedules" cssClass="e-filled" placeholder="Select a Schedule" popupHeight="230px" change="valueChange">
+                                    <e-dropdownlist-fields text="Schedule" ></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
                                 <label class="form-label"><b>Classroom:</b></label>
-                                @*<span asp-validation-for="Course" class="text-danger"></span>*@
-                                <ejs-combobox id="classrooms" ejs-for="Room" dataSource="Model.Classrooms" cssClass="e-filled" placeholder="Select a Classroom" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="Classroom" ></e-combobox-fields> @*dataSource="@ViewBag.data"*@
-                                </ejs-combobox>
-                                <!--<div style="height:48px;"></div>
-                                <div class="row">
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-4">
-                                        <label class="form-label"><b>Subjects:</b></label>
-                                        <ejs-listbox id="subjects-select-listbox">
-                                            <e-listbox-selectionsettings showCheckbox="true"></e-listbox-selectionsettings>
-                                        </ejs-listbox>--> @*dataSource="ViewBag.data"*@
-                                        <!--<br />
-                                        <label class="form-label"><b>Total:</b></label>
-                                        <label class="form-label">2</label>
-                                    </div>
-                                    <div class="col-md-2"></div>
-                                    <div class="col-md-4">
-                                        <label class="form-label"><b>Students:</b></label>
-                                        <ejs-listbox ejs-for="Students" dataSource="Model.Students" id="students-select-listbox">
-                                            <e-listbox-selectionsettings showCheckbox="true" ></e-listbox-selectionsettings>
-                                            <e-listbox-fields text="FullName" value="Id" ></e-listbox-fields>
-                                        </ejs-listbox>--> @*dataSource="ViewBag.data"*@
-                                        <!--<br />
-                                        <label class="form-label"><b>Total:</b></label>
-                                        <label class="form-label">2</label>
-                                    </div>
-                                    <div class="col-md-1"></div>
-                                </div>-->
+                                <span asp-validation-for="ClassroomId" class="text-danger"></span>
+                                <ejs-dropdownlist id="classrooms" ejs-for="ClassroomId" dataSource="Model.Classrooms" cssClass="e-filled" placeholder="Select a Classroom" popupHeight="230px" change="valueChange">
+                                    <e-dropdownlist-fields text="Classroom" ></e-dropdownlist-fields>
+                                </ejs-dropdownlist>                               
                             </div>
                         </div>
                         <!-- ##### About Us Area End ##### -->

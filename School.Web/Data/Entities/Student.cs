@@ -5,9 +5,11 @@ namespace School.Web.Data.Entities
     public class Student : Person
     {
         [Display(Name = "Schedule")]
-        [Required(ErrorMessage = "Field {0} is mandatory")]
+        //[Required(ErrorMessage = "Field {0} is mandatory")]
         //[Range(1, double.MaxValue, ErrorMessage = "You must select a {0}")]
-        public string Schedule { get; set; }
+        public Schedule Schedule { get; set; }
+
+        public int ScheduleId { get; set; }
 
         [Display(Name = "Course")]
         //[Required(ErrorMessage = "Field {0} is mandatory")]

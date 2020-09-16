@@ -39,9 +39,9 @@
                             <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:650px;">
                                 <label class="form-label"><b>Area:</b></label>
                                 <span asp-validation-for="Field" class="text-danger"></span>
-                                <ejs-combobox id="fields" ejs-for="Field" dataSource="Model.Fields" cssClass="e-filled" placeholder="Select an Area" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="Area"></e-combobox-fields>
-                                </ejs-combobox>
+                                <ejs-dropdownlist id="fields" ejs-for="Field" dataSource="Model.Fields" cssClass="e-filled" placeholder="Select an Area" popupHeight="230px" change="valueChange">
+                                    <e-dropdownlist-fields text="Area"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
                                 <label asp-for="Name" class="form-label"><b><br />Name:</b></label>
                                 <span asp-validation-for="Name" class="text-danger"></span>
                                 <input asp-for="Name" type="text" class="form-control" id="name" placeholder="Name">
@@ -50,9 +50,9 @@
                                 <input asp-for="Description" type="text" class="form-control" id="description" placeholder="Description">
                                 <label class="form-label"><b>Coordinator:</b></label>
                                 <span asp-validation-for="Coordinator" class="text-danger"></span>
-                                <ejs-combobox id="coordinator" ejs-for="CoordinatorId" dataSource="Model.Teachers" cssClass="e-filled" placeholder="Select a Coordinator" index="2" popupHeight="230px" change="valueChange">
-                                    <e-combobox-fields text="FullName" value="Id"></e-combobox-fields>
-                                </ejs-combobox>
+                                <ejs-dropdownlist id="coordinator" ejs-for="CoordinatorId" dataSource="Model.Teachers" cssClass="e-filled" placeholder="Select a Coordinator" popupHeight="230px" change="valueChange">
+                                    <e-dropdownlist-fields text="FullName" value="Id"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
                                 @{
                                     var maxDate = DateTime.Now.Year + 5;
                                     var minDate = DateTime.Now.Date;
@@ -64,21 +64,21 @@
                                     <div class="col-md-4">
                                         <label asp-for="BeginDate" class="form-label"><b>Begin Date:</b></label>
                                         <span asp-validation-for="BeginDate" class="text-danger"></span>
-                                        <input asp-for="BeginDate" type="date" min=@minDate max=@maxDate value=@defaultDate class="form-control" id="begindate" placeholder="Begin Date">
+                                        <ejs-datetimepicker id="begindate" value="@defaultDate" min="@minDate" max="@maxDate" format="dd-MM-yyyy" cssClass="e-filled" change="onchange" ></ejs-datetimepicker>
                                     </div>
                                     <div class="col-md-2"></div>
                                     <div class="col-md-4">
                                         <label asp-for="EndDate" class="form-label"><b>End Date:</b></label>
                                         <span asp-validation-for="EndDate" class="text-danger"></span>
-                                        <input asp-for="EndDate" type="date" min=@minDate max=@maxDate value=@defaultDate class="form-control" id="enddate" placeholder="End Date">
+                                        <ejs-datetimepicker id="enddate" format="dd-MM-yyyy" min="DateTime.Now" cssClass="e-filled" ></ejs-datetimepicker>
                                     </div>
                                     <div class="col-md-1"></div>
-                                </div>                               
+                                </div>
                             </div>
-                        <!-- ##### About Us Area End ##### -->
-                        <input asp-action="Create" id="button" class="btn academy-btn mt-30" type="submit" value="Create" style="margin-left:30%" />
-                        <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:5%">Back</a>
-                    </div>
+                            <!-- ##### About Us Area End ##### -->
+                            <input asp-action="Create" id="button" class="btn academy-btn mt-30" type="submit" value="Create" style="margin-left:30%" />
+                            <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:5%">Back</a>
+                        </div>
                 </form>
             </div>
         </section>
@@ -87,11 +87,23 @@
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
-    <script>
-        function OnChange() {
-            var multiselectObj = document.getElementById('subjects-select-listbox').ej2_instances[0];
-            console.log(multiselectObj.value);
-        }
-    </script>
 }
+
+<style>
+        #begindate {
+            height: 54px;
+        }
+        #enddate {
+            height: 54px;
+        }
+</style>
+
+<script type="text/javascript">
+    function onchange(args) {
+        var end = document.getElementById('enddate').ej2_instances[0];
+
+        end.properties['min'] = args.value;
+
+        end.value = args.value;
+    }
+</script>

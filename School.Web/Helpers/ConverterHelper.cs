@@ -29,7 +29,7 @@ namespace School.Web.Helpers
                 Nationality = model.Nationality,
                 Telephone = model.Telephone,
                 Email = model.Email,
-                Schedule = model.Schedule,
+                ScheduleId = model.ScheduleId,
                 Course = course,
                 CourseId = model.CourseId,
                 Class = classes,
@@ -126,8 +126,8 @@ namespace School.Web.Helpers
             {
                 Id = isNew ? 0 : model.Id, //Se o produto for novo => id = 0; senão apanhao o seu id
                 Name = model.Name,
-                Schedule = model.Schedule,
-                Room = model.Room,
+                ScheduleId = model.ScheduleId,
+                ClassroomId = model.ClassroomId,
                 CourseId = course.Id,
                 Course = course
             };
@@ -140,7 +140,7 @@ namespace School.Web.Helpers
                 Id = model.Id,
                 Name = model.Name,
                 Schedule = model.Schedule,
-                Room = model.Room,
+                Classroom = model.Classroom,
                 CourseId = model.CourseId,
                 Course = course,
                 Students = students,
@@ -161,8 +161,9 @@ namespace School.Web.Helpers
                 CoordinatorId = model.CoordinatorId,
                 Coordinator = model.Coordinator,
                 BeginDate = model.BeginDate.Date,
-                EndDate = model.EndDate.Date
-            };
+                EndDate = model.EndDate.Date,
+                SchoolYear = model.SchoolYear = $"{ model.BeginDate.Year } / { model.EndDate.Year }"
+        };
         }
 
         public CourseViewModel ToCourseViewModel(Course model, Teacher coordinator, IEnumerable<Teacher> teachers, IEnumerable<Class> classes, IEnumerable<Subject> subjects)//Converts to ViewModel
@@ -177,6 +178,7 @@ namespace School.Web.Helpers
                 Coordinator = coordinator,
                 BeginDate = model.BeginDate.Date,
                 EndDate = model.EndDate.Date,
+                SchoolYear = model.SchoolYear = $"{ model.BeginDate.Year } / { model.EndDate.Year }",
                 Teachers = teachers,
                 Classes = classes,
                 Subjects = subjects
