@@ -24,6 +24,7 @@
         <section class="contact-area">
             <div class="contact-content">
                 <form asp-action="Create" method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="row">
                         <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
                             <!--BANNER START-->
@@ -54,7 +55,6 @@
                                     <e-dropdownlist-fields text="FullName" value="Id"></e-dropdownlist-fields>
                                 </ejs-dropdownlist>
                                 @{
-                                    var maxDate = DateTime.Now.Year + 5;
                                     var minDate = DateTime.Now.Date;
                                     var defaultDate = DateTime.Now.Date;
                                 }
@@ -64,13 +64,13 @@
                                     <div class="col-md-4">
                                         <label asp-for="BeginDate" class="form-label"><b>Begin Date:</b></label>
                                         <span asp-validation-for="BeginDate" class="text-danger"></span>
-                                        <ejs-datetimepicker id="begindate" value="@defaultDate" min="@minDate" max="@maxDate" format="dd-MM-yyyy" cssClass="e-filled" change="onchange" ></ejs-datetimepicker>
+                                        <ejs-datetimepicker id="begindate" value="@defaultDate" min="@minDate" format="dd-MM-yyyy" cssClass="e-filled" change="onchange"></ejs-datetimepicker>
                                     </div>
                                     <div class="col-md-2"></div>
                                     <div class="col-md-4">
                                         <label asp-for="EndDate" class="form-label"><b>End Date:</b></label>
                                         <span asp-validation-for="EndDate" class="text-danger"></span>
-                                        <ejs-datetimepicker id="enddate" format="dd-MM-yyyy" min="DateTime.Now" cssClass="e-filled" ></ejs-datetimepicker>
+                                        <ejs-datetimepicker id="enddate" format="dd-MM-yyyy" value="@defaultDate" min="@minDate" cssClass="e-filled"></ejs-datetimepicker>
                                     </div>
                                     <div class="col-md-1"></div>
                                 </div>
@@ -79,6 +79,7 @@
                             <input asp-action="Create" id="button" class="btn academy-btn mt-30" type="submit" value="Create" style="margin-left:30%" />
                             <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:5%">Back</a>
                         </div>
+                    </div>
                 </form>
             </div>
         </section>
@@ -90,12 +91,13 @@
 }
 
 <style>
-        #begindate {
-            height: 54px;
-        }
-        #enddate {
-            height: 54px;
-        }
+    #begindate {
+        height: 54px;
+    }
+
+    #enddate {
+        height: 54px;
+    }
 </style>
 
 <script type="text/javascript">

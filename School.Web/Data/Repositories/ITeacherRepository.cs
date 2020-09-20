@@ -8,6 +8,6 @@ namespace School.Web.Data.Repositories
 {
     public interface ITeacherRepository : IGenericRepository<Teacher>
     {
-
+        IQueryable GetAllWithUsers();
     }
 }

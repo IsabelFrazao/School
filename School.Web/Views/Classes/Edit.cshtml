@@ -23,6 +23,7 @@
         <section class="contact-area">
             <div class="contact-content">
                 <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="row">
                         <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
                             <!--BANNER START-->
@@ -47,13 +48,13 @@
                                 <label class="form-label"><b>Schedule:</b></label>
                                 <span asp-validation-for="ScheduleId" class="text-danger"></span>
                                 <ejs-dropdownlist id="schedules" ejs-for="ScheduleId" dataSource="Model.Schedules" cssClass="e-filled" placeholder="Select a Schedule" popupHeight="230px" change="valueChange">
-                                    <e-dropdownlist-fields text="Schedule" ></e-dropdownlist-fields>
+                                    <e-dropdownlist-fields text="Schedule"></e-dropdownlist-fields>
                                 </ejs-dropdownlist>
                                 <label class="form-label"><b>Classroom:</b></label>
                                 <span asp-validation-for="ClassroomId" class="text-danger"></span>
                                 <ejs-dropdownlist id="classrooms" ejs-for="ClassroomId" dataSource="Model.Classrooms" cssClass="e-filled" placeholder="Select a Classroom" popupHeight="230px" change="valueChange">
-                                    <e-dropdownlist-fields text="Classroom" ></e-dropdownlist-fields>
-                                </ejs-dropdownlist>                               
+                                    <e-dropdownlist-fields text="Classroom"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
                             </div>
                         </div>
                         <!-- ##### About Us Area End ##### -->

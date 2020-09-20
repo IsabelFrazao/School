@@ -81,5 +81,7 @@ namespace School.Web.Data
         //[Required(ErrorMessage = "Field {0} is mandatory")]
         //[StringLength(30, ErrorMessage = "Field {0} must have between {2} and {1} characters", MinimumLength = 3)]
         public string Email { get; set; }
+
+        public User User { get; set; }
     }
 }

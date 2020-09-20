@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="~/sync.css" type="text/css">
 
     <!-- DataTables Stylesheet -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+    <!--<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />-->
 
 </head>
 <body>
@@ -48,7 +48,16 @@
                                 <a href="index.html"><img src="../img/core-img/logo.png" alt=""></a>
                             </div>
                             <div class="login-content">
-                                <a href="#">Register / Login</a>
+                                @if (this.User.Identity.IsAuthenticated)
+                                {
+                                    <a asp-area="" asp-controller="Accounts" asp-action="ChangeUser">@this.User.Identity.Name |  </a>
+                                    <a asp-area="" asp-controller="Accounts" asp-action="Logout">Logout</a>
+                                }
+                                else
+                                {
+                                    <a asp-area="" asp-controller="Accounts" asp-action="Login">Login / Register</a>
+                                }
+                                @*<a href="#">Register / Login</a>*@
                             </div>
                         </div>
                     </div>
@@ -154,13 +163,6 @@
     <!-- Syncfusion Essential JS 2 Scripts -->
     <script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js"></script>
 
-    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#MyTable').DataTable();
-        });
-    </script>
-
     @RenderSection("Scripts", required: false)
     <ejs-scripts></ejs-scripts>
 </body>
@@ -182,3 +184,24 @@
         <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
         <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
     </ul>*@
+
+@*<environment include="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+        </script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd">
+        </script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>*@

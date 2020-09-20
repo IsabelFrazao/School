@@ -26,12 +26,12 @@ namespace School.Web.Controllers
         private readonly IScheduleRepository _scheduleRepository;
         private readonly IImageHelper _imageHelper;
         private readonly IConverterHelper _converterHelper;
-        private readonly ICombosHelper _combosHelper;
+        private readonly IUserHelper _userHelper;
 
         public StudentsController(IStudentRepository studentRepository, ICourseRepository courseRepository, IClassRepository classRepository,
             ISubjectRepository subjectRepository, IStudentSubjectRepository studentSubjectRepository, ITeacherRepository teacherRepository,
             IGradeRepository gradeRepository, IScheduleRepository scheduleRepository, IImageHelper imageHelper, IConverterHelper converterHelper,
-            ICombosHelper combosHelper)
+            IUserHelper userHelper)
         {
             _studentRepository = studentRepository;
             _courseRepository = courseRepository;
@@ -43,7 +43,7 @@ namespace School.Web.Controllers
             _scheduleRepository = scheduleRepository;
             _imageHelper = imageHelper;
             _converterHelper = converterHelper;
-            _combosHelper = combosHelper;
+            _userHelper = userHelper;
         }
 
         // GET: StudentsController
@@ -245,8 +245,6 @@ namespace School.Web.Controllers
 
             var model = _converterHelper.ToStudentViewModel(student, await _courseRepository.GetByIdAsync(student.CourseId),
                 _courseRepository.GetAll().Where(c => c.Id > 1), await _classRepository.GetByIdAsync(student.ClassId), _classRepository.GetAll());
-
-            model.ComboCourse = _combosHelper.GetComboCourses();
 
             var school = string.Empty;
 

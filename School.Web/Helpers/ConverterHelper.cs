@@ -34,7 +34,8 @@ namespace School.Web.Helpers
                 CourseId = model.CourseId,
                 Class = classes,
                 ClassId = model.ClassId,                
-                SchoolYear = model.SchoolYear
+                SchoolYear = model.SchoolYear,
+                User = model.User
             };
         }
 
@@ -65,7 +66,8 @@ namespace School.Web.Helpers
                 Class = classes,
                 ClassId = model.ClassId,                
                 Classes = listclasses,
-                SchoolYear = model.SchoolYear
+                SchoolYear = model.SchoolYear,
+                User = model.User
             };
         }
         #endregion STUDENT
@@ -90,7 +92,8 @@ namespace School.Web.Helpers
                 MaritalStatus = model.MaritalStatus,
                 Nationality = model.Nationality,
                 Telephone = model.Telephone,
-                Email = model.Email
+                Email = model.Email,
+                User = model.User
             };
         }
 
@@ -114,7 +117,8 @@ namespace School.Web.Helpers
                 Nationality = model.Nationality,
                 Telephone = model.Telephone,
                 Email = model.Email,
-                Subjects = subjects
+                Subjects = subjects,
+                User = model.User
             };
         }
         #endregion TEACHER

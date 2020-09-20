@@ -17,8 +17,10 @@ namespace School.Web.Controllers
         private readonly ISubjectRepository _subjectRepository;
         private readonly IImageHelper _imageHelper;
         private readonly IConverterHelper _converterHelper;
+        private readonly IUserHelper _userHelper;
 
-        public TeachersController(ITeacherRepository teacherRepository, IClassRepository classRepository, ICourseRepository courseRepository, ISubjectRepository subjectRepository, IImageHelper imageHelper, IConverterHelper converterHelper)
+        public TeachersController(ITeacherRepository teacherRepository, IClassRepository classRepository, ICourseRepository courseRepository,
+            ISubjectRepository subjectRepository, IImageHelper imageHelper, IConverterHelper converterHelper, IUserHelper userHelper)
         {
             _teacherRepository = teacherRepository;
             _classRepository = classRepository;
@@ -26,6 +28,7 @@ namespace School.Web.Controllers
             _subjectRepository = subjectRepository;
             _imageHelper = imageHelper;
             _converterHelper = converterHelper;
+            _userHelper = userHelper;
         }
 
         // GET: TeachersController
@@ -96,6 +99,8 @@ namespace School.Web.Controllers
                 }
 
                 var teacher = _converterHelper.ToTeacher(model, path, true);
+
+                teacher.User = await _userHelper.GetUserByEmailAsync("");
 
                 await _teacherRepository.CreateAsync(teacher);
                 return RedirectToAction(nameof(Index));

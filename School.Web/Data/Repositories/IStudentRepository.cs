@@ -11,5 +11,7 @@ namespace School.Web.Data.Repositories
     {
         Task<bool> ValidationAsync(string identificationNumber, string taxNumber, string ssNumber, string nhsNumber,
             string telephone, string email);
+
+        IQueryable GetAllWithUsers();
     }
 }

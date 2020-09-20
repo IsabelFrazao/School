@@ -41,11 +41,20 @@
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-3">
-                                        <img id="imgpreview" src="~/images/blank.jpg" alt="image" style="width:200px; height:300px; max-width:100%; height:auto" />
+                                        @if (!string.IsNullOrEmpty(Model.PhotoUrl))
+                                        {
+                                            <picture>
+                                                <img src="@Url.Content(Model.PhotoUrl)" alt="image" style="width:200px; height:300px; max-width:100%; height:auto" />
+                                            </picture>
+                                        }
+                                        @if (string.IsNullOrEmpty(Model.PhotoUrl))
+                                        {
+                                            <img id="imgpreview" src="~/images/notavailable.jpg" alt="image" style="width:200px; height:300px; max-width:100%; height:auto" />
+                                        }
                                     </div>
                                     <div class="col-md-8">
-                                        <label asp-for="Id" class="form-label"><b>Student Number:</b></label>
-                                        <label asp-for="Id" class="form-label">@ViewBag.idCount</label>
+                                        <label asp-for="Id" class="form-label"><b>Teacher Number:</b></label>
+                                        <label asp-for="Id" class="form-label">@Model.Id</label>
                                         <input asp-for="ImageFile" class="form-control" type="file" onchange="previewimg(event)" />
                                     </div>
                                 </div>

@@ -10,8 +10,8 @@ namespace School.Web.Data.Entities
         public string Name { get; set; }
 
         [Display(Name = "Schedule")]
-        //[Required(ErrorMessage = "Field {0} is mandatory")]
-        //[Range(1, double.MaxValue, ErrorMessage = "You must select a {0}")]
+        [Required(ErrorMessage = "Field {0} is mandatory")]
+        [Range(1, double.MaxValue, ErrorMessage = "You must select a {0}")]
         public Schedule Schedule { get; set; }
 
         public int ScheduleId { get; set; }

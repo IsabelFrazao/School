@@ -24,6 +24,7 @@
         <section class="contact-area">
             <div class="contact-content">
                 <form asp-action="Create" method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="row">
                         <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="400ms">
                             <!--BANNER START-->
@@ -72,7 +73,6 @@
                                 }
                                 <label asp-for="DateOfBirth" class="form-label"><b>Date of Birth:</b></label>
                                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
-                                @*<input asp-for="DateOfBirth" type="date" value=@defaultDate class="form-control" id="dateofbirth">*@
                                 <ejs-datetimepicker id="datetimepicker" value="@defaultDate" min="@minDate" max="@maxDate" format="dd-MM-yyyy" cssClass="e-filled"></ejs-datetimepicker>
                                 <div style="height:3px;"><h6></h6></div>
                                 <label asp-for="Address" class="form-label"><b>Address:</b></label>
@@ -196,15 +196,15 @@
 </section>
 
 @section Scripts {
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
-    <script>
-        var previewimg = function (event) {
-            var result = document.getElementById("imgpreview");
-            result.src = URL.createObjectURL(event.target.files[0]);
-        }
-    </script>
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}    
 }
+
+<script>
+    var previewimg = function (event) {
+        var result = document.getElementById("imgpreview");
+        result.src = URL.createObjectURL(event.target.files[0]);
+    }
+</script>
 <style>
     .e-mask.e-filled .e-control.e-maskedtextbox {
         height: 54px;
@@ -224,14 +224,19 @@
         // disable the state DropDownList
         course.enabled = true;
         // frame the query based on selected value in country DropDownList.
-        //var tempQuery1 = new ej.data.Query().where('CourseId', 'equal', courses.value).ej.data.Query()/*.where('ScheduleId', 'equal', schedule.value)*/;
-        //var tempQuery2 = new ej.data['SchoolYear'].Query();
+        //var tempQuery1 = new ej.data.Query().where('CourseId', 'equal', courses.value, 'and', 'ScheduleId', 'equal', schedule.value)/*.ej.data.Query().where('ScheduleId', 'equal', schedule.value)*/;
+
+        var tempQuery1 = ej.Query().where(ej.Predicate("CourseId", ej.FilterOperators.equal, courses.value).and("ScheduleId", ej.FilterOperators.equals, schedule.value));
+
         debugger
         // set the framed query based on selected value in country DropDownList.
-        //classes.query = tempQuery1;
-        schoolyear.value = course.listData[0]['SchoolYear'].value;
-        
+        classes.query = tempQuery1;
+        //schoolyear.value = course.listData[0]['SchoolYear'].value;
 
+        schoolyear = ej.data.Query().select(['SchoolYear']).value;
+
+
+        
         debugger
         // set null value to state DropDownList text property
         classes.text = null;

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using School.Web.Data.Entities;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace School.Web.Data.Repositories
@@ -12,6 +13,11 @@ namespace School.Web.Data.Repositories
         public StudentRepository(DataContext context) : base(context)
         {
             _context = context;
+        }
+
+        public IQueryable GetAllWithUsers()
+        {
+            return _context.Students.Include(p => p.User);
         }
 
         public async Task<bool> ValidationAsync(string identificationNumber, string taxNumber, string ssNumber, string nhsNumber,

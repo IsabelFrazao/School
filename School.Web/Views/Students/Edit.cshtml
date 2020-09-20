@@ -23,6 +23,7 @@
         <section class="contact-area">
             <div class="contact-content">
                 <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="row">
                         <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="400ms">
                             <!--BANNER START-->
@@ -39,11 +40,20 @@
                                 <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-3">
-                                        <img id="imgpreview" src="~/images/blank.jpg" alt="image" style="width:200px; height:300px; max-width:100%; height:auto" />
+                                        @if (!string.IsNullOrEmpty(Model.PhotoUrl))
+                                        {
+                                            <picture>
+                                                <img src="@Url.Content(Model.PhotoUrl)" alt="image" style="width:200px; height:300px; max-width:100%; height:auto" />
+                                            </picture>
+                                        }
+                                        @if (string.IsNullOrEmpty(Model.PhotoUrl))
+                                        {
+                                            <img id="imgpreview" src="~/images/notavailable.jpg" alt="image" style="width:200px; height:300px; max-width:100%; height:auto" />
+                                        }
                                     </div>
                                     <div class="col-md-8">
                                         <label asp-for="Id" class="form-label"><b>Student Number:</b></label>
-                                        <label asp-for="Id" class="form-label">@ViewBag.idCount</label>
+                                        <label asp-for="Id" class="form-label">@Model.Id</label>
                                         <input asp-for="ImageFile" class="form-control" type="file" onchange="previewimg(event)" />
                                     </div>
                                 </div>
@@ -65,13 +75,14 @@
                                     </div>
                                 </div><br />
                                 @{
-                                    var minDate = new DateTime(DateTime.Now.Year - 65, DateTime.Now.Month, DateTime.Now.Day);
-                                    var maxDate = new DateTime(DateTime.Now.Year - 18, DateTime.Now.Month, DateTime.Now.Day);
+                                    var minDate = new DateTime(DateTime.Now.Year - 65, DateTime.Now.Month - (65 / 13), DateTime.Now.Day - (65 / 365));
+                                    var maxDate = new DateTime(DateTime.Now.Year - 18, DateTime.Now.Month - (18 / 13), DateTime.Now.Day - (18 / 365));
                                     var defaultDate = DateTime.Now.Date;
                                 }
                                 <label asp-for="DateOfBirth" class="form-label"><b>Date of Birth:</b></label>
                                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
-                                <input asp-for="DateOfBirth" type="date" class="form-control" id="dateofbirth">
+                                <ejs-datetimepicker id="datetimepicker" value="@defaultDate" min="@minDate" max="@maxDate" format="dd-MM-yyyy" cssClass="e-filled"></ejs-datetimepicker>
+                                <div style="height:3px;"><h6></h6></div>
                                 <label asp-for="Address" class="form-label"><b>Address:</b></label>
                                 <span asp-validation-for="Address" class="text-danger"></span>
                                 <input asp-for="Address" type="text" class="form-control" id="address" placeholder="Address">
@@ -108,7 +119,7 @@
                                 <label asp-for="SSNumber" class="form-label"><b>Social Security Number:</b></label>
                                 <span asp-validation-for="SSNumber" class="text-danger"></span>
                                 <ejs-maskedtextbox id="mask4" ejs-for="SSNumber" mask="00000000000" placeholder="00000000000" cssClass="e-filled" floatLabelType="Never"></ejs-maskedtextbox>
-                                <div style="height:3px;"><h6></h6></div>
+                                <div style="height:4px;"><h6></h6></div>
                                 <label asp-for="NHSNumber" class="form-label"><b>National Health Service Number:</b></label>
                                 <span asp-validation-for="NHSNumber" class="text-danger"></span>
                                 <ejs-maskedtextbox id="mask5" ejs-for="NHSNumber" mask="000000000" placeholder="000000000" cssClass="e-filled" floatLabelType="Never"></ejs-maskedtextbox>
@@ -194,17 +205,21 @@
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
-    <script>
-        var previewimg = function (event) {
-            var result = document.getElementById("imgpreview");
-            result.src = URL.createObjectURL(event.target.files[0]);
-        }
-    </script>
-
-    <style>
-        .e-mask.e-filled .e-control.e-maskedtextbox {
-            height: 54px;
-        }
-    </style>
 }
+
+<script>
+    var previewimg = function (event) {
+        var result = document.getElementById("imgpreview");
+        result.src = URL.createObjectURL(event.target.files[0]);
+    }
+</script>
+
+<style>
+    .e-mask.e-filled .e-control.e-maskedtextbox {
+        height: 54px;
+    }
+
+    #datetimepicker {
+        height: 54px;
+    }
+</style>

@@ -1,14 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using School.Web.Data.Entities;
 using System.Linq;
-using Class = School.Web.Data.Entities.Class;
-using Course = School.Web.Data.Entities.Course;
-using Subject = School.Web.Data.Entities.Subject;
-using Teacher = School.Web.Data.Entities.Teacher;
 
 namespace School.Web.Data
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext<User>
     {
         public DbSet<Student> Students { get; set; }
         public DbSet<Teacher> Teachers { get; set; }

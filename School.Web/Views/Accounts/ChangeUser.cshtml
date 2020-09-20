@@ -1,0 +1,48 @@
+﻿@model School.Web.Models.ChangeUserViewModel
+
+@{
+    ViewData["Title"] = "Change User";
+}
+
+<!-- ##### Breadcumb Area Start ##### -->
+<div class="breadcumb-area bg-img" style="background-image: url(../img/bg-img/breadcumb.jpg);">
+    <div class="bradcumbContent">
+        <h2>Change User</h2>
+    </div>
+</div>
+<!-- ##### Breadcumb Area End ##### -->
+<!-- ##### About Us Area Start ##### -->
+<section class="about-us-area mt-50 section-padding-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="section-heading text-center mx-auto wow fadeInUp" data-wow-delay="300ms">
+                    <h3>Change User</h3>
+                </div>
+            </div>
+        </div>
+        <section class="contact-area">
+            <div class="contact-content">
+                <form asp-action="ChangeUser" asp-controller="Accounts" method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row">
+                        <div class="col-12 col-md-3 wow fadeInUp" data-wow-delay="500ms"></div>
+                        <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="500ms">
+                            <br />
+                            <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:370px;">
+                                <label class="form-label"><b>First Name:</b></label>
+                                <input asp-for="FirstName" type="text" class="form-control" placeholder="First Name">
+                                <label class="form-label"><b>Last Name:</b></label>
+                                <input asp-for="LastName" type="text" class="form-control" placeholder="Last Name"> 
+                                <button asp-action="ChangeUser" class="btn academy-btn mt-30" type="submit" style="margin-left:32%">Update</button>
+                            </div>
+                        </div>
+                        <!-- ##### About Us Area End ##### -->
+                        <button asp-action="ChangePassword" class="btn academy-btn mt-30" style="margin-left:29%">Change Password</button>
+                        <a asp-action="Index" class="btn academy-btn mt-30" style="margin-left:6%">Back</a>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+</section>
