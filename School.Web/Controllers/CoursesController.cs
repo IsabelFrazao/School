@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using School.Web.Data.Entities;
 using School.Web.Data.Repositories;
 using School.Web.Helpers;
 using School.Web.Models;
@@ -61,10 +61,13 @@ namespace School.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: CoursesController/Create
         public IActionResult Create()
         {
-            var model = new CourseViewModel { Teachers = _teacherRepository.GetAll().Where(c => c.Id > 1).ToList(),
+            var model = new CourseViewModel
+            {
+                Teachers = _teacherRepository.GetAll().Where(c => c.Id > 1).ToList(),
                 Subjects = _subjectRepository.GetAll()
                 .Where(e => e.Field == "Áudiovisuais e Produção dos Media" || e.Field == "Ciências Informáticas" ||
                 e.Field == "Eletrónica e Automação").ToList()
@@ -74,7 +77,6 @@ namespace School.Web.Controllers
 
             return View(model);
         }
-
 
         // POST: CoursesController/Create
         [HttpPost]
@@ -94,6 +96,7 @@ namespace School.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: CoursesController/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -148,6 +151,7 @@ namespace School.Web.Controllers
             return View(course);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: CoursesController/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

@@ -39,21 +39,19 @@
                             <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:450px;">
                                 <label asp-for="CourseId" class="form-label"><b>Course:</b></label>
                                 <span asp-validation-for="CourseId" class="text-danger"></span>
-                                <ejs-dropdownlist id="courses" ejs-for="Course.Name" dataSource="Model.Courses" cssClass="e-filled" placeholder="Select a Course" popupHeight="230px" change="valueChange">
-                                    <e-dropdownlist-fields text="Name" value="Id"></e-dropdownlist-fields>
-                                </ejs-dropdownlist>
+                                <input asp-for="Course.Name" type="text" class="form-control" id="course" readonly="readonly">
                                 <label asp-for="Name" class="form-label"><b>Name:</b></label>
                                 <span asp-validation-for="Name" class="text-danger"></span>
                                 <input asp-for="Name" type="text" class="form-control" id="name" placeholder="Name">
                                 <label class="form-label"><b>Schedule:</b></label>
                                 <span asp-validation-for="ScheduleId" class="text-danger"></span>
-                                <ejs-dropdownlist id="schedules" ejs-for="ScheduleId" dataSource="Model.Schedules" cssClass="e-filled" placeholder="Select a Schedule" popupHeight="230px" change="valueChange">
-                                    <e-dropdownlist-fields text="Schedule"></e-dropdownlist-fields>
+                                <ejs-dropdownlist id="schedules" ejs-for="ScheduleId" dataSource="Model.Schedules" cssClass="e-filled" placeholder="@Model.Schedule.Shift" popupHeight="230px" change="valueChange">
+                                    <e-dropdownlist-fields text="Shift" value="Id"></e-dropdownlist-fields>
                                 </ejs-dropdownlist>
                                 <label class="form-label"><b>Classroom:</b></label>
                                 <span asp-validation-for="ClassroomId" class="text-danger"></span>
-                                <ejs-dropdownlist id="classrooms" ejs-for="ClassroomId" dataSource="Model.Classrooms" cssClass="e-filled" placeholder="Select a Classroom" popupHeight="230px" change="valueChange">
-                                    <e-dropdownlist-fields text="Classroom"></e-dropdownlist-fields>
+                                <ejs-dropdownlist id="classrooms" ejs-for="ClassroomId" dataSource="Model.Classrooms" cssClass="e-filled" placeholder="@Model.Classroom.Room" popupHeight="230px" change="valueChange">
+                                    <e-dropdownlist-fields text="Room" value="Id"></e-dropdownlist-fields>
                                 </ejs-dropdownlist>
                             </div>
                         </div>

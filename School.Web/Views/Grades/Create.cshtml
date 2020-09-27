@@ -55,7 +55,6 @@
                                         <e-grid-column field="Teacher.FullName" headerText="Teacher" textAlign="Right" allowEditing="false" width="140" type="string"></e-grid-column>
                                         <e-grid-column field="Student.FullName" headerText="Student" allowEditing="false" width="auto" type="string"></e-grid-column>
                                         <e-grid-column field="FinalGrade" uid="FinalGrade" id="FinalGrade" headerText="Final Grade" allowEditing="true" editType="numericedit" width="auto" type="number"></e-grid-column>
-                                        @*<e-grid-column field="Approval" headerText="Approval" width="auto" type="string"></e-grid-column>*@
                                         <e-grid-column textAlign="Right" width="auto" commands="commands"></e-grid-column>
                                     </e-grid-columns>
                                 </ejs-grid>
@@ -78,7 +77,8 @@
                 FinalGrade: args.data['FinalGrade'],
             });
 
-            $.ajax({
+            if (args.data['FinalGrade'] >= 0 && args.data['FinalGrade'] <= 20) {
+                $.ajax({
                 url: '@Url.Action("Create","Grades")',
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("RequestVerificationToken",
@@ -90,13 +90,14 @@
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
                 },
-                success: function (result) {
-                    alert("We returned: " + result);
-                },
-                //complete: function () {
-                //    $("#divLoadingPanel").hide();
-                //}
+                success: function () {
+                    alert("Success");
+                }
             });
+            }
+            else {                
+                alert("Invalid Number");
+            }
         }
     }
 </script>

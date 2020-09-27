@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using School.Web.Data.Entities;
+using School.Web.Data.Repositories;
 using School.Web.Helpers;
 using School.Web.Models;
 using System;
@@ -13,17 +15,24 @@ namespace School.Web.Controllers
     public class AccountsController : Controller
     {
         private readonly IUserHelper _userHelper;
+        private readonly IConfiguration _configuration;
+        private readonly IScheduleRepository _scheduleRepository;
+        private readonly IClassroomRepository _classroomRepository;
 
-        public AccountsController(IUserHelper userHelper)
+        public AccountsController(IUserHelper userHelper, IConfiguration configuration, IScheduleRepository scheduleRepository,
+            IClassroomRepository classroomRepository)
         {
             _userHelper = userHelper;
+            _configuration = configuration;
+            _scheduleRepository = scheduleRepository;
+            _classroomRepository = classroomRepository;
         }
 
         public IActionResult Login()
         {
             if (this.User.Identity.IsAuthenticated)
             {
-                return this.RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home");
             }
 
             return View();
@@ -196,6 +205,96 @@ namespace School.Web.Controllers
             }
 
             return View(model);
+        }
+
+        public IActionResult Settings()
+        {
+            var model = new SettingsViewModel { Schedules = _scheduleRepository.GetAll(), Classrooms = _classroomRepository.GetAll() };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task AddSchedule([FromBody] Schedule model)
+        {
+            if (ModelState.IsValid)
+            {
+
+
+                if (await _scheduleRepository.GetByIdAsync(model.Id) == null)
+                {
+                    var schedule = new Schedule
+                    {
+                        Id = 0,
+                        Shift = model.Shift
+                    };
+
+                    await _scheduleRepository.CreateAsync(schedule);
+                }
+                else //ESTÁ-ME A CRIAR UM NOVO!!
+                {
+                    var schedule = model;
+
+                    //schedule.Id = model.Id;
+                    //schedule.Shift = model.Shift;
+
+                    await _scheduleRepository.UpdateAsync(schedule);
+                }
+            }
+        }
+
+        [HttpPost]
+        public async Task AddClassroom([FromBody] Classroom model)
+        {
+            if (ModelState.IsValid)
+            {
+                var classroom = new Classroom
+                {
+                    Id = 0,
+                    Room = model.Room
+                };
+
+                await _classroomRepository.CreateAsync(classroom);
+            }
+        }
+
+        [HttpPost]
+        public async Task DeleteSchedule([FromBody] Schedule model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (await _scheduleRepository.GetByIdAsync(model.Id) != null)
+                {
+                    var schedule = model;
+
+                    //schedule.Id = model.Id;
+                    //schedule.Shift = model.Shift;
+
+                    await _scheduleRepository.DeleteAsync(schedule);
+                }                
+            }
+        }
+
+        [HttpPost]
+        public async Task DeleteClassroom([FromBody]Classroom model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (await _classroomRepository.GetByIdAsync(model.Id) != null)
+                {
+                    var classroom = model;
+
+                    //schedule.Id = model.Id;
+                    //schedule.Shift = model.Shift;
+
+                    await _classroomRepository.DeleteAsync(classroom);
+                }
+            }
+        }
+
+        public IActionResult Users()
+        {
+            return View();
         }
     }
 }

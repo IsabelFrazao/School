@@ -24,7 +24,10 @@
         <section class="contact-area">
             <div class="contact-content">
                 <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
-                    <a asp-action="Create" class="btn academy-btn mt-30" style="margin-left:40%">Create New</a>
+                    @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Create" class="btn academy-btn mt-30" style="margin-left:40%">Create New</a>
+                    }
                     <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
                         <h6><br /></h6>
                     </div>
@@ -42,7 +45,6 @@
                             <e-grid-column field="Student.FullName" headerText="Student" width="auto" type="string"></e-grid-column>
                             <e-grid-column field="FinalGrade" headerText="Final Grade" width="auto" type="number"></e-grid-column>
                             <e-grid-column field="Approval" headerText="Approval" width="auto" type="string"></e-grid-column>
-                            @*<e-grid-column template="#template" textAlign="Right" width="auto"></e-grid-column>*@
                         </e-grid-columns>
                     </ejs-grid>
                 </div>
@@ -53,8 +55,14 @@
 
 <script id="template" type="text/x-template">
     <div>
-        <a href='/Grades/Edit/${Id}'>Edit</a> |
-        <a href='/Grades/Details/${Id}'>Details</i></a> |
-        <a href='/Grades/Delete/${Id}'>Delete</a>
+        @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
+        {
+            <a href='/Grades/Edit/${Id}'>Edit | </a>
+        }
+        <a href='/Grades/Details/${Id}'>Details</a>
+        @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
+        {
+            <a href='/Grades/Delete/${Id}'> | Delete</a>
+        }
     </div>
 </script>

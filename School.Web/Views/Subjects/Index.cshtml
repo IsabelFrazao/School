@@ -24,13 +24,15 @@
         <section class="contact-area">
             <div class="contact-content">
                 <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
-                    <a asp-action="CreateIndex" class="btn academy-btn mt-30" style="margin-left:40%">Create Subjects</a>
-                    @*<a asp-action="Upload" class="btn academy-btn mt-30" style="margin-left:10%">Upload Subjects</a>*@
+                    @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
+                    {
+                        <a asp-action="CreateIndex" class="btn academy-btn mt-30" style="margin-left:40%">Create Subjects</a>
+                    }
                     <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
                         <h6><br /></h6>
                     </div>
                 </div>
-                <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">                   
+                <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
                     <ejs-grid id="Grid" dataSource="Model" allowSorting="true" allowFiltering="true" allowPaging="true">
                         <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
                         <e-grid-columns>
@@ -51,7 +53,10 @@
 
 <script id="template" type="text/x-template">
     <div>
-        <a href='/Subjects/Edit/${Id}'>Edit</a> |
+        @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
+        {
+            <a href='/Subjects/Edit/${Id}'>Edit | </a>
+        }
         <a href='/Subjects/Details/${Id}'>Details</a>
     </div>
 </script>

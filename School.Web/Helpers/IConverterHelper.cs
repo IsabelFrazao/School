@@ -23,8 +23,6 @@ namespace School.Web.Helpers
         Subject ConvertToSubject(IEFPSubject model, int courseid, Course course, int teacherid, Teacher teacher, string credits, bool isNew);
 
         Grade ToGrade(GradeViewModel model, Course course, Class classes, Subject subject, Teacher teacher, Student student, bool isNew);
-        GradeViewModel ToGradeViewModel(Grade model, Course course, IEnumerable<Course> courses, Class classes, IEnumerable<Class> listclasses, IEnumerable<Subject> subjects, IEnumerable<Teacher> teachers, IEnumerable<Student> students);
-        Grade CreateGrade(StudentSubject studentsubject, Student student, Subject subject, Course course, Class classes, Teacher teacher, bool isNew);//Converts to Model
-
+        GradeViewModel ToGradeViewModel(Grade model, Course course, IEnumerable<Course> courses, Class classes, IEnumerable<Class> listclasses, IEnumerable<Subject> subjects, IEnumerable<Teacher> teachers, IEnumerable<Student> students);       
     }
 }

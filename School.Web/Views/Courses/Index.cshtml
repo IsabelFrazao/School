@@ -24,7 +24,10 @@
         <section class="contact-area">
             <div class="contact-content">
                 <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
-                    <a asp-action="Create" class="btn academy-btn mt-30" style="margin-left:40%">Create New</a>
+                    @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Create" class="btn academy-btn mt-30" style="margin-left:40%">Create New</a>
+                    }
                     <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
                         <h6><br /></h6>
                     </div>
@@ -37,7 +40,7 @@
                             <e-grid-column field="Field" headerText="Field" width="auto" type="string"></e-grid-column>
                             <e-grid-column field="Name" headerText="Name" width="auto" type="string"></e-grid-column>
                             <e-grid-column field="BeginDate" headerText="Begin Date" width="auto" type="string"></e-grid-column>
-                            <e-grid-column field="EndDate" headerText="End Date" width="auto" type="string"></e-grid-column>                            
+                            <e-grid-column field="EndDate" headerText="End Date" width="auto" type="string"></e-grid-column>
                             <e-grid-column template="#template" textAlign="Right" width="auto"></e-grid-column>
                         </e-grid-columns>
                     </ejs-grid>
@@ -49,8 +52,14 @@
 
 <script id="template" type="text/x-template">
     <div>
-        <a href='/Courses/Edit/${Id}'>Edit</a> |
-        <a href='/Courses/Details/${Id}'>Details</a> |
-        <a href='/Courses/Delete/${Id}'>Delete</a>
+        @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
+        {
+            <a href='/Courses/Edit/${Id}'>Edit | </a>
+        }
+        <a href='/Courses/Details/${Id}'>Details</a>
+        @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
+        {
+            <a href='/Courses/Delete/${Id}'> | Delete</a>
+        }
     </div>
 </script>

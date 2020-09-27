@@ -23,10 +23,13 @@
         <section class="contact-area">
             <div class="contact-content">
                 <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
-                    <a asp-action="Create" class="btn academy-btn mt-30" style="margin-left:40%">Create New</a>
+                    @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Create" class="btn academy-btn mt-30" style="margin-left:40%">Create New</a>
+                    }
                     <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
                         <h6><br /></h6>
-                    </div>                   
+                    </div>
                 </div>
                 <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
                     <ejs-grid id="Grid" dataSource="Model" allowSorting="true" allowFiltering="true" allowPaging="true">
@@ -35,7 +38,6 @@
                             <e-grid-column field="Id" headerText="Id" visible="false" textAlign="Right" width="auto" type="number" isPrimaryKey="true"></e-grid-column>
                             <e-grid-column field="FullName" headerText="FullName" width="auto" type="string"></e-grid-column>
                             <e-grid-column field="DateOfBirth" headerText="Date Of Birth" textAlign="Right" width="auto" type="string"></e-grid-column>
-                            @*<e-grid-column field="Address" headerText="Address" textAlign="Right" width="120" type="string"></e-grid-column>*@
                             <e-grid-column field="IdentificationNumber" headerText="IdentificationNumber" textAlign="Right" width="auto" type="string"></e-grid-column>
                             <e-grid-column field="Telephone" headerText="Telephone" textAlign="Right" width="auto" type="string"></e-grid-column>
                             <e-grid-column field="Email" headerText="Email" textAlign="Right" width="auto" type="string"></e-grid-column>
@@ -50,8 +52,14 @@
 
 <script id="template" type="text/x-template">
     <div>
-        <a href='/Students/Edit/${Id}'>Edit</a> |
-        <a href='/Students/Details/${Id}'>Details</a> |
-        <a href='/Students/Delete/${Id}'>Delete</a>
+        @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
+        {
+            <a href='/Students/Edit/${Id}'>Edit | </a>
+        }
+        <a href='/Students/Details/${Id}'>Details</a>
+        @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
+        {
+            <a href='/Students/Delete/${Id}'> | Delete</a>
+        }
     </div>
 </script>

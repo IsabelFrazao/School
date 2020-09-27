@@ -72,12 +72,15 @@
                                     <div style="height:48px;">
                                         <label class="form-label">@Html.DisplayFor(model => model.EndDate)</label> <br />
                                         <br />
-                                        <label class="form-label"><b>Classes:</b></label>
-                                        <ejs-listbox dataSource="Model.Classes" id="classes-select-listbox" height="200px">
-                                            <e-listbox-selectionsettings showCheckbox="false"></e-listbox-selectionsettings>
-                                            <e-listbox-fields text="Name" value="Id"></e-listbox-fields>
-                                        </ejs-listbox>
-                                    </div>
+                                        @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin") || this.User.IsInRole("Teacher"))
+                                        {
+                                            <label class="form-label"><b>Classes:</b></label>
+                                            <ejs-listbox dataSource="Model.Classes" id="classes-select-listbox" height="200px">
+                                                <e-listbox-selectionsettings showCheckbox="false"></e-listbox-selectionsettings>
+                                                <e-listbox-fields text="Name" value="Id"></e-listbox-fields>
+                                            </ejs-listbox>
+                                        }
+                                        </div>
                                     <div class="col-md-1"></div>
                                 </div>
                             </div>

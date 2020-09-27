@@ -1,0 +1,192 @@
+﻿@model School.Web.Models.SettingsViewModel
+
+@{
+    ViewData["Title"] = "Settings";
+}
+
+<!-- ##### Breadcumb Area Start ##### -->
+<div class="breadcumb-area bg-img" style="background-image: url(../../img/bg-img/breadcumb.jpg);">
+    <div class="bradcumbContent">
+        <h2>Settings</h2>
+    </div>
+</div>
+<!-- ##### Breadcumb Area End ##### -->
+<!-- ##### About Us Area Start ##### -->
+<section class="about-us-area mt-50 section-padding-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="section-heading text-center mx-auto wow fadeInUp" data-wow-delay="300ms">
+                    <h3>Settings</h3>
+                </div>
+            </div>
+        </div>
+        <section class="contact-area">
+            <div class="contact-content">
+                @*<form asp-action="CreateSettings" method="post" enctype="multipart/form-data">*@
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row">
+                        <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
+                            <!--BANNER START-->
+                            <div class="panel single-accordion">
+                                <h6>
+                                    <a class="collapsed" style="text-align:center;">
+                                        General Information
+                                    </a>
+                                </h6>
+                            </div>
+                            <!--BANNER END-->
+                            <br />
+                            <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:650px;">
+                                @{
+                                    List<object> commands = new List<object>();
+                                    commands.Add(new { type = "Edit", buttonOption = new { iconCss = "e-icons e-edit", cssClass = "e-flat" } });
+                                    commands.Add(new { type = "Save", buttonOption = new { iconCss = "e-icons e-update", cssClass = "e-flat" } });
+                                    commands.Add(new { type = "Cancel", buttonOption = new { iconCss = "e-icons e-cancel-icon", cssClass = "e-flat" } });
+                                    commands.Add(new { type = "Delete", buttonOption = new { iconCss = "e-icons e-delete", cssClass = "e-flat" } });
+                                }
+                                <label class="form-label"><b>Schedules:</b></label>
+                                <ejs-grid id="Grid2" dataSource="Model.Schedules" actionBegin="addSchedule" toolbar="@(new List<string>() { "Add"})" height="100px" allowSorting="true" allowFiltering="true" allowPaging="true">
+                                    <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
+                                    <e-grid-editsettings allowDeleting="true" allowAdding="true" allowEditing="true" mode="Normal"></e-grid-editsettings>
+                                    <e-grid-columns>
+                                        <e-grid-column field="Id" headerText="Id" visible="false" textAlign="Right" allowEditing="true" width="auto" type="number" isPrimaryKey="true"></e-grid-column>
+                                        <e-grid-column field="Shift" headerText="Shift" allowEditing="true" width="150" type="string"></e-grid-column>
+                                        <e-grid-column textAlign="Right" width="auto" commands="commands"></e-grid-column>
+                                    </e-grid-columns>
+                                </ejs-grid>
+                                <br/>
+                                <label class="form-label"><b>Classrooms:</b></label>
+                                <ejs-grid id="Grid3" dataSource="Model.Classrooms" actionBegin="addClassroom" toolbar="@(new List<string>() { "Add"})" height="100px" allowSorting="true" allowFiltering="true" allowPaging="true">
+                                    <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
+                                    <e-grid-editsettings allowDeleting="true" allowAdding="true" allowEditing="true" mode="Normal"></e-grid-editsettings>
+                                    <e-grid-columns>
+                                        <e-grid-column field="Id" headerText="Id" visible="false" textAlign="Right" allowEditing="false" width="auto" type="number" isPrimaryKey="true"></e-grid-column>
+                                        <e-grid-column field="Room" headerText="Course" allowEditing="true" width="auto" type="string"></e-grid-column>
+                                        <e-grid-column textAlign="Right" width="auto" commands="commands"></e-grid-column>
+                                    </e-grid-columns>
+                                </ejs-grid>
+                            </div>
+                            <!-- ##### About Us Area End ##### -->
+                            <a asp-action="Index" asp-controller="Home" class="btn academy-btn mt-30" style="margin-left:40%">Back</a>
+                        </div>
+                    </div>
+                @*</form>*@
+            </div>
+        </section>
+    </div>
+</section>
+
+<script>
+    function addSchedule(args) {
+        if (args.requestType === 'save') {
+            var data = JSON.stringify({
+                Id: args.data['Id'],
+                Shift: args.data['Shift']
+            });
+            $.ajax({
+                url: '@Url.Action("AddSchedule", "Accounts")',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("RequestVerificationToken",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                type: 'POST',
+                data: data,
+                contentType: "application/json; charset=utf-8",
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    //alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                    alert("Failed");
+                },
+                success: function (result) {
+                    //alert("We returned: " + result);
+                    alert("Success");
+                }
+            });
+        }
+        if (args.requestType === 'delete') {
+            var data = JSON.stringify({
+                Id: args.data[0]['Id']
+            });
+            debugger
+            $.ajax({
+                url: '@Url.Action("DeleteSchedule", "Accounts")',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("RequestVerificationToken",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                type: 'POST',
+                data: data,
+                contentType: "application/json; charset=utf-8",
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    //alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                    alert("Failed");
+                },
+                success: function (result) {
+                    //alert("We returned: " + result);
+                    alert("Success");
+                }
+            });
+        }
+    }
+
+    function addClassroom(args) {
+        if (args.requestType === 'save') {
+            var data = JSON.stringify({
+                Id: args.data['Id'],
+                Room: args.data['Room']
+            });
+            $.ajax({
+                url: '@Url.Action("AddClassroom", "Accounts")',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("RequestVerificationToken",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                type: 'POST',
+                data: data,
+                contentType: "application/json; charset=utf-8",
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    //alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                    alert("Failed");
+                },
+                success: function() {
+                    alert("Success");
+                }
+            });
+        }
+        else if (args.requestType === 'delete') {
+            var data = JSON.stringify({
+                Id: args.data['Id']
+            });
+            $.ajax({
+                url: '@Url.Action("DeleteClassroom", "Accounts")',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("RequestVerificationToken",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                type: 'POST',
+                data: data,
+                contentType: "application/json; charset=utf-8",
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    //alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                    alert("Failed");
+                },
+                success: function() {
+                    alert("Success");
+                }
+            });
+        }
+    }
+</script>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+@*<span asp-validation-for="Course" class="text-danger"></span>*@
+@*<ejs-listbox id="schedules-select-listbox" dataSource="Model.Schedules" height="100px">
+        <e-listbox-selectionsettings></e-listbox-selectionsettings>
+        <e-listbox-fields text="Shift" value="Id"></e-listbox-fields>
+    </ejs-listbox>
+    <label asp-for="Schedule" class="form-label"><b><br />Name:</b></label>
+    <span asp-validation-for="Schedule" class="text-danger"></span>
+    <input asp-for="Schedule" type="text" class="form-control" id="name" placeholder="Schedule">*@

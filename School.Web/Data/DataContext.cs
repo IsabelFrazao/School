@@ -14,7 +14,6 @@ namespace School.Web.Data
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<Grade> Grades { get; set; }
         public DbSet<IEFPSubject> IEFPSubjects { get; set; }
-        public DbSet<StudentSubject> StudentSubjects { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<Classroom> Classrooms { get; set; }
 

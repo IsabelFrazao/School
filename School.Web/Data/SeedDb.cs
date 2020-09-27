@@ -24,6 +24,10 @@ namespace School.Web.Data
         {
             await _context.Database.EnsureCreatedAsync();
 
+            await _userHelper.CheckRoleAsync("Admin");
+            await _userHelper.CheckRoleAsync("Teacher");
+            await _userHelper.CheckRoleAsync("Student");
+
             var user = await _userHelper.GetUserByEmailAsync("maria_frazao@hotmail.com");
 
             if (user == null)
@@ -45,8 +49,12 @@ namespace School.Web.Data
                 }
             }
 
+            var isInRole = await _userHelper.IsUserInRoleAsync(user, "Admin");
 
-
+            if (!isInRole)
+            {
+                await _userHelper.AddUserToRoleAsync(user, "Admin");
+            }
 
 
             //if(!_context.Students.Any())
@@ -59,17 +67,49 @@ namespace School.Web.Data
 
             if (!_context.Teachers.Any())
             {
-                this.AddTeachers("Not Selected");
+                this.AddTeachers("No Selection");
 
                 await _context.SaveChangesAsync();
             }
 
             if (!_context.Courses.Any())
             {
-                this.AddCourses("Not Selected");
+                this.AddCourses("No Selection");
 
                 await _context.SaveChangesAsync();
             }
+
+            if (!_context.Schedules.Any())
+            {
+                this.AddSchedules("Day");
+                this.AddSchedules("Night");
+
+                await _context.SaveChangesAsync();
+            }
+
+            if (!_context.Classrooms.Any())
+            {
+                this.AddClassrooms("3.01");
+                this.AddClassrooms("3.02");
+
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        private void AddClassrooms(string room)
+        {
+            _context.Classrooms.Add(new Classroom
+            {
+                Room = room
+            });
+        }
+
+        private void AddSchedules(string shift)
+        {
+            _context.Schedules.Add(new Schedule
+            {
+                Shift = shift
+            });
         }
 
         //private void AddStudents(string name)
@@ -84,7 +124,7 @@ namespace School.Web.Data
         {
             _context.Courses.Add(new Course
             {
-                Name = "Not Selected",
+                Name = name,
                 CoordinatorId = 1
             });
         }
@@ -93,7 +133,7 @@ namespace School.Web.Data
         {
             _context.Teachers.Add(new Teacher
             {
-                FullName = "Not Selected"
+                FullName = name
             });
         }
     }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,6 @@ namespace School.Web.Controllers
         private readonly ICourseRepository _courseRepository;
         private readonly ITeacherRepository _teacherRepository;
         private readonly IStudentRepository _studentRepository;
-        private readonly IStudentSubjectRepository _studentSubjectRepository;
         private readonly IClassRepository _classRepository;
         private readonly IGradeRepository _gradeRepository;
         private readonly IHostingEnvironment _hostingEnvironment;
@@ -35,15 +35,14 @@ namespace School.Web.Controllers
 
         public SubjectsController(ISubjectRepository subjectRepository, IIEFPSubjectRepository iefpSubjectRepository,
             ICourseRepository courseRepository, ITeacherRepository teacherRepository, IStudentRepository studentRepository,
-            IStudentSubjectRepository studentSubjectRepository, IClassRepository classRepository, IGradeRepository gradeRepository,
-            IHostingEnvironment hostingEnvironment, IConverterHelper converterHelper, IFileHelper fileHelper)
+            IClassRepository classRepository, IGradeRepository gradeRepository, IHostingEnvironment hostingEnvironment,
+            IConverterHelper converterHelper, IFileHelper fileHelper)
         {
             _subjectRepository = subjectRepository;
             _iefpSubjectRepository = iefpSubjectRepository;
             _courseRepository = courseRepository;
             _teacherRepository = teacherRepository;
             _studentRepository = studentRepository;
-            _studentSubjectRepository = studentSubjectRepository;
             _classRepository = classRepository;
             _gradeRepository = gradeRepository;
             _hostingEnvironment = hostingEnvironment;
@@ -78,6 +77,7 @@ namespace School.Web.Controllers
             return View(subject);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult CreateIndex()
         {
             var model = new SubjectViewModel
@@ -102,10 +102,6 @@ namespace School.Web.Controllers
                     }
                 }
             }
-
-            //model.Courses = _courseRepository.GetAll();
-            //model.Teachers = _teacherRepository.GetAll();
-            //model.IEFPSubjects = _iefpSubjectRepository.GetAll().Where(e => e.Field == "Áudiovisuais e Produção dos Media" || e.Field == "Ciências Informáticas" || e.Field == "Eletrónica e Automação");//Filter by Field
 
             return View(model);
         }
@@ -146,13 +142,13 @@ namespace School.Web.Controllers
                 model.TeacherId, await _teacherRepository.GetByIdAsync(model.TeacherId), model.Credits, true);
 
                 if (!await _subjectRepository.ExistsCodeAsync(subject.Code))
-                {
                     await _subjectRepository.CreateAsync(subject);
-                }
+
+                //GRADES
 
                 var Students = _studentRepository.GetAll().Where(s => s.CourseId == subject.CourseId);
 
-                List<StudentSubject> StudentSubjects = new List<StudentSubject>();
+                var Grades = new List<Grade>();
 
                 if (Students != null)
                 {
@@ -160,81 +156,24 @@ namespace School.Web.Controllers
                     {
                         if (student.CourseId == subject.CourseId)
                         {
-                            StudentSubjects.Add(new StudentSubject
+                            Grades.Add(new Grade
                             {
-                                StudentId = student.Id,
+                                Id = 0,
+                                CourseId = student.CourseId,
+                                ClassId = student.ClassId,
                                 SubjectId = subject.Id,
+                                TeacherId = subject.TeacherId,
+                                StudentId = student.Id,
+                                FinalGrade = -1,
                             });
                         }
                     }
 
-                    foreach (var ss in StudentSubjects)
+                    foreach (var grade in Grades)
                     {
-                        await _studentSubjectRepository.CreateAsync(ss);
+                        await _gradeRepository.CreateAsync(grade);
                     }
 
-                    var stu = new Student();
-                    var sub = new Subject();
-                    var course = new Course();
-                    var classes = new Class();
-                    var teacher = new Teacher();
-
-                    var StudentsSubjects = new List<StudentSubject>(_studentSubjectRepository.GetAll());
-                    var Stus = new List<Student>(_studentRepository.GetAll());
-                    var Subjects = new List<Subject>(_subjectRepository.GetAll());
-                    var Courses = new List<Course>(_courseRepository.GetAll());
-                    var Classes = new List<Class>(_classRepository.GetAll());
-                    var Teachers = new List<Teacher>(_teacherRepository.GetAll());
-
-                    foreach (var ss in StudentsSubjects)
-                    {
-                        foreach (var s in Stus)
-                        {
-                            if (s.Id == ss.StudentId)
-                            {
-                                stu = s;
-                            }
-
-                            foreach (var c in Courses)
-                            {
-                                if (s.CourseId == c.Id)
-                                {
-                                    course = c;
-                                }
-                            }
-
-                            foreach (var cl in Classes)
-                            {
-                                if (s.ClassId == cl.Id)
-                                {
-                                    classes = cl;
-                                }
-                            }
-                        }
-
-                        foreach (var subj in Subjects)
-                        {
-                            if (sub.Id == ss.SubjectId)
-                            {
-                                sub = subj;
-                            }
-
-                            foreach (var t in Teachers)
-                            {
-                                if (t.Id == subj.TeacherId)
-                                {
-                                    teacher = t;
-                                }
-                            }
-                        }
-
-                        var grade = _converterHelper.CreateGrade(ss, stu, sub, course, classes, teacher, true);
-
-                        if (!await _gradeRepository.ExistsAsync(ss.Id))
-                        {
-                            await _gradeRepository.CreateAsync(grade);
-                        }
-                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -261,10 +200,6 @@ namespace School.Web.Controllers
 
             var model = _converterHelper.ToSubjectViewModel(subject, _courseRepository.GetAll().Where(c => c.Id > 1), _teacherRepository.GetAll().Where(c => c.Id > 1));
 
-            //var model = _converterHelper.ToSubjectViewModel(subject);
-            //model.Courses = _courseRepository.GetAll();
-            //model.Teachers = _teacherRepository.GetAll();
-
             return View(model);
         }
 
@@ -277,10 +212,6 @@ namespace School.Web.Controllers
             {
                 try
                 {
-                    //var subject = await _subjectRepository.GetByIdAsync(model.Id);
-                    //subject.Course = await _courseRepository.GetByIdAsync(model.CourseId);
-                    //subject.Teacher = await _teacherRepository.GetByIdAsync(model.TeacherId);
-
                     var subject = _converterHelper.ToSubject(model, await _courseRepository.GetByIdAsync(model.CourseId),
                         await _teacherRepository.GetByIdAsync(model.TeacherId), true);
 
@@ -356,8 +287,8 @@ namespace School.Web.Controllers
                             }
                         }
                     }
-                    int cellCount = headerRow.LastCellNum;                    
-                    sb.Append("<div class='panel-body' onloadeddata='StopProgress()'><table class='table table-hover table-responsive table-striped' style='width:100%; height:400px' id='MyTable'><tr>");
+                    int cellCount = headerRow.LastCellNum;
+                    sb.Append("<div class='panel-body'><table class='table table-hover table-responsive table-striped' style='width:100%; height:400px' id='MyTable'><tr>");
                     for (int j = 0; j < cellCount; j++)
                     {
                         NPOI.SS.UserModel.ICell cell = headerRow.GetCell(j);
@@ -411,20 +342,20 @@ namespace School.Web.Controllers
 
                         sb.AppendLine("</tr>");
                     }
-                    sb.Append("</table></div><script>function StopProgress(){$('div.modal').hide();var loading = $('.loading');loading.hide();}</script>");
+                    sb.Append("</table></div>");
                 }
             }
             return this.Content(sb.ToString());
         }
 
-        public IActionResult Download()
-        {
-            string Files = "wwwroot/UploadExcel/CoreProgramm_ExcelImport.xlsx";
-            byte[] fileBytes = System.IO.File.ReadAllBytes(Files);
-            System.IO.File.WriteAllBytes(Files, fileBytes);
-            MemoryStream ms = new MemoryStream(fileBytes);
-            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, "employee.xlsx");
-        }
+        //public IActionResult Download()
+        //{
+        //    string Files = "wwwroot/UploadExcel/CoreProgramm_ExcelImport.xlsx";
+        //    byte[] fileBytes = System.IO.File.ReadAllBytes(Files);
+        //    System.IO.File.WriteAllBytes(Files, fileBytes);
+        //    MemoryStream ms = new MemoryStream(fileBytes);
+        //    return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, "employee.xlsx");
+        //}
     }
 }
 

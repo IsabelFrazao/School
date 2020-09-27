@@ -178,7 +178,7 @@
                                 </ejs-dropdownlist>
                                 <label class="form-label"><b>Schedule:</b></label>
                                 <span asp-validation-for="ScheduleId" class="text-danger"></span>
-                                <ejs-dropdownlist id="schedules" ejs-for="ScheduleId" dataSource="Model.Schedules" cssClass="e-filled" placeholder="Select a Schedule" index="2" popupHeight="230px" change="valueChange">
+                                <ejs-dropdownlist id="schedules" ejs-for="ScheduleId" dataSource="Model.Schedules" cssClass="e-filled" placeholder="@Model.Schedule.Shift" index="2" popupHeight="230px" change="valueChange">
                                     <e-dropdownlist-fields text="Shift" value="Id"></e-dropdownlist-fields>
                                 </ejs-dropdownlist>
                                 <label asp-for="ClassId" class="form-label"><b>Class:</b></label>
@@ -188,7 +188,7 @@
                                 </ejs-dropdownlist>
                                 <label asp-for="SchoolYear" class="form-label"><b>School Year:</b></label>
                                 <span asp-validation-for="SchoolYear" class="text-danger"></span>
-                                <ejs-dropdownlist id="schoolyears" ejs-for="SchoolYear" dataSource="Model.SchoolYears" cssClass="e-filled" placeholder="Select a School Year" index="2" popupHeight="230px" change="valueChange">
+                                <ejs-dropdownlist id="schoolyears" ejs-for="SchoolYear" dataSource="Model.SchoolYears" cssClass="e-filled" placeholder="@Model.SchoolYear" index="2" popupHeight="230px" change="valueChange">
                                     <e-dropdownlist-fields text="SchoolYear"></e-dropdownlist-fields>
                                 </ejs-dropdownlist>
                             </div>

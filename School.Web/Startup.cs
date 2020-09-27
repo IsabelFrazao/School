@@ -32,8 +32,7 @@ namespace School.Web
         {
             services.AddIdentity<User, IdentityRole>(cfg =>
             {
-                //Mudar para verdadeiros para segurança da Password
-                //cfg.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
+                cfg.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
                 cfg.SignIn.RequireConfirmedEmail = true;
                 cfg.User.RequireUniqueEmail = true;
                 cfg.Password.RequireDigit = false;
@@ -43,6 +42,7 @@ namespace School.Web
                 cfg.Password.RequireNonAlphanumeric = false;
                 cfg.Password.RequiredLength = 6;
             })
+                .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<DataContext>();
 
             services.AddDbContext<DataContext>(cfg =>
@@ -59,7 +59,6 @@ namespace School.Web
             services.AddScoped<ISubjectRepository, SubjectRepository>();
             services.AddScoped<IGradeRepository, GradeRepository>();
             services.AddScoped<IIEFPSubjectRepository, IEFPSubjectRepository>();
-            services.AddScoped<IStudentSubjectRepository, StudentSubjectRepository>();
             services.AddScoped<IClassroomRepository, ClassroomRepository>();
             services.AddScoped<IScheduleRepository, ScheduleRepository>();
             services.AddScoped<IImageHelper, ImageHelper>();

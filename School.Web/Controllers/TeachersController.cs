@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NPOI.OpenXmlFormats.Spreadsheet;
+using School.Web.Data.Entities;
 using School.Web.Data.Repositories;
 using School.Web.Helpers;
 using School.Web.Models;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -73,6 +77,7 @@ namespace School.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: TeachersController/Create
         public IActionResult Create()
         {
@@ -100,14 +105,43 @@ namespace School.Web.Controllers
 
                 var teacher = _converterHelper.ToTeacher(model, path, true);
 
-                teacher.User = await _userHelper.GetUserByEmailAsync("");
+                teacher.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
 
                 await _teacherRepository.CreateAsync(teacher);
+
+                var user = await _userHelper.GetUserByEmailAsync(teacher.Email);
+
+                if (user == null)
+                {
+                    user = new User
+                    {
+                        FirstName = teacher.FullName,
+                        Email = teacher.Email,
+                        UserName = teacher.Email,
+                        EmailConfirmed = true
+                    };
+
+                    var result = await _userHelper.AddUserAsync(user, "123456");
+
+                    if (result != IdentityResult.Success)
+                    {
+                        throw new InvalidOperationException("Could not create the user in seeder");
+                    }
+                }
+
+                var isInRole = await _userHelper.IsUserInRoleAsync(user, "Teacher");
+
+                if (!isInRole)
+                {
+                    await _userHelper.AddUserToRoleAsync(user, "Teacher");
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: TeachersController/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -148,6 +182,8 @@ namespace School.Web.Controllers
 
                     teacher.Id = model.Id;
 
+                    teacher.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
+
                     await _teacherRepository.UpdateAsync(teacher);
                     return RedirectToAction(nameof(Index));
                 }
@@ -166,6 +202,7 @@ namespace School.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: TeachersController/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -205,7 +242,5 @@ namespace School.Web.Controllers
             await _teacherRepository.DeleteAsync(teacher);
             return RedirectToAction(nameof(Index));
         }
-
-
     }
 }

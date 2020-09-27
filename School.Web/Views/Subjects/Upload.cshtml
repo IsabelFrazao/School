@@ -43,7 +43,7 @@
                             </div>
                             <div class="clearfix">&nbsp;</div>
                             <div class="row">
-                                <div id="divPrint"  style="margin-left:-19px;"></div>
+                                <div id="divPrint" style="margin-left:-19px;"></div>
                             </div>
                         </div>
                         <!-- ##### About Us Area End ##### -->
@@ -110,6 +110,7 @@
                         alert('Some error occured while uploading');
                     else {
                         $('#divPrint').html(response);
+                        StopProgress();
                     }
                 },
                 error: function (e) {

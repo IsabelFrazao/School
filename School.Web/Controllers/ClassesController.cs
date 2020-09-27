@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using School.Web.Data.Entities;
 using School.Web.Data.Repositories;
@@ -46,6 +47,7 @@ namespace School.Web.Controllers
                 .Include(c => c.Schedule));
         }
 
+        [Authorize(Roles = "Admin, Teacher")]
         // GET: ClassesController/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -74,7 +76,7 @@ namespace School.Web.Controllers
                 {
                     if(teacher.Id == subject.TeacherId && teacher.Id != rep)
                     {
-                        model.Teachers.Add(new Teacher
+                        model.Teachers.Add(new Teacher //FAZER MÉTODO DE CONVERSÃO PARA TEACHER
                         {
                             Id = teacher.Id,
                             PhotoUrl = teacher.PhotoUrl,
@@ -102,6 +104,9 @@ namespace School.Web.Controllers
             var students = _studentRepository.GetAll().Where(e => e.ClassId == id.Value);
             model.Students = students;
 
+            model.Schedule = await _scheduleRepository.GetByIdAsync(classes.ScheduleId);
+            model.Classroom = await _classroomRepository.GetByIdAsync(classes.ClassroomId);
+
             if (classes == null)
             {
                 return NotFound();
@@ -110,6 +115,7 @@ namespace School.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: ClassesController/Create
         public IActionResult Create()
         {
@@ -146,6 +152,7 @@ namespace School.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: ClassesController/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -165,6 +172,11 @@ namespace School.Web.Controllers
 
             var model = _converterHelper.ToClassViewModel(classes, await _courseRepository.GetByIdAsync(classes.CourseId), _studentRepository.GetAll().Where(e => e.ClassId == id.Value), _subjectRepository.GetAll().Where(e => e.CourseId == classes.CourseId));
 
+            model.Schedules = _scheduleRepository.GetAll();
+            model.Classrooms = _classroomRepository.GetAll();
+
+            model.Schedule = await _scheduleRepository.GetByIdAsync(classes.ScheduleId);
+            model.Classroom = await _classroomRepository.GetByIdAsync(classes.ClassroomId);
             //var students = _studentRepository.GetAll().Where(e => e.ClassId == id.Value);
             //model.Students = students;
 
@@ -204,6 +216,7 @@ namespace School.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: ClassesController/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -259,6 +272,9 @@ namespace School.Web.Controllers
 
             var students = _studentRepository.GetAll().Where(e => e.ClassId == id.Value);
             model.Students = students;
+
+            model.Schedule = await _scheduleRepository.GetByIdAsync(classes.ScheduleId);
+            model.Classroom = await _classroomRepository.GetByIdAsync(classes.ClassroomId);
 
             if (classes == null)
             {
