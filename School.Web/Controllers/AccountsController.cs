@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Remotion.Linq.Utilities;
 using School.Web.Data.Entities;
 using School.Web.Data.Repositories;
 using School.Web.Helpers;
@@ -289,10 +290,21 @@ namespace School.Web.Controllers
         public IActionResult Settings()
         {
             var model = new SettingsViewModel { Schedules = _scheduleRepository.GetAll().Where(a => a.isActive == true),
-                Classrooms = _classroomRepository.GetAll().Where(a => a.isActive == true) };
+                Classrooms = _classroomRepository.GetAll().Where(a => a.isActive == true),
+                Fields = _fieldRepository.GetAll().Where(a => a.isActive == true)
+            };
 
             return View(model);
         }
+
+        public async Task<bool> CheckSchedule([FromBody] Schedule model)
+        {
+            if (await _scheduleRepository.GetByIdAsync(model.Id) == null)
+                return false;
+
+            return true;
+        }
+
 
         [HttpPost]
         public async Task AddSchedule([FromBody] Schedule model)
@@ -304,17 +316,18 @@ namespace School.Web.Controllers
                     var schedule = new Schedule
                     {
                         Id = 0,
-                        Shift = model.Shift
+                        Shift = model.Shift,
+                        isActive = true
                     };
 
                     await _scheduleRepository.CreateAsync(schedule);
                 }
-                else //ESTÁ-ME A CRIAR UM NOVO!!
+                else
                 {
-                    var schedule = model;
+                    var schedule = await _scheduleRepository.GetByIdAsync(model.Id);
 
-                    //schedule.Id = model.Id;
-                    //schedule.Shift = model.Shift;
+                    schedule.Shift = model.Shift;
+                    schedule.isActive = true;
 
                     await _scheduleRepository.UpdateAsync(schedule);
                 }
@@ -326,13 +339,26 @@ namespace School.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var classroom = new Classroom
+                if (await _classroomRepository.GetByIdAsync(model.Id) == null)
                 {
-                    Id = 0,
-                    Room = model.Room
-                };
+                    var classroom = new Classroom
+                    {
+                        Id = 0,
+                        Room = model.Room,
+                        isActive = true
+                    };
 
-                await _classroomRepository.CreateAsync(classroom);
+                    await _classroomRepository.CreateAsync(classroom);
+                }
+                else
+                {
+                    var classroom = await _classroomRepository.GetByIdAsync(model.Id);
+
+                    classroom.Room = model.Room;
+                    classroom.isActive = true;
+
+                    await _classroomRepository.UpdateAsync(classroom);
+                }
             }
         }
 
@@ -346,68 +372,60 @@ namespace School.Web.Controllers
                     var field = new Field
                     {
                         Id = 0,
-                        Area = model.Area
+                        Area = model.Area,
+                        isActive = true
                     };
 
                     await _fieldRepository.CreateAsync(field);
                 }
-                else //ESTÁ-ME A CRIAR UM NOVO!!
+                else
                 {
-                    var field = model;
+                    var field = await _fieldRepository.GetByIdAsync(model.Id);
 
-                    //schedule.Id = model.Id;
-                    //schedule.Shift = model.Shift;
+                    field.Area = model.Area;
+                    field.isActive = true;
 
                     await _fieldRepository.UpdateAsync(field);
                 }
             }
         }
 
-        [HttpPost]
+        [HttpDelete]
         public async Task DeleteSchedule([FromBody] Schedule model)
         {
             if (ModelState.IsValid)
             {
                 if (await _scheduleRepository.GetByIdAsync(model.Id) != null)
                 {
-                    var schedule = model;
-
-                    //schedule.Id = model.Id;
-                    //schedule.Shift = model.Shift;
+                    var schedule = await _scheduleRepository.GetByIdAsync(model.Id);
 
                     await _scheduleRepository.DeleteAsync(schedule);
                 }
             }
         }
 
-        [HttpPost]
+        [HttpDelete]
         public async Task DeleteClassroom([FromBody] Classroom model)
         {
             if (ModelState.IsValid)
             {
                 if (await _classroomRepository.GetByIdAsync(model.Id) != null)
                 {
-                    var classroom = model;
-
-                    //schedule.Id = model.Id;
-                    //schedule.Shift = model.Shift;
+                    var classroom = await _classroomRepository.GetByIdAsync(model.Id);
 
                     await _classroomRepository.DeleteAsync(classroom);
                 }
             }
         }
 
-        [HttpPost]
+        [HttpDelete]
         public async Task DeleteField([FromBody] Field model)
         {
             if (ModelState.IsValid)
             {
                 if (await _fieldRepository.GetByIdAsync(model.Id) != null)
                 {
-                    var field = model;
-
-                    //schedule.Id = model.Id;
-                    //schedule.Shift = model.Shift;
+                    var field = await _fieldRepository.GetByIdAsync(model.Id);
 
                     await _fieldRepository.DeleteAsync(field);
                 }

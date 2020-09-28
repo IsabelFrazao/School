@@ -123,7 +123,7 @@
                     xhr.setRequestHeader("RequestVerificationToken",
                         $('input:hidden[name="__RequestVerificationToken"]').val());
                 },
-                type: 'POST',
+                type: 'DELETE',
                 data: data,
                 contentType: "application/json; charset=utf-8",
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -164,7 +164,7 @@
         }
         else if (args.requestType === 'delete') {
             var data = JSON.stringify({
-                Id: args.data['Id']
+                Id: args.data[0]['Id']
             });
             $.ajax({
                 url: '@Url.Action("DeleteClassroom", "Accounts")',
@@ -172,7 +172,7 @@
                     xhr.setRequestHeader("RequestVerificationToken",
                         $('input:hidden[name="__RequestVerificationToken"]').val());
                 },
-                type: 'POST',
+                type: 'DELETE',
                 data: data,
                 contentType: "application/json; charset=utf-8",
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -222,7 +222,7 @@
                     xhr.setRequestHeader("RequestVerificationToken",
                         $('input:hidden[name="__RequestVerificationToken"]').val());
                 },
-                type: 'POST',
+                type: 'DELETE',
                 data: data,
                 contentType: "application/json; charset=utf-8",
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
