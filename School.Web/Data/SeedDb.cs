@@ -37,7 +37,7 @@ namespace School.Web.Data
                     FirstName = "Isabel",
                     LastName = "Frazão",
                     Email = "maria_frazao@hotmail.com",
-                    UserName = "maria_frazao@hotmail.com",  
+                    UserName = "maria_frazao@hotmail.com",
                     EmailConfirmed = true
                 };
 

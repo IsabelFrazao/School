@@ -24,7 +24,7 @@
         <section class="contact-area">
             <div class="contact-content">
                 <form asp-action="Login" asp-controller="Accounts" method="post" enctype="multipart/form-data">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div asp-validation-summary="ModelOnly" style="text-align:center" class="text-danger"></div>
                     <div class="row">
                         <div class="col-12 col-md-3 wow fadeInUp" data-wow-delay="500ms"></div>
                         <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="500ms">
@@ -34,7 +34,7 @@
                                 <input asp-for="Username" type="email" class="form-control" id="name" placeholder="Username">
                                 <label class="form-label"><b>Password:</b></label>
                                 <input asp-for="Password" type="password" class="form-control" id="password" placeholder="Password">
-                                <a><i>Forgot Password?</i></a>
+                                <a asp-action="RecoverPassword" class="btn btn-link"><i>Forgot Password?</i></a>
                                 <label class="form-label" style="color:transparent"><b>space</b></label>
                                 <button asp-action="Login" class="btn academy-btn mt-30" type="submit" style="margin-left:30%">Login</button>
                             </div>

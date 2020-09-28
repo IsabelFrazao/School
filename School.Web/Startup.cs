@@ -66,6 +66,7 @@ namespace School.Web
             services.AddScoped<IFileHelper, FileHelper>();
             services.AddScoped<ICombosHelper, CombosHelper>();
             services.AddScoped<IUserHelper, UserHelper>();
+            services.AddScoped<IMailHelper, MailHelper>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {

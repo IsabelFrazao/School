@@ -22,9 +22,10 @@ namespace School.Web.Controllers
         private readonly IImageHelper _imageHelper;
         private readonly IConverterHelper _converterHelper;
         private readonly IUserHelper _userHelper;
+        private readonly IMailHelper _mailHelper;
 
         public TeachersController(ITeacherRepository teacherRepository, IClassRepository classRepository, ICourseRepository courseRepository,
-            ISubjectRepository subjectRepository, IImageHelper imageHelper, IConverterHelper converterHelper, IUserHelper userHelper)
+            ISubjectRepository subjectRepository, IImageHelper imageHelper, IConverterHelper converterHelper, IUserHelper userHelper, IMailHelper mailHelper)
         {
             _teacherRepository = teacherRepository;
             _classRepository = classRepository;
@@ -33,6 +34,7 @@ namespace School.Web.Controllers
             _imageHelper = imageHelper;
             _converterHelper = converterHelper;
             _userHelper = userHelper;
+            _mailHelper = mailHelper;
         }
 
         // GET: TeachersController
@@ -111,17 +113,20 @@ namespace School.Web.Controllers
 
                 var user = await _userHelper.GetUserByEmailAsync(teacher.Email);
 
+                var random = new Random();
+                var password = random.Next(100000, 999999).ToString();
+
+
                 if (user == null)
                 {
                     user = new User
                     {
                         FirstName = teacher.FullName,
                         Email = teacher.Email,
-                        UserName = teacher.Email,
-                        EmailConfirmed = true
-                    };
+                        UserName = teacher.Email
+                    };                    
 
-                    var result = await _userHelper.AddUserAsync(user, "123456");
+                    var result = await _userHelper.AddUserAsync(user, password);
 
                     if (result != IdentityResult.Success)
                     {
@@ -135,6 +140,21 @@ namespace School.Web.Controllers
                 {
                     await _userHelper.AddUserToRoleAsync(user, "Teacher");
                 }
+
+                var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                var tokenLink = this.Url.Action("ConfirmEmail", "Accounts", new
+                {
+                    userId = user.Id,
+                    token = myToken,
+                }, protocol: HttpContext.Request.Scheme, password);
+
+                _mailHelper.SendMail(model.Email, "Email confirmation", $"<h1>Email Confirmation</h1>" +
+                    $"To allow the user, " +
+                    $"please click on this link:<br/><br/><a href = \"{tokenLink}\">Confirm Email</a>" +
+                    $"<br/><br/> Please, change your Password! <br /><br />Your old password is:<br/><br/><b>{password}</b>.");
+                this.ViewBag.Message = "The instructions to allow your user has been sent to email.";
+
+                this.ModelState.AddModelError(string.Empty, "The user already exists.");
 
                 return RedirectToAction(nameof(Index));
             }

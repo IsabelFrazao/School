@@ -5,8 +5,6 @@ using School.Web.Data.Entities;
 using School.Web.Data.Repositories;
 using School.Web.Helpers;
 using School.Web.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,14 +16,16 @@ namespace School.Web.Controllers
         private readonly IConfiguration _configuration;
         private readonly IScheduleRepository _scheduleRepository;
         private readonly IClassroomRepository _classroomRepository;
+        private readonly IMailHelper _mailHelper;
 
         public AccountsController(IUserHelper userHelper, IConfiguration configuration, IScheduleRepository scheduleRepository,
-            IClassroomRepository classroomRepository)
+            IClassroomRepository classroomRepository, IMailHelper mailHelper)
         {
             _userHelper = userHelper;
             _configuration = configuration;
             _scheduleRepository = scheduleRepository;
             _classroomRepository = classroomRepository;
+            _mailHelper = mailHelper;
         }
 
         public IActionResult Login()
@@ -83,7 +83,7 @@ namespace School.Web.Controllers
                     user = new User
                     {
                         FirstName = model.FirstName,
-                        LastName = model.LastName,
+                        //LastName = model.LastName,
                         UserName = model.Username
                     };
 
@@ -95,38 +95,46 @@ namespace School.Web.Controllers
                         return View(model);
                     }
 
-                    //var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-                    //var tokenLink = this.Url.Action("ConfirmEmail", "Accounts", new
-                    //{
-                    //    userId = user.Id,
-                    //    token = myToken,
-                    //}, protocol: HttpContext.Request.Scheme);
-
-                    //_mailHelper.SendMail(model.Username, "Email confirmation", $"<h1>Email Confirmation</h1>" +
-                    //    $"To allow the user, " +
-                    //    $"please click on this link:<br/><br/><a href = \"{tokenLink}\">Confirm Email</a>");
-                    //this.ViewBag.Message = "The instructions to allow your user has been sent to email.";
-
-                    /*var loginViewModel = new LoginViewModel
+                    var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                    var tokenLink = this.Url.Action("ConfirmEmail", "Accounts", new
                     {
-                        Username = model.Username,
-                        Password = model.Password,
-                        RememberMe = false,
-                    };
+                        userId = user.Id,
+                        token = myToken,
+                    }, protocol: HttpContext.Request.Scheme);
 
-                    var result2 = await _userHelper.LoginAsync(loginViewModel);
+                    _mailHelper.SendMail(model.Username, "Email confirmation", $"<h1>Email Confirmation</h1>" +
+                        $"To allow the user, " +
+                        $"please click on this link:<br/><br/><a href = \"{tokenLink}\">Confirm Email</a>");
+                    this.ViewBag.Message = "The instructions to allow your user has been sent to email.";
 
-                    if (result2.Succeeded)
-                    {
-                        return this.RedirectToAction("Index", "Home");
-                    }
-
-                    this.ModelState.AddModelError(string.Empty, "The user couldn´t login");*/
-
-                    ModelState.AddModelError(string.Empty, "The user already exists");
                     return View(model);
                 }
+                this.ModelState.AddModelError(string.Empty, "The user already exists.");
             }
+            return View(model);
+        }
+
+        public async Task<IActionResult> ConfirmEmail(string userId, string token, string password)
+        {
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
+            {
+                return NotFound();
+            }
+
+            var user = await _userHelper.GetUserByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _userHelper.ConfirmEmailAsync(user, token);
+            if (!result.Succeeded)
+            {
+                return NotFound();
+            }
+
+            var model = new ChangePasswordViewModel { OldPassword = password };
+
             return View(model);
         }
 
@@ -156,14 +164,14 @@ namespace School.Web.Controllers
                     user.FirstName = model.FirstName;
                     user.LastName = model.LastName;
 
-                    var respose = await _userHelper.UpdateUserAsync(user);
-                    if (respose.Succeeded)
+                    var response = await _userHelper.UpdateUserAsync(user);
+                    if (response.Succeeded)
                     {
                         ViewBag.UserMessage = "User updated!";
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, respose.Errors.FirstOrDefault().Description);
+                        ModelState.AddModelError(string.Empty, response.Errors.FirstOrDefault().Description);
                     }
                 }
                 else
@@ -173,7 +181,6 @@ namespace School.Web.Controllers
             }
             return this.View(model);
         }
-
 
         public IActionResult ChangePassword()
         {
@@ -219,8 +226,6 @@ namespace School.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-
-
                 if (await _scheduleRepository.GetByIdAsync(model.Id) == null)
                 {
                     var schedule = new Schedule
@@ -271,12 +276,12 @@ namespace School.Web.Controllers
                     //schedule.Shift = model.Shift;
 
                     await _scheduleRepository.DeleteAsync(schedule);
-                }                
+                }
             }
         }
 
         [HttpPost]
-        public async Task DeleteClassroom([FromBody]Classroom model)
+        public async Task DeleteClassroom([FromBody] Classroom model)
         {
             if (ModelState.IsValid)
             {
@@ -293,6 +298,71 @@ namespace School.Web.Controllers
         }
 
         public IActionResult Users()
+        {
+            return View();
+        }
+
+        public IActionResult RecoverPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RecoverPassword(RecoverPasswordViewModel model)
+        {
+            if (this.ModelState.IsValid)
+            {
+                var user = await _userHelper.GetUserByEmailAsync(model.Email);
+                if (user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "The email doesn't correspond to a registered user.");
+                    return this.View(model);
+                }
+
+                var myToken = await _userHelper.GeneratePasswordResetTokenAsync(user);
+
+                var link = this.Url.Action(
+                    "ResetPassword",
+                    "Accounts",
+                    new { token = myToken }, protocol: HttpContext.Request.Scheme);
+
+                _mailHelper.SendMail(model.Email, "School Password Reset", $"<h1>School Password Reset</h1>" +
+                $"To reset the password click in this link:</br></br>" +
+                $"<a href = \"{link}\">Reset Password</a>");
+                this.ViewBag.Message = "The instructions to recover your password has been sent to email.";
+                return this.View();
+            }
+
+            return this.View(model);
+        }
+
+        public IActionResult ResetPassword(string token)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            var user = await _userHelper.GetUserByEmailAsync(model.UserName);
+            if (user != null)
+            {
+                var result = await _userHelper.ResetPasswordAsync(user, model.Token, model.Password);
+                if (result.Succeeded)
+                {
+                    this.ViewBag.Message = "Password reset successful.";
+                    return this.View();
+                }
+
+                this.ViewBag.Message = "Error while resetting the password.";
+                return View(model);
+            }
+
+            this.ViewBag.Message = "User not found.";
+            return View(model);
+        }
+
+        public IActionResult NotAuthorized()
         {
             return View();
         }

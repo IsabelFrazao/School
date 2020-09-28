@@ -13,5 +13,7 @@ namespace School.Web.Models
         public string Password { get; set; }
 
         public bool RememberMe { get; set; }
+
+        public ChangePasswordViewModel ChangePassword { get; set; }
     }
 }

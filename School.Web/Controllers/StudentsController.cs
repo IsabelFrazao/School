@@ -139,8 +139,7 @@ namespace School.Web.Controllers
                     {
                         FirstName = student.FullName,
                         Email = student.Email,
-                        UserName = student.Email,
-                        EmailConfirmed = true
+                        UserName = student.Email
                     };
 
                     var result = await _userHelper.AddUserAsync(user, "123456");
