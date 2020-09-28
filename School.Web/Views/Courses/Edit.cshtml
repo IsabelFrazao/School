@@ -22,7 +22,7 @@
         </div>
         <section class="contact-area">
             <div class="contact-content">
-                <form asp-action="Create" method="post" enctype="multipart/form-data">
+                <form asp-action="Edit" method="post" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="row">
                         <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
@@ -38,9 +38,9 @@
                             <br />
                             <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:650px;">
                                 <label class="form-label"><b>Area:</b></label>
-                                <span asp-validation-for="Field" class="text-danger"></span>
-                                <ejs-dropdownlist id="areas" ejs-for="Field" dataSource="Model.Fields" cssClass="e-filled" placeholder="@Model.Field" popupHeight="230px" change="valueChange">
-                                    <e-dropdownlist-fields text="Field"></e-dropdownlist-fields>
+                                <span asp-validation-for="FieldId" class="text-danger"></span>
+                                <ejs-dropdownlist id="areas" ejs-for="FieldId" dataSource="Model.Fields" cssClass="e-filled" placeholder="@Model.Field.Area" popupHeight="230px" change="valueChange">
+                                    <e-dropdownlist-fields text="Area" value="Id"></e-dropdownlist-fields>
                                 </ejs-dropdownlist>
                                 <label asp-for="Name" class="form-label"><b><br />Name:</b></label>
                                 <span asp-validation-for="Name" class="text-danger"></span>

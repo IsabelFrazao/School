@@ -26,7 +26,7 @@
                 <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
                     @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
                     {
-                        <a asp-action="Create" class="btn academy-btn mt-30" style="margin-left:40%">Create New</a>
+                        <a asp-action="Create" class="btn academy-btn mt-30" style="margin-left:40%">Create/Edit</a>
                     }
                     <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
                         <h6><br /></h6>
@@ -37,11 +37,10 @@
                         <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
                         <e-grid-columns>
                             <e-grid-column field="Id" headerText="Id" visible="false" textAlign="Center" width="120" type="number" isPrimaryKey="true"></e-grid-column>
-                            @*<e-grid-column field="Field" headerText="Field" textAlign="Right" width="auto" type="string"></e-grid-column>*@
                             <e-grid-column field="Course.Name" headerText="Course" width="auto" type="string"></e-grid-column>
                             <e-grid-column field="Class.Name" headerText="Class" width="auto" type="string"></e-grid-column>
                             <e-grid-column field="Subject.Name" headerText="Subject" width="auto" type="string"></e-grid-column>
-                            @*<e-grid-column field="Teacher.FullName" headerText="Teacher" textAlign="Right" width="auto" type="string"></e-grid-column>*@
+                            <e-grid-column field="Teacher.FullName" headerText="Teacher" width="auto" type="string"></e-grid-column>
                             <e-grid-column field="Student.FullName" headerText="Student" width="auto" type="string"></e-grid-column>
                             <e-grid-column field="FinalGrade" headerText="Final Grade" width="auto" type="number"></e-grid-column>
                             <e-grid-column field="Approval" headerText="Approval" width="auto" type="string"></e-grid-column>
@@ -52,17 +51,3 @@
         </section>
     </div>
 </section>
-
-<script id="template" type="text/x-template">
-    <div>
-        @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
-        {
-            <a href='/Grades/Edit/${Id}'>Edit | </a>
-        }
-        <a href='/Grades/Details/${Id}'>Details</a>
-        @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
-        {
-            <a href='/Grades/Delete/${Id}'> | Delete</a>
-        }
-    </div>
-</script>

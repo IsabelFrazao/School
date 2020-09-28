@@ -36,12 +36,12 @@ namespace School.Web.Controllers
         // GET: GradesController
         public IActionResult Index()
         {
-            return View(_gradeRepository.GetAll()
-                .Include(c => c.Course)
-                .Include(c => c.Class)
-                .Include(c => c.Subject)
-                .Include(c => c.Teacher)
-                .Include(c => c.Student)
+            return View(_gradeRepository.GetAll().Where(a => a.isActive == true)
+                .Include(c => c.Course).Where(a => a.isActive == true)
+                .Include(c => c.Class).Where(a => a.isActive == true)
+                .Include(c => c.Subject).Where(a => a.isActive == true)
+                .Include(c => c.Teacher).Where(a => a.isActive == true)
+                .Include(c => c.Student).Where(a => a.isActive == true)
                 .Where(g => g.FinalGrade >= 0));
         }
 
@@ -67,11 +67,12 @@ namespace School.Web.Controllers
         // GET: GradesController/Create
         public IActionResult Create()
         {
-            return View(_gradeRepository.GetAll().Include(c => c.Course)
-                .Include(c => c.Class)
-                .Include(c => c.Subject)
-                .Include(c => c.Teacher)
-                .Include(c => c.Student));
+            return View(_gradeRepository.GetAll().Where(a => a.isActive == true)
+                .Include(c => c.Course).Where(a => a.isActive == true)
+                .Include(c => c.Class).Where(a => a.isActive == true)
+                .Include(c => c.Subject).Where(a => a.isActive == true)
+                .Include(c => c.Teacher).Where(a => a.isActive == true)
+                .Include(c => c.Student).Where(a => a.isActive == true));
         }
 
         // POST: GradesController/Create

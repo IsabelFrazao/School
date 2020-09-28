@@ -82,13 +82,13 @@ namespace School.Web.Controllers
         {
             var model = new SubjectViewModel
             {
-                Courses = _courseRepository.GetAll().Where(c => c.Id > 1).ToList(),
-                Teachers = _teacherRepository.GetAll().Where(c => c.Id > 1).ToList(),
-                IEFPSubjects = _iefpSubjectRepository.GetAll().Where(e => e.Field == "Áudiovisuais e Produção dos Media" ||
+                Courses = _courseRepository.GetAll().Where(c => c.Id > 1).ToList().Where(a => a.isActive == true),
+                Teachers = _teacherRepository.GetAll().Where(c => c.Id > 1).ToList().Where(a => a.isActive == true),
+                IEFPSubjects = _iefpSubjectRepository.GetAll().Where(a => a.isActive == true).Where(e => e.Field == "Áudiovisuais e Produção dos Media" ||
                 e.Field == "Ciências Informáticas" || e.Field == "Eletrónica e Automação").ToList()
             };
 
-            IEnumerable<Subject> Subjects = _subjectRepository.GetAll().ToList();
+            IEnumerable<Subject> Subjects = _subjectRepository.GetAll().Where(a => a.isActive == true).ToList();
 
             List<IEFPSubject> ISubjects = new List<IEFPSubject>(model.IEFPSubjects);
 
@@ -124,7 +124,8 @@ namespace School.Web.Controllers
                 return NotFound();
             }
 
-            var model = _converterHelper.ToSubjectViewModel(subject, _courseRepository.GetAll().Where(c => c.Id > 1), _teacherRepository.GetAll().Where(c => c.Id > 1));
+            var model = _converterHelper.ToSubjectViewModel(subject, _courseRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true), 
+                _teacherRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true));
 
             return View(model);
         }
@@ -141,12 +142,12 @@ namespace School.Web.Controllers
                 var subject = _converterHelper.ConvertToSubject(iefpsubject, model.CourseId, await _courseRepository.GetByIdAsync(model.CourseId),
                 model.TeacherId, await _teacherRepository.GetByIdAsync(model.TeacherId), model.Credits, true);
 
-                if (!await _subjectRepository.ExistsCodeAsync(subject.Code))
+                if (!await _subjectRepository.ExistsCodeAsync(subject.Code) && subject.isActive == true)
                     await _subjectRepository.CreateAsync(subject);
 
                 //GRADES
 
-                var Students = _studentRepository.GetAll().Where(s => s.CourseId == subject.CourseId);
+                var Students = _studentRepository.GetAll().Where(s => s.CourseId == subject.CourseId).Where(a => a.isActive == true);
 
                 var Grades = new List<Grade>();
 
@@ -198,7 +199,8 @@ namespace School.Web.Controllers
             subject.Course = await _courseRepository.GetByIdAsync(subject.CourseId);
             subject.Teacher = await _teacherRepository.GetByIdAsync(subject.TeacherId);
 
-            var model = _converterHelper.ToSubjectViewModel(subject, _courseRepository.GetAll().Where(c => c.Id > 1), _teacherRepository.GetAll().Where(c => c.Id > 1));
+            var model = _converterHelper.ToSubjectViewModel(subject, _courseRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true), 
+                _teacherRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true));
 
             return View(model);
         }

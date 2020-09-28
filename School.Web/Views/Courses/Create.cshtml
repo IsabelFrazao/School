@@ -39,9 +39,9 @@
                             <br />
                             <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:650px;">
                                 <label class="form-label"><b>Area:</b></label>
-                                <span asp-validation-for="Field" class="text-danger"></span>
-                                <ejs-dropdownlist id="fields" ejs-for="Field" dataSource="Model.Fields" cssClass="e-filled" placeholder="Select an Area" popupHeight="230px" change="valueChange">
-                                    <e-dropdownlist-fields text="Area"></e-dropdownlist-fields>
+                                <span asp-validation-for="FieldId" class="text-danger"></span>
+                                <ejs-dropdownlist id="fields" ejs-for="FieldId" dataSource="Model.Fields" cssClass="e-filled" placeholder="Select an Area" popupHeight="230px" change="valueChange">
+                                    <e-dropdownlist-fields text="Area" value="Id"></e-dropdownlist-fields>
                                 </ejs-dropdownlist>
                                 <label asp-for="Name" class="form-label"><b><br />Name:</b></label>
                                 <span asp-validation-for="Name" class="text-danger"></span>
@@ -50,7 +50,7 @@
                                 <span asp-validation-for="Description" class="text-danger"></span>
                                 <input asp-for="Description" type="text" class="form-control" id="description" placeholder="Description">
                                 <label class="form-label"><b>Coordinator:</b></label>
-                                <span asp-validation-for="Coordinator" class="text-danger"></span>
+                                <span asp-validation-for="CoordinatorId" class="text-danger"></span>
                                 <ejs-dropdownlist id="coordinator" ejs-for="CoordinatorId" dataSource="Model.Teachers" cssClass="e-filled" placeholder="Select a Coordinator" popupHeight="230px" change="valueChange">
                                     <e-dropdownlist-fields text="FullName" value="Id"></e-dropdownlist-fields>
                                 </ejs-dropdownlist>

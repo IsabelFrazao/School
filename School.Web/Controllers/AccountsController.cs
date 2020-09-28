@@ -16,15 +16,17 @@ namespace School.Web.Controllers
         private readonly IConfiguration _configuration;
         private readonly IScheduleRepository _scheduleRepository;
         private readonly IClassroomRepository _classroomRepository;
+        private readonly IFieldRepository _fieldRepository;
         private readonly IMailHelper _mailHelper;
 
         public AccountsController(IUserHelper userHelper, IConfiguration configuration, IScheduleRepository scheduleRepository,
-            IClassroomRepository classroomRepository, IMailHelper mailHelper)
+            IClassroomRepository classroomRepository, IFieldRepository fieldRepository, IMailHelper mailHelper)
         {
             _userHelper = userHelper;
             _configuration = configuration;
             _scheduleRepository = scheduleRepository;
             _classroomRepository = classroomRepository;
+            _fieldRepository = fieldRepository;
             _mailHelper = mailHelper;
         }
 
@@ -214,89 +216,6 @@ namespace School.Web.Controllers
             return View(model);
         }
 
-        public IActionResult Settings()
-        {
-            var model = new SettingsViewModel { Schedules = _scheduleRepository.GetAll(), Classrooms = _classroomRepository.GetAll() };
-
-            return View(model);
-        }
-
-        [HttpPost]
-        public async Task AddSchedule([FromBody] Schedule model)
-        {
-            if (ModelState.IsValid)
-            {
-                if (await _scheduleRepository.GetByIdAsync(model.Id) == null)
-                {
-                    var schedule = new Schedule
-                    {
-                        Id = 0,
-                        Shift = model.Shift
-                    };
-
-                    await _scheduleRepository.CreateAsync(schedule);
-                }
-                else //ESTÁ-ME A CRIAR UM NOVO!!
-                {
-                    var schedule = model;
-
-                    //schedule.Id = model.Id;
-                    //schedule.Shift = model.Shift;
-
-                    await _scheduleRepository.UpdateAsync(schedule);
-                }
-            }
-        }
-
-        [HttpPost]
-        public async Task AddClassroom([FromBody] Classroom model)
-        {
-            if (ModelState.IsValid)
-            {
-                var classroom = new Classroom
-                {
-                    Id = 0,
-                    Room = model.Room
-                };
-
-                await _classroomRepository.CreateAsync(classroom);
-            }
-        }
-
-        [HttpPost]
-        public async Task DeleteSchedule([FromBody] Schedule model)
-        {
-            if (ModelState.IsValid)
-            {
-                if (await _scheduleRepository.GetByIdAsync(model.Id) != null)
-                {
-                    var schedule = model;
-
-                    //schedule.Id = model.Id;
-                    //schedule.Shift = model.Shift;
-
-                    await _scheduleRepository.DeleteAsync(schedule);
-                }
-            }
-        }
-
-        [HttpPost]
-        public async Task DeleteClassroom([FromBody] Classroom model)
-        {
-            if (ModelState.IsValid)
-            {
-                if (await _classroomRepository.GetByIdAsync(model.Id) != null)
-                {
-                    var classroom = model;
-
-                    //schedule.Id = model.Id;
-                    //schedule.Shift = model.Shift;
-
-                    await _classroomRepository.DeleteAsync(classroom);
-                }
-            }
-        }
-
         public IActionResult Users()
         {
             return View();
@@ -365,6 +284,134 @@ namespace School.Web.Controllers
         public IActionResult NotAuthorized()
         {
             return View();
+        }
+
+        public IActionResult Settings()
+        {
+            var model = new SettingsViewModel { Schedules = _scheduleRepository.GetAll().Where(a => a.isActive == true),
+                Classrooms = _classroomRepository.GetAll().Where(a => a.isActive == true) };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task AddSchedule([FromBody] Schedule model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (await _scheduleRepository.GetByIdAsync(model.Id) == null)
+                {
+                    var schedule = new Schedule
+                    {
+                        Id = 0,
+                        Shift = model.Shift
+                    };
+
+                    await _scheduleRepository.CreateAsync(schedule);
+                }
+                else //ESTÁ-ME A CRIAR UM NOVO!!
+                {
+                    var schedule = model;
+
+                    //schedule.Id = model.Id;
+                    //schedule.Shift = model.Shift;
+
+                    await _scheduleRepository.UpdateAsync(schedule);
+                }
+            }
+        }
+
+        [HttpPost]
+        public async Task AddClassroom([FromBody] Classroom model)
+        {
+            if (ModelState.IsValid)
+            {
+                var classroom = new Classroom
+                {
+                    Id = 0,
+                    Room = model.Room
+                };
+
+                await _classroomRepository.CreateAsync(classroom);
+            }
+        }
+
+        [HttpPost]
+        public async Task AddField([FromBody] Field model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (await _fieldRepository.GetByIdAsync(model.Id) == null)
+                {
+                    var field = new Field
+                    {
+                        Id = 0,
+                        Area = model.Area
+                    };
+
+                    await _fieldRepository.CreateAsync(field);
+                }
+                else //ESTÁ-ME A CRIAR UM NOVO!!
+                {
+                    var field = model;
+
+                    //schedule.Id = model.Id;
+                    //schedule.Shift = model.Shift;
+
+                    await _fieldRepository.UpdateAsync(field);
+                }
+            }
+        }
+
+        [HttpPost]
+        public async Task DeleteSchedule([FromBody] Schedule model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (await _scheduleRepository.GetByIdAsync(model.Id) != null)
+                {
+                    var schedule = model;
+
+                    //schedule.Id = model.Id;
+                    //schedule.Shift = model.Shift;
+
+                    await _scheduleRepository.DeleteAsync(schedule);
+                }
+            }
+        }
+
+        [HttpPost]
+        public async Task DeleteClassroom([FromBody] Classroom model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (await _classroomRepository.GetByIdAsync(model.Id) != null)
+                {
+                    var classroom = model;
+
+                    //schedule.Id = model.Id;
+                    //schedule.Shift = model.Shift;
+
+                    await _classroomRepository.DeleteAsync(classroom);
+                }
+            }
+        }
+
+        [HttpPost]
+        public async Task DeleteField([FromBody] Field model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (await _fieldRepository.GetByIdAsync(model.Id) != null)
+                {
+                    var field = model;
+
+                    //schedule.Id = model.Id;
+                    //schedule.Shift = model.Shift;
+
+                    await _fieldRepository.DeleteAsync(field);
+                }
+            }
         }
     }
 }

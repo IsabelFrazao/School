@@ -7,9 +7,11 @@ namespace School.Web.Data.Entities
     {
         public int Id { get; set; }
 
-        //[Required(ErrorMessage = "Field {0} is mandatory")]
+        [Required(ErrorMessage = "Field {0} is mandatory")]
         //[Range(1, double.MaxValue, ErrorMessage = "You must select a {0}")]
-        public string Field { get; set; }
+        public int FieldId { get; set; }
+
+        public Field Field { get; set; }
 
         [Display(Name = "Full Name")]
         [Required(ErrorMessage = "Field {0} is mandatory")]
@@ -19,11 +21,11 @@ namespace School.Web.Data.Entities
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
 
-        [Display(Name = "Coordinator")]
-        //[Required(ErrorMessage = "Field {0} is mandatory")]
-        //[Range(1, double.MaxValue, ErrorMessage = "You must select a {0}")]
         public Teacher Coordinator { get; set; }
 
+        [Display(Name = "Coordinator")]
+        [Required(ErrorMessage = "Field {0} is mandatory")]
+        //[Range(1, double.MaxValue, ErrorMessage = "You must select a {0}")]
         public int CoordinatorId { get; set; }
 
         [DataType(DataType.Date)]
@@ -39,5 +41,7 @@ namespace School.Web.Data.Entities
         public DateTime EndDate { get; set; }
 
         public string SchoolYear { get; set; }
+
+        public bool isActive { get; set; }
     }
 }

@@ -16,6 +16,7 @@ namespace School.Web.Data
         public DbSet<IEFPSubject> IEFPSubjects { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<Classroom> Classrooms { get; set; }
+        public DbSet<Field> Fields { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {

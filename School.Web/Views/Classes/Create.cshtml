@@ -54,7 +54,7 @@
                                 <label asp-for="ClassroomId" class="form-label"><b><br />Classroom:</b></label>
                                 <span asp-validation-for="ClassroomId" class="text-danger"></span>
                                 <ejs-dropdownlist id="classrooms" ejs-for="ClassroomId" dataSource="Model.Classrooms" cssClass="e-filled" placeholder="Select a Classroom" popupHeight="230px" change="valueChange">
-                                    <e-dropdownlist-fields text="Room" ></e-dropdownlist-fields>
+                                    <e-dropdownlist-fields text="Room" value="Id"></e-dropdownlist-fields>
                                 </ejs-dropdownlist>
                             </div>
                         </div>
@@ -67,16 +67,6 @@
         </section>
     </div>
 </section>
-
-<script>
-    function valueChange() {
-        var courses = document.getElementById('courses').ej2_instances[0];
-        var value = document.getElementById('value');
-        var text = document.getElementById('text');
-        value.innerHTML = courses.value === null ? 'null' : courses.value.toString();
-        text.innerHTML = courses.text === null ? 'null' : courses.text.toString();
-    }
-</script>
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}

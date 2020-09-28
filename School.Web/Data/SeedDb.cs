@@ -56,7 +56,6 @@ namespace School.Web.Data
                 await _userHelper.AddUserToRoleAsync(user, "Admin");
             }
 
-
             //if(!_context.Students.Any())
             //{
             //    this.AddStudents("Isabel");
@@ -64,6 +63,15 @@ namespace School.Web.Data
             //    this.AddStudents("António");
             //    await _context.SaveChangesAsync();
             //}
+
+            if (!_context.Fields.Any())
+            {
+                this.AddFields("Áudiovisuais e Produção dos Media");
+                this.AddFields("Ciências Informáticas");
+                this.AddFields("Eletrónica e Automação");
+
+                await _context.SaveChangesAsync();
+            }
 
             if (!_context.Teachers.Any())
             {
@@ -96,11 +104,21 @@ namespace School.Web.Data
             }
         }
 
+        private void AddFields(string area)
+        {
+            _context.Fields.Add(new Field
+            {
+                Area = area,
+                isActive = true
+            });
+        }
+
         private void AddClassrooms(string room)
         {
             _context.Classrooms.Add(new Classroom
             {
-                Room = room
+                Room = room,
+                isActive = true
             });
         }
 
@@ -108,7 +126,8 @@ namespace School.Web.Data
         {
             _context.Schedules.Add(new Schedule
             {
-                Shift = shift
+                Shift = shift,
+                isActive = true
             });
         }
 
@@ -119,22 +138,42 @@ namespace School.Web.Data
         //        FullName = "Isabel Frazão",
         //    });
         //}
+        private void AddTeachers(string name)
+        {
+            _context.Teachers.Add(new Teacher
+            {
+                FullName = name,
+                Gender = "No Selection",
+                DateOfBirth = DateTime.Now,
+                Address = "No Selection",
+                ZipCode = "No Selection",
+                City = "No Selection",
+                IdentificationNumber = "No Selection",
+                TaxNumber = "No Selection",
+                SSNumber = "No Selection",
+                NHSNumber = "No Selection",
+                MaritalStatus = "No Selection",
+                Nationality = "No Selection",
+                Telephone = "No Selection",
+                Email = "No Selection",
+                isActive = true,
+                User = null
+            });
+        }
 
         private void AddCourses(string name)
         {
             _context.Courses.Add(new Course
             {
-                Name = name,
-                CoordinatorId = 1
+                FieldId = 1,
+                Name = name,                
+                Description = "No Selection",
+                CoordinatorId = 1,
+                BeginDate = DateTime.Now,
+                EndDate = DateTime.Now,
+                SchoolYear = "No Selection",
+                isActive = true
             });
-        }
-
-        private void AddTeachers(string name)
-        {
-            _context.Teachers.Add(new Teacher
-            {
-                FullName = name
-            });
-        }
+        }        
     }
 }

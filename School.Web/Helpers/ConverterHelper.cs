@@ -35,6 +35,7 @@ namespace School.Web.Helpers
                 Class = classes,
                 ClassId = model.ClassId,                
                 SchoolYear = model.SchoolYear,
+                isActive = true,
                 User = model.User
             };
         }
@@ -67,6 +68,7 @@ namespace School.Web.Helpers
                 ClassId = model.ClassId,                
                 Classes = listclasses,
                 SchoolYear = model.SchoolYear,
+                isActive = true,
                 User = model.User
             };
         }
@@ -93,6 +95,7 @@ namespace School.Web.Helpers
                 Nationality = model.Nationality,
                 Telephone = model.Telephone,
                 Email = model.Email,
+                isActive = true,
                 User = model.User
             };
         }
@@ -118,6 +121,7 @@ namespace School.Web.Helpers
                 Telephone = model.Telephone,
                 Email = model.Email,
                 Subjects = subjects,
+                isActive = true,
                 User = model.User
             };
         }
@@ -133,7 +137,8 @@ namespace School.Web.Helpers
                 ScheduleId = model.ScheduleId,
                 ClassroomId = model.ClassroomId,
                 CourseId = course.Id,
-                Course = course
+                Course = course,
+                isActive = true
             };
         }
 
@@ -148,7 +153,8 @@ namespace School.Web.Helpers
                 CourseId = model.CourseId,
                 Course = course,
                 Students = students,
-                Subjects = subjects
+                Subjects = subjects,
+                isActive = true
             };
         }
         #endregion CLASS
@@ -159,15 +165,16 @@ namespace School.Web.Helpers
             return new Course
             {
                 Id = isNew ? 0 : model.Id, //Se o produto for novo => id = 0; senão apanhao o seu id
-                Field = model.Field,
+                FieldId = model.FieldId,
                 Name = model.Name,
                 Description = model.Description,
                 CoordinatorId = model.CoordinatorId,
                 Coordinator = model.Coordinator,
                 BeginDate = model.BeginDate.Date,
                 EndDate = model.EndDate.Date,
-                SchoolYear = model.SchoolYear = $"{ model.BeginDate.Year } / { model.EndDate.Year }"
-        };
+                SchoolYear = model.SchoolYear = $"{ model.BeginDate.Year } / { model.EndDate.Year }",
+                isActive = true
+            };
         }
 
         public CourseViewModel ToCourseViewModel(Course model, Teacher coordinator, IEnumerable<Teacher> teachers, IEnumerable<Class> classes, IEnumerable<Subject> subjects)//Converts to ViewModel
@@ -175,7 +182,7 @@ namespace School.Web.Helpers
             return new CourseViewModel
             {
                 Id = model.Id,
-                Field = model.Field,
+                FieldId = model.FieldId,
                 Name = model.Name,
                 Description = model.Description,
                 CoordinatorId = model.CoordinatorId,
@@ -185,7 +192,8 @@ namespace School.Web.Helpers
                 SchoolYear = model.SchoolYear = $"{ model.BeginDate.Year } / { model.EndDate.Year }",
                 Teachers = teachers,
                 Classes = classes,
-                Subjects = subjects
+                Subjects = subjects,
+                isActive = true
             };
         }
         #endregion COURSE
@@ -210,7 +218,8 @@ namespace School.Web.Helpers
                 CourseId = model.CourseId,
                 Course = model.Course,
                 TeacherId = model.TeacherId,
-                Teacher = model.Teacher
+                Teacher = model.Teacher,
+                isActive = true
             };
         }
 
@@ -235,7 +244,8 @@ namespace School.Web.Helpers
                 TeacherId = model.TeacherId,
                 Teacher = model.Teacher,
                 Courses = courses,
-                Teachers = teachers
+                Teachers = teachers,
+                isActive = true
             };
         }
 
@@ -258,7 +268,8 @@ namespace School.Web.Helpers
                 CourseId = courseid,
                 Course = course,
                 TeacherId = teacherid,
-                Teacher = teacher
+                Teacher = teacher,
+                isActive = true
             };
         }
         #endregion SUBJECT
@@ -280,7 +291,8 @@ namespace School.Web.Helpers
                 StudentId = model.StudentId,
                 Student = student,
                 FinalGrade = model.FinalGrade,
-                Approval = model.FinalGrade >= 10 ? model.Approval = "Approved" : model.Approval = "Disapproved"
+                Approval = model.FinalGrade >= 10 ? model.Approval = "Approved" : model.Approval = "Disapproved",
+                isActive = true
             };
         }
 
@@ -305,7 +317,8 @@ namespace School.Web.Helpers
                 Student = model.Student,
                 Students = students,
                 FinalGrade = model.FinalGrade,
-                Approval = model.FinalGrade >= 10 ? model.Approval = "Approved" : model.Approval = "Disapproved"
+                Approval = model.FinalGrade >= 10 ? model.Approval = "Approved" : model.Approval = "Disapproved",
+                isActive = true
             };
         }
         #endregion GRADE

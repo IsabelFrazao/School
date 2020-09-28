@@ -29,11 +29,12 @@ namespace School.Web.Controllers
         private readonly IImageHelper _imageHelper;
         private readonly IConverterHelper _converterHelper;
         private readonly IUserHelper _userHelper;
+        private readonly IMailHelper _mailHelper;
 
         public StudentsController(IStudentRepository studentRepository, ICourseRepository courseRepository, IClassRepository classRepository,
             ISubjectRepository subjectRepository, ITeacherRepository teacherRepository,
             IGradeRepository gradeRepository, IScheduleRepository scheduleRepository, IImageHelper imageHelper, IConverterHelper converterHelper,
-            IUserHelper userHelper)
+            IUserHelper userHelper, IMailHelper mailHelper)
         {
             _studentRepository = studentRepository;
             _courseRepository = courseRepository;
@@ -45,12 +46,13 @@ namespace School.Web.Controllers
             _imageHelper = imageHelper;
             _converterHelper = converterHelper;
             _userHelper = userHelper;
+            _mailHelper = mailHelper;
         }
 
         // GET: StudentsController
         public IActionResult Index()
         {
-            return View(_studentRepository.GetAll());
+            return View(_studentRepository.GetAll().Where(a => a.isActive == true));
         }
 
         // GET: StudentsController/Details/5
@@ -66,16 +68,17 @@ namespace School.Web.Controllers
             student.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);// ????
 
             var model = _converterHelper.ToStudentViewModel(student, await _courseRepository.GetByIdAsync(student.CourseId),
-                _courseRepository.GetAll().Where(c => c.Id > 1), await _classRepository.GetByIdAsync(student.ClassId), _classRepository.GetAll());
+                _courseRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true), 
+                await _classRepository.GetByIdAsync(student.ClassId), _classRepository.GetAll().Where(a => a.isActive == true));
 
             model.Schedule = await _scheduleRepository.GetByIdAsync(student.ScheduleId);
 
-            model.Grades = _gradeRepository.GetAll()
+            model.Grades = _gradeRepository.GetAll().Where(a => a.isActive == true)
                 .Where(g => g.StudentId == model.Id)
-                .Include(g => g.Course)
-                .Include(g => g.Class)
-                .Include(g => g.Subject)
-                .Include(g => g.Teacher)
+                .Include(g => g.Course).Where(a => a.isActive == true)
+                .Include(g => g.Class).Where(a => a.isActive == true)
+                .Include(g => g.Subject).Where(a => a.isActive == true)
+                .Include(g => g.Teacher).Where(a => a.isActive == true)
                 .Where(g => g.FinalGrade >= 0);
 
             if (student == null)
@@ -92,8 +95,9 @@ namespace School.Web.Controllers
         {
             ViewBag.idCount = (_studentRepository.GetAll().Count() + 1).ToString();
 
-            var model = new StudentViewModel { Courses = _courseRepository.GetAll().Where(c => c.Id > 1).ToList(), Classes = _classRepository.GetAll().ToList(),
-            Schedules = _scheduleRepository.GetAll().ToList()
+            var model = new StudentViewModel { Courses = _courseRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true).ToList(), 
+                Classes = _classRepository.GetAll().Where(a => a.isActive == true).ToList(),
+            Schedules = _scheduleRepository.GetAll().Where(a => a.isActive == true).ToList()
             };
 
             model.SchoolYears = new List<string>();
@@ -133,6 +137,9 @@ namespace School.Web.Controllers
 
                 var user = await _userHelper.GetUserByEmailAsync(student.Email);
 
+                var random = new Random();
+                var password = random.Next(100000, 999999).ToString();
+
                 if (user == null)
                 {
                     user = new User
@@ -142,7 +149,7 @@ namespace School.Web.Controllers
                         UserName = student.Email
                     };
 
-                    var result = await _userHelper.AddUserAsync(user, "123456");
+                    var result = await _userHelper.AddUserAsync(user, password);
 
                     if (result != IdentityResult.Success)
                     {
@@ -157,9 +164,24 @@ namespace School.Web.Controllers
                     await _userHelper.AddUserToRoleAsync(user, "Student");
                 }
 
+                var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                var tokenLink = this.Url.Action("ConfirmEmail", "Accounts", new
+                {
+                    userId = user.Id,
+                    token = myToken,
+                }, protocol: HttpContext.Request.Scheme, password);
+
+                _mailHelper.SendMail(model.Email, "Email confirmation", $"<h1>Email Confirmation</h1>" +
+                    $"To allow the user, " +
+                    $"please click on this link:<br/><br/><a href = \"{tokenLink}\">Confirm Email</a>" +
+                    $"<br/><br/> Please, change your Password! <br /><br />Your old password is:<br/><br/><b>{password}</b>.");
+                this.ViewBag.Message = "The instructions to allow your user has been sent to email.";
+
+                this.ModelState.AddModelError(string.Empty, "The user already exists.");
+
                 //GRADES
 
-                var Subjects = _subjectRepository.GetAll().Where(s => s.CourseId == student.CourseId);
+                var Subjects = _subjectRepository.GetAll().Where(s => s.CourseId == student.CourseId).Where(a => a.isActive == true);
 
                 var Grades = new List<Grade>();
 
@@ -208,9 +230,10 @@ namespace School.Web.Controllers
             }
 
             var model = _converterHelper.ToStudentViewModel(student, await _courseRepository.GetByIdAsync(student.CourseId),
-                _courseRepository.GetAll().Where(c => c.Id > 1), await _classRepository.GetByIdAsync(student.ClassId), _classRepository.GetAll());
+                _courseRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true), 
+                await _classRepository.GetByIdAsync(student.ClassId), _classRepository.GetAll().Where(a => a.isActive == true));
 
-            model.Schedules = _scheduleRepository.GetAll();
+            model.Schedules = _scheduleRepository.GetAll().Where(a => a.isActive == true);
 
             model.SchoolYears = new List<string>();
 
@@ -277,16 +300,17 @@ namespace School.Web.Controllers
             var student = await _studentRepository.GetByIdAsync(id.Value);
 
             var model = _converterHelper.ToStudentViewModel(student, await _courseRepository.GetByIdAsync(student.CourseId),
-                _courseRepository.GetAll().Where(c => c.Id > 1), await _classRepository.GetByIdAsync(student.ClassId), _classRepository.GetAll());
+                _courseRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true), 
+                await _classRepository.GetByIdAsync(student.ClassId), _classRepository.GetAll().Where(a => a.isActive == true));
 
             model.Schedule = await _scheduleRepository.GetByIdAsync(student.ScheduleId);
 
-            model.Grades = _gradeRepository.GetAll()
+            model.Grades = _gradeRepository.GetAll().Where(a => a.isActive == true)
                 .Where(g => g.StudentId == model.Id)
-                .Include(g => g.Course)
-                .Include(g => g.Class)
-                .Include(g => g.Subject)
-                .Include(g => g.Teacher)
+                .Include(g => g.Course).Where(a => a.isActive == true)
+                .Include(g => g.Class).Where(a => a.isActive == true)
+                .Include(g => g.Subject).Where(a => a.isActive == true)
+                .Include(g => g.Teacher).Where(a => a.isActive == true)
                 .Where(g => g.FinalGrade >= 0);
 
             if (student == null)

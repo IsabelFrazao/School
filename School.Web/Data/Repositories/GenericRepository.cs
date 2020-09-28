@@ -18,6 +18,8 @@ namespace School.Web.Data.Repositories
 
         public async Task CreateAsync(T entity)
         {
+            entity.isActive = true;
+
             await _context.Set<T>().AddAsync(entity);
 
             await SaveAllAsync();
@@ -30,7 +32,11 @@ namespace School.Web.Data.Repositories
 
         public async Task DeleteAsync(T entity)
         {
-            _context.Set<T>().Remove(entity);
+            //_context.Set<T>().Remove(entity);
+
+            entity.isActive = false;
+
+            _context.Set<T>().Update(entity);
 
             await SaveAllAsync();
         }
@@ -52,6 +58,8 @@ namespace School.Web.Data.Repositories
 
         public async Task UpdateAsync(T entity)
         {
+            entity.isActive = true;
+
             _context.Set<T>().Update(entity);
 
             await SaveAllAsync();

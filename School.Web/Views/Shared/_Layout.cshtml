@@ -9,23 +9,42 @@
     <!-- Title -->
     <title>Academy - Education Course Template</title>
 
-    <!-- Favicon -->
-    <link rel="icon" href="~/img/core-img/favicon.ico">
+    <environment include="Development">
+        <!-- Favicon -->
+        <link rel="icon" href="~/img/core-img/favicon.ico">
 
-    <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
+        <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
 
-    <!-- Core Stylesheet -->
-    <link rel="stylesheet" href="~/style.css" type="text/css">
+        <!-- Core Stylesheet -->
+        <link rel="stylesheet" href="~/style.css" type="text/css">
 
-    <!-- Syncfusion Essential JS 2 Styles -->
-    <link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/material.css" />
+        <!-- Syncfusion Essential JS 2 Styles -->
+        <link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/material.css" />
 
-    <!-- Sync Stylesheet -->
-    <link rel="stylesheet" href="~/sync.css" type="text/css">
+        <!-- Sync Stylesheet -->
+        <link rel="stylesheet" href="~/sync.css" type="text/css">
 
-    <!-- DataTables Stylesheet -->
-    <!--<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />-->
+        <!-- DataTables Stylesheet -->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+    </environment>
+    <environment exclude="Development">
+        <!-- Favicon -->
+        <link rel="icon" href="~/img/core-img/favicon.ico">
 
+        <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
+
+        <!-- Core Stylesheet -->
+        <link rel="stylesheet" href="~/style.css" type="text/css">
+
+        <!-- Syncfusion Essential JS 2 Styles -->
+        <link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/material.css" />
+
+        <!-- Sync Stylesheet -->
+        <link rel="stylesheet" href="~/sync.css" type="text/css">
+
+        <!-- DataTables Stylesheet -->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+    </environment>
 </head>
 <body>
     <partial name="_CookieConsentPartial" />
@@ -78,131 +97,68 @@
                         </div>
 
                         @*Menu*@
-                    <div class="classy-menu">
+                        <div class="classy-menu">
 
-                        @*close btn*@
-                        <div class="classycloseIcon">
-                            <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
-                        </div>
+                            @*close btn*@
+                            <div class="classycloseIcon">
+                                <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                            </div>
 
-                        @*Nav Start*@
-                        <!--<div class="classynav" style="justify-content:center; font-size:20px;">
-        <div class="row" style="justify-content:center">
-            <div>
-                <a asp-area="" asp-controller="Home" asp-action="Index"><b>HOME</b></a>
-            </div>
-            <div class="col-md-3"></div>
-            <div class="col-md-2">
-                <a asp-area="" asp-controller="Home" asp-action="About"><b>ABOUT</b></a>
-            </div>
-            <div class="col-md-3"></div>
-            <div class="col-md-2">
-                <a asp-area="" asp-controller="Home" asp-action="Contact"><b>CONTACT</b></a>
-            </div>
-        </div>
-    </div>
-    <div class="classynav" style="justify-content:center;">
-        <div class="row" style="justify-content:center;">
-            @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
-            {
-                <div class="col-md-1">
-                    <a asp-controller="Courses" asp-action="Index"><b>COURSES</b></a>
-                </div>
-                <div class="col-md-1"></div>
-                <div class="col-md-1">
-                    <a asp-controller="Classes" asp-action="Index"><b>CLASSES</b></a>
-                </div>
-                <div class="col-md-1"></div>
-                <div class="col-md-1">
-                    <a asp-controller="Subjects" asp-action="Index"><b>SUBJECTS</b></a>
-                </div>
-                <div class="col-md-1"></div>
-                <div class="col-md-1">
-                    <a asp-controller="Teachers" asp-action="Index"><b>TEACHERS</b></a>
-                </div>
-                <div class="col-md-1"></div>
-            }
-            <div class="col-md-1">
-                <a asp-controller="Students" asp-action="Index"><b>STUDENTS</b></a>
-            </div>
-            @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
-            {
-                <div class="col-md-1"></div>
-                <div class="col-md-1">
-                    <a asp-controller="Grades" asp-action="Index"><b>GRADES</b></a>
-                </div>
-                <div class="col-md-1">
-                    <div class="classynav">
-                        <ul>
-                            <li>
-                                <a href="#">ADMIN</a>
-                                <ul class="dropdown">
-                                    <li><a asp-area="" asp-controller="" asp-action="">USERS</a></li>
-                                    <li><a asp-area="" asp-controller="" asp-action="">ROLES</a></li>
-                                    <li><a asp-area="" asp-controller="Accounts" asp-action="Settings">SETTINGS</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            }
-        </div>
-    </div>-->
-                        @*Nav End*@
-                        <!--</div>-->
-                        @*Nav Start*@
-                        <div class="classynav">
-                            <ul>
-                                <li><a asp-controller="" asp-action=""></a></li>
-                                <li><a asp-controller="" asp-action=""></a></li>
-                                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                                <li><a asp-controller="" asp-action=""></a></li>
-                                <li><a asp-controller="" asp-action=""></a></li>
-                                <li><a asp-controller="" asp-action=""></a></li>
-                                <li><a asp-controller="Home" asp-action="About">About Us</a></li>
-                                <li><a asp-controller="" asp-action=""></a></li>
-                                <li><a asp-controller="" asp-action=""></a></li>
-                                <li><a asp-controller="" asp-action=""></a></li>
-                                <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
-                                <li><a asp-controller="" asp-action=""></a></li>
-                                <li><a asp-controller="" asp-action=""></a></li>
-                                <li><a asp-controller="" asp-action=""></a></li>
-                                <li><a asp-controller="Courses" asp-action="Index">Courses</a></li>
-                            </ul>
-                        </div>
-                        <div class="classynav">
-                            @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin") || (this.User.Identity.IsAuthenticated && this.User.IsInRole("Teacher")) || (this.User.Identity.IsAuthenticated && this.User.IsInRole("Student")))
-                            {
-                            <ul>
-                                <li><a asp-controller="" asp-action=""></a></li>
-                                <li><a asp-controller="" asp-action=""></a></li>
-                                <li><a asp-controller="Students" asp-action="Index">Students</a></li>
-                                @if ((this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin")) || (this.User.Identity.IsAuthenticated && this.User.IsInRole("Teacher")))
-                                {
-                                    <li><a asp-controller="Teachers" asp-action="Index">Teachers</a></li>
-                                    <li><a asp-controller="Classes" asp-action="Index">Classes</a></li>
+                            @*Nav Start*@
+                            <div class="classynav" style="height:20px;">
+                                <ul>
                                     <li><a asp-controller="" asp-action=""></a></li>
-                                    <li><a asp-controller="Subjects" asp-action="Index">Subjects</a></li>
-                                    <li><a asp-controller="Grades" asp-action="Index">Grades</a></li>
-                                }
-                                @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
+                                    <li><a asp-controller="" asp-action=""></a></li>
+                                    <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                                    <li><a asp-controller="" asp-action=""></a></li>
+                                    <li><a asp-controller="" asp-action=""></a></li>
+                                    <li><a asp-controller="" asp-action=""></a></li>
+                                    <li><a asp-controller="Home" asp-action="About">About</a></li>
+                                    <li><a asp-controller="" asp-action=""></a></li>
+                                    <li><a asp-controller="" asp-action=""></a></li>
+                                    <li><a asp-controller="" asp-action=""></a></li>
+                                    <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
+                                    <li><a asp-controller="" asp-action=""></a></li>
+                                    <li><a asp-controller="" asp-action=""></a></li>
+                                    <li><a asp-controller="" asp-action=""></a></li>
+                                    <li><a asp-controller="Courses" asp-action="Index">Courses</a></li>
+                                </ul>
+                            </div>
+                            <div class="classynav">
+                                @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin") || (this.User.Identity.IsAuthenticated && this.User.IsInRole("Teacher")) || (this.User.Identity.IsAuthenticated && this.User.IsInRole("Student")))
                                 {
-                                    <li><a asp-controller="Accounts" asp-action="Settings">Settings</a></li>
+                                    <ul>
+                                        <li><a asp-controller="Students" asp-action="Index">Students</a></li>
+                                        @if ((this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin")) || (this.User.Identity.IsAuthenticated && this.User.IsInRole("Teacher")))
+                                        {
+                                            <li><a asp-controller="" asp-action=""></a></li>
+                                            <li><a asp-controller="Teachers" asp-action="Index">Teachers</a></li>
+                                            <li><a asp-controller="" asp-action=""></a></li>
+                                            <li><a asp-controller="Classes" asp-action="Index">Classes</a></li>
+                                            <li><a asp-controller="" asp-action=""></a></li>
+                                            <li><a asp-controller="Subjects" asp-action="Index">Subjects</a></li>
+                                            <li><a asp-controller="" asp-action=""></a></li>
+                                            <li><a asp-controller="Grades" asp-action="Index">Grades</a></li>
+                                        }
+                                        @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
+                                        {
+                                            <li><a asp-controller="" asp-action=""></a></li>
+                                            <li><a asp-controller="Accounts" asp-action="Settings">Settings</a></li>
+                                        }
+                                    </ul>
                                 }
-                            </ul>
-                            }
-                        </div>
-                        <div class="classynav"></div>
+                            </div>
+                            <div class="classynav"></div>
                             @*Nav End*@
                         </div>
 
                         @*Calling Info*@
                         <div class="calling-info">
                             <div class="call-center">
-                                <a href="tel:+654563325568889"><i class="icon-telephone-2"></i><span>(+65) 456 332 5568 889</span></a>
+                                <a href="tel:21 123 45 67"><i class="icon-telephone-2"></i><span>(+351)21 1234567</span></a>
                             </div>
                         </div>
-</nav>
+                    </nav>
                 </div>
             </div>
         </div>
@@ -212,23 +168,42 @@
     @RenderBody()
 
     <!-- ##### Footer Area Start ##### -->
-    <!-- ##### All Javascript Script ##### -->
-    <!-- jQuery-2.2.4 js -->
-    <script src="~/js/jquery/jquery-2.2.4.min.js"></script>
-    <!-- Popper js -->
-    <script src="~/js/bootstrap/popper.min.js"></script>
-    <!-- Bootstrap js -->
-    <script src="~/js/bootstrap/bootstrap.min.js"></script>
-    <!-- All Plugins js -->
-    <script src="~/js/plugins/plugins.js"></script>
-    <!-- Active js -->
-    <script src="~/js/active.js"></script>
-    <!-- Sync js -->
-    <script src="~/js/sync.js"></script>
+    <environment include="Development">
+        <!-- ##### All Javascript Script ##### -->
+        <!-- jQuery-2.2.4 js -->
+        <script src="~/js/jquery/jquery-2.2.4.min.js"></script>
+        <!-- Popper js -->
+        <script src="~/js/bootstrap/popper.min.js"></script>
+        <!-- Bootstrap js -->
+        <script src="~/js/bootstrap/bootstrap.min.js"></script>
+        <!-- All Plugins js -->
+        <script src="~/js/plugins/plugins.js"></script>
+        <!-- Active js -->
+        <script src="~/js/active.js"></script>
+        <!-- Sync js -->
+        <script src="~/js/sync.js"></script>
 
-    <!-- Syncfusion Essential JS 2 Scripts -->
-    <script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js"></script>
+        <!-- Syncfusion Essential JS 2 Scripts -->
+        <script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <!-- ##### All Javascript Script ##### -->
+        <!-- jQuery-2.2.4 js -->
+        <script src="~/js/jquery/jquery-2.2.4.min.js"></script>
+        <!-- Popper js -->
+        <script src="~/js/bootstrap/popper.min.js"></script>
+        <!-- Bootstrap js -->
+        <script src="~/js/bootstrap/bootstrap.min.js"></script>
+        <!-- All Plugins js -->
+        <script src="~/js/plugins/plugins.js"></script>
+        <!-- Active js -->
+        <script src="~/js/active.js"></script>
+        <!-- Sync js -->
+        <script src="~/js/sync.js"></script>
 
+        <!-- Syncfusion Essential JS 2 Scripts -->
+        <script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js"></script>
+    </environment>
     @RenderSection("Scripts", required: false)
     <ejs-scripts></ejs-scripts>
 </body>

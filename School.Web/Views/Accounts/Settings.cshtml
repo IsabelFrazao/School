@@ -23,55 +23,64 @@
         </div>
         <section class="contact-area">
             <div class="contact-content">
-                @*<form asp-action="CreateSettings" method="post" enctype="multipart/form-data">*@
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="row">
-                        <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
-                            <!--BANNER START-->
-                            <div class="panel single-accordion">
-                                <h6>
-                                    <a class="collapsed" style="text-align:center;">
-                                        General Information
-                                    </a>
-                                </h6>
-                            </div>
-                            <!--BANNER END-->
-                            <br />
-                            <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:650px;">
-                                @{
-                                    List<object> commands = new List<object>();
-                                    commands.Add(new { type = "Edit", buttonOption = new { iconCss = "e-icons e-edit", cssClass = "e-flat" } });
-                                    commands.Add(new { type = "Save", buttonOption = new { iconCss = "e-icons e-update", cssClass = "e-flat" } });
-                                    commands.Add(new { type = "Cancel", buttonOption = new { iconCss = "e-icons e-cancel-icon", cssClass = "e-flat" } });
-                                    commands.Add(new { type = "Delete", buttonOption = new { iconCss = "e-icons e-delete", cssClass = "e-flat" } });
-                                }
-                                <label class="form-label"><b>Schedules:</b></label>
-                                <ejs-grid id="Grid2" dataSource="Model.Schedules" actionBegin="addSchedule" toolbar="@(new List<string>() { "Add"})" height="100px" allowSorting="true" allowFiltering="true" allowPaging="true">
-                                    <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
-                                    <e-grid-editsettings allowDeleting="true" allowAdding="true" allowEditing="true" mode="Normal"></e-grid-editsettings>
-                                    <e-grid-columns>
-                                        <e-grid-column field="Id" headerText="Id" visible="false" textAlign="Right" allowEditing="true" width="auto" type="number" isPrimaryKey="true"></e-grid-column>
-                                        <e-grid-column field="Shift" headerText="Shift" allowEditing="true" width="150" type="string"></e-grid-column>
-                                        <e-grid-column textAlign="Right" width="auto" commands="commands"></e-grid-column>
-                                    </e-grid-columns>
-                                </ejs-grid>
-                                <br/>
-                                <label class="form-label"><b>Classrooms:</b></label>
-                                <ejs-grid id="Grid3" dataSource="Model.Classrooms" actionBegin="addClassroom" toolbar="@(new List<string>() { "Add"})" height="100px" allowSorting="true" allowFiltering="true" allowPaging="true">
-                                    <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
-                                    <e-grid-editsettings allowDeleting="true" allowAdding="true" allowEditing="true" mode="Normal"></e-grid-editsettings>
-                                    <e-grid-columns>
-                                        <e-grid-column field="Id" headerText="Id" visible="false" textAlign="Right" allowEditing="false" width="auto" type="number" isPrimaryKey="true"></e-grid-column>
-                                        <e-grid-column field="Room" headerText="Course" allowEditing="true" width="auto" type="string"></e-grid-column>
-                                        <e-grid-column textAlign="Right" width="auto" commands="commands"></e-grid-column>
-                                    </e-grid-columns>
-                                </ejs-grid>
-                            </div>
-                            <!-- ##### About Us Area End ##### -->
-                            <a asp-action="Index" asp-controller="Home" class="btn academy-btn mt-30" style="margin-left:40%">Back</a>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="row">
+                    <div class="col-12 wow fadeInUp" data-wow-delay="500ms" style="height:1100px;">
+                        <!--BANNER START-->
+                        <div class="panel single-accordion">
+                            <h6>
+                                <a class="collapsed" style="text-align:center;">
+                                    General Information
+                                </a>
+                            </h6>
                         </div>
+                        <!--BANNER END-->
+                        <br />
+                        <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:950px;">
+                            @{
+                                List<object> commands = new List<object>();
+                                commands.Add(new { type = "Edit", buttonOption = new { iconCss = "e-icons e-edit", cssClass = "e-flat" } });
+                                commands.Add(new { type = "Save", buttonOption = new { iconCss = "e-icons e-update", cssClass = "e-flat" } });
+                                commands.Add(new { type = "Cancel", buttonOption = new { iconCss = "e-icons e-cancel-icon", cssClass = "e-flat" } });
+                                commands.Add(new { type = "Delete", buttonOption = new { iconCss = "e-icons e-delete", cssClass = "e-flat" } });
+                            }
+                            <label class="form-label"><b>Schedules:</b></label>
+                            <ejs-grid id="Grid2" dataSource="Model.Schedules" actionBegin="addSchedule" toolbar="@(new List<string>() { "Add"})" height="100px" allowSorting="true" allowFiltering="true" allowPaging="true">
+                                <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
+                                <e-grid-editsettings allowDeleting="true" allowAdding="true" allowEditing="true" mode="Normal"></e-grid-editsettings>
+                                <e-grid-columns>
+                                    <e-grid-column field="Id" headerText="Id" visible="false" textAlign="Right" allowEditing="true" width="auto" type="number" isPrimaryKey="true"></e-grid-column>
+                                    <e-grid-column field="Shift" headerText="Shift" allowEditing="true" width="auto" type="string"></e-grid-column>
+                                    <e-grid-column textAlign="Right" width="auto" commands="commands"></e-grid-column>
+                                </e-grid-columns>
+                            </ejs-grid>
+                            <br />
+                            <label class="form-label"><b>Classrooms:</b></label>
+                            <ejs-grid id="Grid3" dataSource="Model.Classrooms" actionBegin="addClassroom" toolbar="@(new List<string>() { "Add"})" height="100px" allowSorting="true" allowFiltering="true" allowPaging="true">
+                                <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
+                                <e-grid-editsettings allowDeleting="true" allowAdding="true" allowEditing="true" mode="Normal"></e-grid-editsettings>
+                                <e-grid-columns>
+                                    <e-grid-column field="Id" headerText="Id" visible="false" textAlign="Right" allowEditing="false" width="auto" type="number" isPrimaryKey="true"></e-grid-column>
+                                    <e-grid-column field="Room" headerText="Room" allowEditing="true" width="auto" type="string"></e-grid-column>
+                                    <e-grid-column textAlign="Right" width="auto" commands="commands"></e-grid-column>
+                                </e-grid-columns>
+                            </ejs-grid>
+                            <br />
+                            <label class="form-label"><b>Fields:</b></label>
+                            <ejs-grid id="Grid4" dataSource="Model.Fields" actionBegin="addField" toolbar="@(new List<string>() { "Add"})" height="100px" allowSorting="true" allowFiltering="true" allowPaging="true">
+                                <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
+                                <e-grid-editsettings allowDeleting="true" allowAdding="true" allowEditing="true" mode="Normal"></e-grid-editsettings>
+                                <e-grid-columns>
+                                    <e-grid-column field="Id" headerText="Id" visible="false" textAlign="Right" allowEditing="false" width="auto" type="number" isPrimaryKey="true"></e-grid-column>
+                                    <e-grid-column field="Area" headerText="Area" allowEditing="true" width="auto" type="string"></e-grid-column>
+                                    <e-grid-column textAlign="Right" width="auto" commands="commands"></e-grid-column>
+                                </e-grid-columns>
+                            </ejs-grid>
+                        </div>
+                        <!-- ##### About Us Area End ##### -->
+                        <a asp-action="Index" asp-controller="Home" class="btn academy-btn mt-30" style="margin-left:40%">Back</a>
                     </div>
-                @*</form>*@
+                </div>
             </div>
         </section>
     </div>
@@ -176,17 +185,59 @@
             });
         }
     }
+
+    function addField(args) {
+        if (args.requestType === 'save') {
+            var data = JSON.stringify({
+                Id: args.data['Id'],
+                Area: args.data['Area']
+            });
+            $.ajax({
+                url: '@Url.Action("AddField", "Accounts")',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("RequestVerificationToken",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                type: 'POST',
+                data: data,
+                contentType: "application/json; charset=utf-8",
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    //alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                    alert("Failed");
+                },
+                success: function (result) {
+                    //alert("We returned: " + result);
+                    alert("Success");
+                }
+            });
+        }
+        if (args.requestType === 'delete') {
+            var data = JSON.stringify({
+                Id: args.data[0]['Id']
+            });
+            debugger
+            $.ajax({
+                url: '@Url.Action("DeleteField", "Accounts")',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("RequestVerificationToken",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                type: 'POST',
+                data: data,
+                contentType: "application/json; charset=utf-8",
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    //alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                    alert("Failed");
+                },
+                success: function (result) {
+                    //alert("We returned: " + result);
+                    alert("Success");
+                }
+            });
+        }
+    }
 </script>
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-
-@*<span asp-validation-for="Course" class="text-danger"></span>*@
-@*<ejs-listbox id="schedules-select-listbox" dataSource="Model.Schedules" height="100px">
-        <e-listbox-selectionsettings></e-listbox-selectionsettings>
-        <e-listbox-fields text="Shift" value="Id"></e-listbox-fields>
-    </ejs-listbox>
-    <label asp-for="Schedule" class="form-label"><b><br />Name:</b></label>
-    <span asp-validation-for="Schedule" class="text-danger"></span>
-    <input asp-for="Schedule" type="text" class="form-control" id="name" placeholder="Schedule">*@

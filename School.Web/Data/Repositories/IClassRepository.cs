@@ -1,13 +1,11 @@
 ﻿using School.Web.Data.Entities;
-using System;
+using School.Web.Models;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace School.Web.Data.Repositories
 {
     public interface IClassRepository : IGenericRepository<Class>
     {
-
+        IEnumerable<Teacher> GetTeachers(ClassViewModel model, IEnumerable<Teacher> teachers, IEnumerable<Subject> subjects);
     }
 }

@@ -40,7 +40,7 @@ namespace School.Web.Controllers
         // GET: TeachersController
         public IActionResult Index()
         {
-            return View(_teacherRepository.GetAll().Where(c => c.Id > 1));
+            return View(_teacherRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true));
         }
 
         // GET: TeachersController/Details/5
@@ -53,13 +53,13 @@ namespace School.Web.Controllers
 
             var teacher = await _teacherRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
 
-            var model = _converterHelper.ToTeacherViewModel(teacher, _subjectRepository.GetAll().Where(c => c.TeacherId == id.Value));
+            var model = _converterHelper.ToTeacherViewModel(teacher, _subjectRepository.GetAll().Where(c => c.TeacherId == id.Value).Where(a => a.isActive == true));
 
             if(model.Subjects != null)
             {
                 foreach (var subject in model.Subjects)
                 {
-                    model.Courses = _courseRepository.GetAll().Where(c => c.Id == subject.CourseId);
+                    model.Courses = _courseRepository.GetAll().Where(c => c.Id == subject.CourseId).Where(a => a.isActive == true);
                 }
             }            
 
@@ -67,7 +67,7 @@ namespace School.Web.Controllers
             {
                 foreach (var course in model.Courses)
                 {
-                    model.Classes = _classRepository.GetAll().Where(c => c.CourseId == course.Id);
+                    model.Classes = _classRepository.GetAll().Where(c => c.CourseId == course.Id).Where(a => a.isActive == true);
                 }
             }
 
@@ -85,7 +85,10 @@ namespace School.Web.Controllers
         {
             ViewBag.idCount = (_teacherRepository.GetAll().Count() + 1).ToString();
 
-            var model = new TeacherViewModel { Courses = _courseRepository.GetAll().Where(c => c.Id > 1), Classes = _classRepository.GetAll(), Subjects = _subjectRepository.GetAll() };
+            var model = new TeacherViewModel { Courses = _courseRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true), 
+                Classes = _classRepository.GetAll().Where(a => a.isActive == true), 
+                Subjects = _subjectRepository.GetAll().Where(a => a.isActive == true)
+            };
 
             return View(model);
         }
@@ -111,11 +114,12 @@ namespace School.Web.Controllers
 
                 await _teacherRepository.CreateAsync(teacher);
 
+                //USER
+
                 var user = await _userHelper.GetUserByEmailAsync(teacher.Email);
 
                 var random = new Random();
                 var password = random.Next(100000, 999999).ToString();
-
 
                 if (user == null)
                 {
@@ -177,7 +181,7 @@ namespace School.Web.Controllers
                 return NotFound();
             }
 
-            var model = _converterHelper.ToTeacherViewModel(teacher, _subjectRepository.GetAll().Where(c => c.TeacherId == id.Value));
+            var model = _converterHelper.ToTeacherViewModel(teacher, _subjectRepository.GetAll().Where(c => c.TeacherId == id.Value).Where(a => a.isActive == true));
 
             return View(model);
         }
@@ -233,16 +237,22 @@ namespace School.Web.Controllers
 
             var teacher = await _teacherRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
 
-            var model = _converterHelper.ToTeacherViewModel(teacher, _subjectRepository.GetAll());
+            var model = _converterHelper.ToTeacherViewModel(teacher, _subjectRepository.GetAll().Where(a => a.isActive == true));
 
-            foreach (var subject in model.Subjects)
+            if(model.Subjects != null)
             {
-                model.Courses = _courseRepository.GetAll().Where(c => c.Id == subject.CourseId);
-            }
+                foreach (var subject in model.Subjects)
+                {
+                    model.Courses = _courseRepository.GetAll().Where(c => c.Id == subject.CourseId).Where(a => a.isActive == true);
+                }
+            }            
 
-            foreach (var course in model.Courses)
+            if(model.Courses != null)
             {
-                model.Classes = _classRepository.GetAll().Where(c => c.CourseId == course.Id);
+                foreach (var course in model.Courses)
+                {
+                    model.Classes = _classRepository.GetAll().Where(c => c.CourseId == course.Id).Where(a => a.isActive == true);
+                }
             }
 
             if (teacher == null)

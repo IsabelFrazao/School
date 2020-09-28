@@ -11,6 +11,7 @@ namespace School.Web.Controllers
 {
     public class CoursesController : Controller
     {
+        private readonly IFieldRepository _fieldRepository;
         private readonly ICourseRepository _courseRepository;
         private readonly ITeacherRepository _teacherRepository;
         private readonly IClassRepository _classRepository;
@@ -18,9 +19,10 @@ namespace School.Web.Controllers
         private readonly ISubjectRepository _subjectRepository;
         private readonly IConverterHelper _converterHelper;
 
-        public CoursesController(ICourseRepository courseRepository, ITeacherRepository teacherRepository, IClassRepository classRepository,
+        public CoursesController(IFieldRepository fieldRepository, ICourseRepository courseRepository, ITeacherRepository teacherRepository, IClassRepository classRepository,
             IIEFPSubjectRepository iefpSubjectRepository, ISubjectRepository subjectRepository, IConverterHelper converterHelper)
         {
+            _fieldRepository = fieldRepository;
             _courseRepository = courseRepository;
             _teacherRepository = teacherRepository;
             _classRepository = classRepository;
@@ -32,7 +34,7 @@ namespace School.Web.Controllers
         // GET: CoursesController
         public IActionResult Index()
         {
-            return View(_courseRepository.GetAll().Where(c => c.Id > 1));
+            return View(_courseRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true).Include(c => c.Field));
         }
 
         // GET: CoursesController/Details/5
@@ -48,8 +50,11 @@ namespace School.Web.Controllers
             //course.Coordinator = await _teacherRepository.GetByIdAsync(course.CoordinatorId);
 
             var model = _converterHelper.ToCourseViewModel(course, await _teacherRepository.GetByIdAsync(course.CoordinatorId),
-                 _teacherRepository.GetAll().Where(c => c.Id > 1), _classRepository.GetAll().Where(e => e.CourseId == id.Value),
-                 _subjectRepository.GetAll().Where(e => e.CourseId == id.Value));
+                 _teacherRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true), 
+                 _classRepository.GetAll().Where(e => e.CourseId == id.Value).Where(a => a.isActive == true),
+                 _subjectRepository.GetAll().Where(e => e.CourseId == id.Value).Where(a => a.isActive == true));
+
+            model.Field = await _fieldRepository.GetByIdAsync(course.FieldId);
 
             //model.Classes = _classRepository.GetAll().Where(e => e.CourseId == id.Value);
 
@@ -67,10 +72,11 @@ namespace School.Web.Controllers
         {
             var model = new CourseViewModel
             {
-                Teachers = _teacherRepository.GetAll().Where(c => c.Id > 1).ToList(),
-                Subjects = _subjectRepository.GetAll()
-                .Where(e => e.Field == "Áudiovisuais e Produção dos Media" || e.Field == "Ciências Informáticas" ||
-                e.Field == "Eletrónica e Automação").ToList()
+                Teachers = _teacherRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true).ToList(),
+                Subjects = _subjectRepository.GetAll().Where(a => a.isActive == true).ToList(),
+                Fields = _fieldRepository.GetAll().Where(a => a.isActive == true).ToList()
+                //.Where(e => e.Field == "Áudiovisuais e Produção dos Media" || e.Field == "Ciências Informáticas" ||
+                //e.Field == "Eletrónica e Automação").ToList()
             };
 
             //model.IEFPSubjects = _iefpSubjectRepository.GetAll().Where(e => e.Field == "Áudiovisuais e Produção dos Media" || e.Field == "Ciências Informáticas" || e.Field == "Eletrónica e Automação");//Filter by Field
@@ -115,8 +121,13 @@ namespace School.Web.Controllers
             }
 
             var model = _converterHelper.ToCourseViewModel(course, await _teacherRepository.GetByIdAsync(course.CoordinatorId),
-                 _teacherRepository.GetAll().Where(c => c.Id > 1), _classRepository.GetAll().Where(e => e.CourseId == id.Value),
-                 _subjectRepository.GetAll().Where(e => e.CourseId == id.Value));
+                 _teacherRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true), 
+                 _classRepository.GetAll().Where(e => e.CourseId == id.Value).Where(a => a.isActive == true),
+                 _subjectRepository.GetAll().Where(e => e.CourseId == id.Value).Where(a => a.isActive == true));
+
+            model.Fields = _fieldRepository.GetAll().Where(a => a.isActive == true).ToList();
+
+            model.Field = await _fieldRepository.GetByIdAsync(course.FieldId);
 
             //model.Classes = _classRepository.GetAll().Where(e => e.CourseId == id.Value);
 
@@ -163,8 +174,11 @@ namespace School.Web.Controllers
             var course = await _courseRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
 
             var model = _converterHelper.ToCourseViewModel(course, await _teacherRepository.GetByIdAsync(course.CoordinatorId),
-                 _teacherRepository.GetAll().Where(c => c.Id > 1), _classRepository.GetAll().Where(e => e.CourseId == id.Value),
-                 _subjectRepository.GetAll().Where(e => e.CourseId == id.Value));
+                 _teacherRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true), 
+                 _classRepository.GetAll().Where(e => e.CourseId == id.Value).Where(a => a.isActive == true),
+                 _subjectRepository.GetAll().Where(e => e.CourseId == id.Value).Where(a => a.isActive == true));
+
+            model.Field = await _fieldRepository.GetByIdAsync(course.FieldId);
 
             if (course == null)
             {

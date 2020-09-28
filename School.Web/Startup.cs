@@ -61,13 +61,14 @@ namespace School.Web
             services.AddScoped<IIEFPSubjectRepository, IEFPSubjectRepository>();
             services.AddScoped<IClassroomRepository, ClassroomRepository>();
             services.AddScoped<IScheduleRepository, ScheduleRepository>();
+            services.AddScoped<IFieldRepository, FieldRepository>();
             services.AddScoped<IImageHelper, ImageHelper>();
             services.AddScoped<IConverterHelper, ConverterHelper>();
             services.AddScoped<IFileHelper, FileHelper>();
             services.AddScoped<ICombosHelper, CombosHelper>();
             services.AddScoped<IUserHelper, UserHelper>();
             services.AddScoped<IMailHelper, MailHelper>();
-
+            
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.

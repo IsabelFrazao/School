@@ -4,7 +4,7 @@
 }
 
 <!-- ##### Breadcumb Area Start ##### -->
-<div class="breadcumb-area bg-img" style="background-image: url(../img/bg-img/breadcumb.jpg);">
+<div class="breadcumb-area bg-img" style="background-image: url(../../img/bg-img/breadcumb.jpg);">
     <div class="bradcumbContent">
         <h2>Edit Class</h2>
     </div>
@@ -64,16 +64,6 @@
         </section>
     </div>
 </section>
-
-<script>
-    function valueChange() {
-        var courses = document.getElementById('courses').ej2_instances[0];
-        var value = document.getElementById('value');
-        var text = document.getElementById('text');
-        value.innerHTML = courses.value === null ? 'null' : courses.value.toString();
-        text.innerHTML = courses.text === null ? 'null' : courses.text.toString();
-    }
-</script>
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}

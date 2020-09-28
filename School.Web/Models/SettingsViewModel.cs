@@ -12,5 +12,9 @@ namespace School.Web.Models
         public IEnumerable<Classroom> Classrooms { get; set; }
 
         public Classroom Classroom { get; set; }
+
+        public IEnumerable<Field> Fields { get; set; }
+
+        public Field Field { get; set; }
     }
 }

@@ -76,20 +76,20 @@
                                     </div>
                                 </div><br />
                                 @{
-                                    var minDate = new DateTime(DateTime.Now.Year - 65, DateTime.Now.Month, DateTime.Now.Day);
-                                    var maxDate = new DateTime(DateTime.Now.Year - 18, DateTime.Now.Month, DateTime.Now.Day);
+                                    var minDate = new DateTime(DateTime.Now.Year - 65, DateTime.Now.Month - (65 / 13), DateTime.Now.Day - (65 / 365));
+                                    var maxDate = new DateTime(DateTime.Now.Year - 65, DateTime.Now.Month - (65 / 13), DateTime.Now.Day - (65 / 365));
                                     var defaultDate = DateTime.Now.Date;
                                 }
                                 <label asp-for="DateOfBirth" class="form-label"><b>Date of Birth:</b></label>
                                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
-                                <input asp-for="DateOfBirth" type="date" class="form-control" id="dateofbirth">
+                                <ejs-datetimepicker id="datetimepicker" value="@defaultDate" min="@minDate" max="@maxDate" format="dd-MM-yyyy" cssClass="e-filled"></ejs-datetimepicker>
+                                <div style="height:3px;"><h6></h6></div>
                                 <label asp-for="Address" class="form-label"><b>Address:</b></label>
                                 <span asp-validation-for="Address" class="text-danger"></span>
                                 <input asp-for="Address" type="text" class="form-control" id="address" placeholder="Address">
                                 <label asp-for="ZipCode" class="form-label"><b>Zip-Code:</b></label>
                                 <span asp-validation-for="ZipCode" class="text-danger"></span>
                                 <ejs-maskedtextbox id="mask1" ejs-for="ZipCode" mask="0000-000" placeholder="0000-000" cssClass="e-filled" floatLabelType="Never"></ejs-maskedtextbox>
-                                @*<input asp-for="ZipCode" type="text" class="form-control" id="zip-code" placeholder="Zip-Code">*@
                                 <div style="height:2px;"><h6></h6></div>
                                 <label asp-for="City" class="form-label"><b>City:</b></label>
                                 <span asp-validation-for="City" class="text-danger"></span>
@@ -179,6 +179,9 @@
 
     <style>
         .e-mask.e-filled .e-control.e-maskedtextbox {
+            height: 54px;
+        }
+        #datetimepicker {
             height: 54px;
         }
     </style>

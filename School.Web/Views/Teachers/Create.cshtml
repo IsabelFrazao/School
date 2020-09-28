@@ -66,13 +66,14 @@
                                     </div>
                                 </div><br />
                                 @{
-                                    var minDate = new DateTime(DateTime.Now.Year - 65, DateTime.Now.Month, DateTime.Now.Day);
-                                    var maxDate = new DateTime(DateTime.Now.Year - 18, DateTime.Now.Month, DateTime.Now.Day);
+                                    var minDate = new DateTime(DateTime.Now.Year - 65, DateTime.Now.Month - (65 / 13), DateTime.Now.Day - (65 / 365));
+                                    var maxDate = new DateTime(DateTime.Now.Year - 65, DateTime.Now.Month - (65 / 13), DateTime.Now.Day - (65 / 365));
                                     var defaultDate = DateTime.Now.Date;
                                 }
                                 <label asp-for="DateOfBirth" class="form-label"><b>Date of Birth:</b></label>
                                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
-                                <input asp-for="DateOfBirth" type="date" value=@defaultDate class="form-control" id="dateofbirth">
+                                <ejs-datetimepicker id="datetimepicker" value="@defaultDate" min="@minDate" format="dd-MM-yyyy" cssClass="e-filled"></ejs-datetimepicker>
+                                <div style="height:3px;"><h6></h6></div>
                                 <label asp-for="Address" class="form-label"><b>Address:</b></label>
                                 <span asp-validation-for="Address" class="text-danger"></span>
                                 <input asp-for="Address" type="text" class="form-control" id="address" placeholder="Address">
@@ -168,6 +169,9 @@
 
 <style>
     .e-mask.e-filled .e-control.e-maskedtextbox {
+        height: 54px;
+    }
+    #datetimepicker {
         height: 54px;
     }
 </style>

@@ -5,7 +5,7 @@
 }
 
 <!-- ##### Breadcumb Area Start ##### -->
-<div class="breadcumb-area bg-img" style="background-image: url(../img/bg-img/breadcumb.jpg);">
+<div class="breadcumb-area bg-img" style="background-image: url(../../img/bg-img/breadcumb.jpg);">
     <div class="bradcumbContent">
         <h2>Create/Edit Grades</h2>
     </div>
@@ -48,11 +48,10 @@
                                     <e-grid-editsettings allowEditing="true" mode="Normal"></e-grid-editsettings>
                                     <e-grid-columns>
                                         <e-grid-column field="Id" headerText="Id" visible="false" textAlign="Right" allowEditing="false" width="120" type="number" isPrimaryKey="true"></e-grid-column>
-                                        @*<e-grid-column field="Field" headerText="Field" textAlign="Right" width="120" type="string"></e-grid-column>*@
-                                        <e-grid-column field="Course.Name" headerText="Course" allowEditing="false" width="150" type="string"></e-grid-column>
-                                        <e-grid-column field="Class.Name" headerText="Class" textAlign="Right" allowEditing="false" width="130" type="string"></e-grid-column>
-                                        <e-grid-column field="Subject.Name" headerText="Subject" textAlign="Right" allowEditing="false" width="120" type="string"></e-grid-column>
-                                        <e-grid-column field="Teacher.FullName" headerText="Teacher" textAlign="Right" allowEditing="false" width="140" type="string"></e-grid-column>
+                                        <e-grid-column field="Course.Name" headerText="Course" allowEditing="false" width="auto" type="string"></e-grid-column>
+                                        <e-grid-column field="Class.Name" headerText="Class" allowEditing="false" width="auto" type="string"></e-grid-column>
+                                        <e-grid-column field="Subject.Name" headerText="Subject" allowEditing="false" width="auto" type="string"></e-grid-column>
+                                        <e-grid-column field="Teacher.FullName" headerText="Teacher"  allowEditing="false" width="auto" type="string"></e-grid-column>
                                         <e-grid-column field="Student.FullName" headerText="Student" allowEditing="false" width="auto" type="string"></e-grid-column>
                                         <e-grid-column field="FinalGrade" uid="FinalGrade" id="FinalGrade" headerText="Final Grade" allowEditing="true" editType="numericedit" width="auto" type="number"></e-grid-column>
                                         <e-grid-column textAlign="Right" width="auto" commands="commands"></e-grid-column>
@@ -101,80 +100,6 @@
         }
     }
 </script>
-
-
-@*<script>
-        function valueChange() {
-            var courses = document.getElementById('courses').ej2_instances[0];
-            var value = document.getElementById('value');
-            var text = document.getElementById('text');
-            value.innerHTML = courses.value === null ? 'null' : courses.value.toString();
-            text.innerHTML = courses.text === null ? 'null' : courses.text.toString();
-        }
-    </script>
-
-    <script type="text/javascript">
-        function fieldChange() {
-            var course = document.getElementById('courses').ej2_instances[0];
-            var classes = document.getElementById('classes').ej2_instances[0];
-            var subjects = document.getElementById('subjects').ej2_instances[0];
-            var field = document.getElementById('fields').ej2_instances[0];
-            // disable the state DropDownList
-            course.enabled = true;
-            // frame the query based on selected value in country DropDownList.
-            var tempQuery = new ej.data.Query().where('Field', 'equal', field.text);
-            // set the framed query based on selected value in country DropDownList.
-            course.query = tempQuery;
-            // set null value to state DropDownList text property
-            course.text = null;
-            // bind the property changes to state DropDownList
-            course.dataBind();
-            // set null value to city DropDownList text property
-            classes.text = null;
-            subjects.text = null;
-            // disable the city DropDownList
-            classes.enabled = false;
-            subjects.enabled = false;
-            // bind the property changes to City DropDownList
-            classes.dataBind();
-            subjects.dataBind();
-        }
-        function courseChange() {
-            var classes = document.getElementById('classes').ej2_instances[0];
-            var subjects = document.getElementById('subjects').ej2_instances[0];
-            var course = document.getElementById('courses').ej2_instances[0];
-            classes.enabled = true;
-            subjects.enabled = true;
-            // Query the data source based on state DropDownList selected value
-            var tempQuery1 = new ej.data.Query().where('CourseId', 'equal', course.value);
-            var tempQuery2 = new ej.data.Query().where('CourseId', 'equal', course.value);
-            // set the framed query based on selected value in city DropDownList.
-            classes.query = tempQuery1;
-            subjects.query = tempQuery2;
-            //clear the existing selection
-            classes.text = null;
-            subjects.text = null;
-            // bind the property change to city DropDownList
-            classes.dataBind();
-            subjects.dataBind();
-        }
-        function subjectChange() {
-            var course = document.getElementById('courses').ej2_instances[0];
-            var classes = document.getElementById('classes').ej2_instances[0];
-            var subjects = document.getElementById('subjects').ej2_instances[0];
-            var teacher = new Teacher();
-            teacher.query = new ej.data.Query().where('SubjectId', 'equal', subjects.value);
-
-            var students = new Student();
-            students.query = new ej.data.Query().where('ClassId', 'equal', classes.value);
-
-            var table = document.getSelection();
-
-            //var tempQuery1 = new ej.data.Query().where('ClassId', 'equal', course.value);
-            //var tempQuery1 = new ej.data.Query().where('SubjectId', 'equal', subjects.value);
-
-        }
-    </script>*@
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}

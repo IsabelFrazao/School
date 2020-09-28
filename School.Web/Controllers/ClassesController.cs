@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using School.Web.Data.Entities;
 using School.Web.Data.Repositories;
 using School.Web.Helpers;
 using School.Web.Models;
 using Syncfusion.EJ2.Linq;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -41,10 +38,10 @@ namespace School.Web.Controllers
         // GET: ClassesController
         public IActionResult Index()
         {
-            return View(_classRepository.GetAll()
-                .Include(c => c.Course)
-                .Include(c => c.Classroom)
-                .Include(c => c.Schedule));
+            return View(_classRepository.GetAll().Where(a => a.isActive == true)
+                .Include(c => c.Course).Where(a => a.isActive == true)
+                .Include(c => c.Classroom).Where(a => a.isActive == true)
+                .Include(c => c.Schedule).Where(a => a.isActive == true));
         }
 
         [Authorize(Roles = "Admin, Teacher")]
@@ -59,49 +56,51 @@ namespace School.Web.Controllers
             var classes = await _classRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
 
             var model = _converterHelper.ToClassViewModel(classes, await _courseRepository.GetByIdAsync(classes.CourseId),
-                _studentRepository.GetAll().Where(e => e.ClassId == id.Value),
-                _subjectRepository.GetAll().Where(e => e.CourseId == classes.CourseId));
+                _studentRepository.GetAll().Where(e => e.ClassId == id.Value).Where(a => a.isActive == true),
+                _subjectRepository.GetAll().Where(e => e.CourseId == classes.CourseId).Where(a => a.isActive == true));
 
-            model.Teachers = new List<Teacher>();
+            model.Teachers = _classRepository.GetTeachers(model, _teacherRepository.GetAll().Where(a => a.isActive == true), model.Subjects).ToList();
 
-            IEnumerable<Teacher> Teachers = _teacherRepository.GetAll();
+            //model.Teachers = new List<Teacher>();
 
-            var Subjects = new List<Subject>(model.Subjects);
+            //IEnumerable<Teacher> Teachers = _teacherRepository.GetAll();
 
-            int rep = 0;
+            //var Subjects = new List<Subject>(model.Subjects);
 
-            foreach (var subject in Subjects)
-            {
-                foreach(var teacher in Teachers)
-                {
-                    if(teacher.Id == subject.TeacherId && teacher.Id != rep)
-                    {
-                        model.Teachers.Add(new Teacher //FAZER MÉTODO DE CONVERSÃO PARA TEACHER
-                        {
-                            Id = teacher.Id,
-                            PhotoUrl = teacher.PhotoUrl,
-                            FullName = teacher.FullName,
-                            Gender = teacher.Gender,
-                            DateOfBirth = teacher.DateOfBirth,
-                            Address = teacher.Address,
-                            ZipCode = teacher.ZipCode,
-                            City = teacher.City,
-                            IdentificationNumber = teacher.IdentificationNumber,
-                            TaxNumber = teacher.TaxNumber,
-                            SSNumber = teacher.SSNumber,
-                            NHSNumber = teacher.NHSNumber,
-                            MaritalStatus = teacher.MaritalStatus,
-                            Nationality = teacher.Nationality,
-                            Telephone = teacher.Telephone,
-                            Email = teacher.Email
-                        });
+            //int rep = 0;
 
-                        rep = teacher.Id;
-                    }
-                }                
-            }
+            //foreach (var subject in Subjects)
+            //{
+            //    foreach(var teacher in Teachers)
+            //    {
+            //        if(teacher.Id == subject.TeacherId && teacher.Id != rep)
+            //        {
+            //            model.Teachers.Add(new Teacher //FAZER MÉTODO DE CONVERSÃO PARA TEACHER
+            //            {
+            //                Id = teacher.Id,
+            //                PhotoUrl = teacher.PhotoUrl,
+            //                FullName = teacher.FullName,
+            //                Gender = teacher.Gender,
+            //                DateOfBirth = teacher.DateOfBirth,
+            //                Address = teacher.Address,
+            //                ZipCode = teacher.ZipCode,
+            //                City = teacher.City,
+            //                IdentificationNumber = teacher.IdentificationNumber,
+            //                TaxNumber = teacher.TaxNumber,
+            //                SSNumber = teacher.SSNumber,
+            //                NHSNumber = teacher.NHSNumber,
+            //                MaritalStatus = teacher.MaritalStatus,
+            //                Nationality = teacher.Nationality,
+            //                Telephone = teacher.Telephone,
+            //                Email = teacher.Email
+            //            });
 
-            var students = _studentRepository.GetAll().Where(e => e.ClassId == id.Value);
+            //            rep = teacher.Id;
+            //        }
+            //    }                
+            //}
+
+            var students = _studentRepository.GetAll().Where(e => e.ClassId == id.Value).Where(a => a.isActive == true);
             model.Students = students;
 
             model.Schedule = await _scheduleRepository.GetByIdAsync(classes.ScheduleId);
@@ -119,11 +118,13 @@ namespace School.Web.Controllers
         // GET: ClassesController/Create
         public IActionResult Create()
         {
-            var model = new ClassViewModel { Courses = _courseRepository.GetAll().Where(c => c.Id > 1).ToList(), Students = _studentRepository.GetAll().ToList(),
-            Classrooms = _classroomRepository.GetAll().ToList(), Schedules = _scheduleRepository.GetAll().ToList()
+            var model = new ClassViewModel
+            {
+                Courses = _courseRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true).ToList(),
+                Students = _studentRepository.GetAll().Where(a => a.isActive == true).ToList(),
+                Classrooms = _classroomRepository.GetAll().Where(a => a.isActive == true).ToList(),
+                Schedules = _scheduleRepository.GetAll().Where(a => a.isActive == true).ToList()
             };
-
-            //model.Students = _studentRepository.GetAll().Where(e => e.ClassId == 0);
 
             return View(model);
         }
@@ -135,16 +136,7 @@ namespace School.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                //var course = await _courseRepository.GetByIdAsync(model.CourseId);
-                //model.Course = course;
-
                 var classes = _converterHelper.ToClass(model, await _courseRepository.GetByIdAsync(model.CourseId), true);
-
-                //foreach(var student in model.Students)
-                //{
-                //    student.ClassId = model.Id;
-                //    await _studentRepository.UpdateAsync(student);
-                //}
 
                 await _classRepository.CreateAsync(classes);
                 return RedirectToAction(nameof(Index));
@@ -162,23 +154,18 @@ namespace School.Web.Controllers
             }
 
             var classes = await _classRepository.GetByIdAsync(id.Value);
-
-            //classes.Course = await _courseRepository.GetByIdAsync(classes.CourseId);
-
             if (classes == null)
             {
                 return NotFound();
             }
 
-            var model = _converterHelper.ToClassViewModel(classes, await _courseRepository.GetByIdAsync(classes.CourseId), _studentRepository.GetAll().Where(e => e.ClassId == id.Value), _subjectRepository.GetAll().Where(e => e.CourseId == classes.CourseId));
+            var model = _converterHelper.ToClassViewModel(classes, await _courseRepository.GetByIdAsync(classes.CourseId), _studentRepository.GetAll().Where(e => e.ClassId == id.Value).Where(a => a.isActive == true), _subjectRepository.GetAll().Where(e => e.CourseId == classes.CourseId).Where(a => a.isActive == true));
 
-            model.Schedules = _scheduleRepository.GetAll();
-            model.Classrooms = _classroomRepository.GetAll();
+            model.Schedules = _scheduleRepository.GetAll().Where(a => a.isActive == true);
+            model.Classrooms = _classroomRepository.GetAll().Where(a => a.isActive == true);
 
             model.Schedule = await _scheduleRepository.GetByIdAsync(classes.ScheduleId);
             model.Classroom = await _classroomRepository.GetByIdAsync(classes.ClassroomId);
-            //var students = _studentRepository.GetAll().Where(e => e.ClassId == id.Value);
-            //model.Students = students;
 
             return View(model);
         }
@@ -192,8 +179,6 @@ namespace School.Web.Controllers
             {
                 try
                 {
-                    //model.Course = await _courseRepository.GetByIdAsync(model.CourseId);
-
                     var classes = _converterHelper.ToClass(model, await _courseRepository.GetByIdAsync(model.CourseId), true);
 
                     classes.Id = model.Id;
@@ -228,51 +213,12 @@ namespace School.Web.Controllers
             var classes = await _classRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
 
             var model = _converterHelper.ToClassViewModel(classes, await _courseRepository.GetByIdAsync(classes.CourseId),
-                _studentRepository.GetAll().Where(e => e.ClassId == id.Value),
-                _subjectRepository.GetAll().Where(e => e.CourseId == classes.CourseId));
+                _studentRepository.GetAll().Where(e => e.ClassId == id.Value).Where(a => a.isActive == true),
+                _subjectRepository.GetAll().Where(e => e.CourseId == classes.CourseId).Where(a => a.isActive == true));
 
-            model.Teachers = new List<Teacher>();
+            model.Teachers = _classRepository.GetTeachers(model, _teacherRepository.GetAll().Where(a => a.isActive == true), model.Subjects).ToList();
 
-            IEnumerable<Teacher> Teachers = _teacherRepository.GetAll();
-
-            var Subjects = new List<Subject>(model.Subjects);
-
-            int rep = 0;
-
-            foreach (var subject in Subjects)
-            {
-                foreach (var teacher in Teachers)
-                {
-                    if (teacher.Id == subject.TeacherId && teacher.Id != rep)
-                    {
-                        model.Teachers.Add(new Teacher
-                        {
-                            Id = teacher.Id,
-                            PhotoUrl = teacher.PhotoUrl,
-                            FullName = teacher.FullName,
-                            Gender = teacher.Gender,
-                            DateOfBirth = teacher.DateOfBirth,
-                            Address = teacher.Address,
-                            ZipCode = teacher.ZipCode,
-                            City = teacher.City,
-                            IdentificationNumber = teacher.IdentificationNumber,
-                            TaxNumber = teacher.TaxNumber,
-                            SSNumber = teacher.SSNumber,
-                            NHSNumber = teacher.NHSNumber,
-                            MaritalStatus = teacher.MaritalStatus,
-                            Nationality = teacher.Nationality,
-                            Telephone = teacher.Telephone,
-                            Email = teacher.Email
-                        });
-
-                        rep = teacher.Id;
-                    }
-                }
-            }
-
-            var students = _studentRepository.GetAll().Where(e => e.ClassId == id.Value);
-            model.Students = students;
-
+            model.Students = _studentRepository.GetAll().Where(e => e.ClassId == id.Value).Where(a => a.isActive == true);
             model.Schedule = await _scheduleRepository.GetByIdAsync(classes.ScheduleId);
             model.Classroom = await _classroomRepository.GetByIdAsync(classes.ClassroomId);
 

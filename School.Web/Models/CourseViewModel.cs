@@ -5,7 +5,7 @@ namespace School.Web.Models
 {
     public class CourseViewModel : Course
     {
-        public string[] Fields = new[] { "Áudiovisuais e Produção dos Media", "Ciências Informáticas", "Eletrónica e Automação" };
+        public IEnumerable<Field> Fields { get; set; }
 
         public IEnumerable<Teacher> Teachers { get; set; }
 
