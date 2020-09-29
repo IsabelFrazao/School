@@ -44,7 +44,7 @@
                                         @if (!string.IsNullOrEmpty(Model.PhotoUrl))
                                         {
                                             <picture>
-                                                <img src="@Url.Content(Model.PhotoUrl)" alt="image" style="width:200px; height:300px; max-width:100%; height:auto" />
+                                                <img src="@Url.Content(Model.PhotoUrl)" id="imgpreview" alt="image" style="width:200px; height:300px; max-width:100%; height:auto" />
                                             </picture>
                                         }
                                         @if (string.IsNullOrEmpty(Model.PhotoUrl))
@@ -77,7 +77,7 @@
                                 </div><br />
                                 @{
                                     var minDate = new DateTime(DateTime.Now.Year - 65, DateTime.Now.Month - (65 / 13), DateTime.Now.Day - (65 / 365));
-                                    var maxDate = new DateTime(DateTime.Now.Year - 65, DateTime.Now.Month - (65 / 13), DateTime.Now.Day - (65 / 365));
+                                    var maxDate = new DateTime(DateTime.Now.Year - 18, DateTime.Now.Month - (18 / 13), DateTime.Now.Day - (18 / 365));
                                     var defaultDate = DateTime.Now.Date;
                                 }
                                 <label asp-for="DateOfBirth" class="form-label"><b>Date of Birth:</b></label>

@@ -38,6 +38,21 @@ namespace School.Web.Data
                 fk.DeleteBehavior = DeleteBehavior.Restrict;
             }
 
+            //UNIQUE
+
+            modelBuilder.Entity<Student>().HasIndex(s => s.IdentificationNumber).IsUnique();
+            modelBuilder.Entity<Student>().HasIndex(s => s.TaxNumber).IsUnique();
+            modelBuilder.Entity<Student>().HasIndex(s => s.SSNumber).IsUnique();
+            modelBuilder.Entity<Student>().HasIndex(s => s.NHSNumber).IsUnique();
+            modelBuilder.Entity<Student>().HasIndex(s => s.Telephone).IsUnique();
+            modelBuilder.Entity<Student>().HasIndex(s => s.Email).IsUnique();
+
+            modelBuilder.Entity<Teacher>().HasIndex(t => t.IdentificationNumber).IsUnique();
+            modelBuilder.Entity<Teacher>().HasIndex(t => t.TaxNumber).IsUnique();
+            modelBuilder.Entity<Teacher>().HasIndex(t => t.SSNumber).IsUnique();
+            modelBuilder.Entity<Teacher>().HasIndex(t => t.NHSNumber).IsUnique();
+            modelBuilder.Entity<Teacher>().HasIndex(t => t.Telephone).IsUnique();
+            modelBuilder.Entity<Teacher>().HasIndex(t => t.Email).IsUnique();
 
             base.OnModelCreating(modelBuilder);
         }

@@ -137,89 +137,99 @@ namespace School.Web.Controllers
 
                     student.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
 
-                    if (!await _studentRepository.ValidationAsync(student.IdentificationNumber, student.TaxNumber, student.SSNumber,
-                        student.NHSNumber, student.Telephone, student.Email))
+                    try
                     {
                         await _studentRepository.CreateAsync(student);
-                    }
 
-                    //USER
+                        //USER
 
-                    var user = await _userHelper.GetUserByEmailAsync(student.Email);
+                        var user = await _userHelper.GetUserByEmailAsync(student.Email);
 
-                    var random = new Random();
-                    var password = random.Next(100000, 999999).ToString();
+                        var random = new Random();
+                        var password = random.Next(100000, 999999).ToString();
 
-                    if (user == null)
-                    {
-                        user = new User
+                        if (user == null)
                         {
-                            FirstName = student.FullName,
-                            Email = student.Email,
-                            UserName = student.Email
-                        };
-
-                        var result = await _userHelper.AddUserAsync(user, password);
-
-                        if (result != IdentityResult.Success)
-                        {
-                            throw new InvalidOperationException("Could not create the user in seeder");
-                        }
-                    }
-
-                    var isInRole = await _userHelper.IsUserInRoleAsync(user, "Student");
-
-                    if (!isInRole)
-                    {
-                        await _userHelper.AddUserToRoleAsync(user, "Student");
-                    }
-
-                    var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-                    var tokenLink = this.Url.Action("ConfirmEmail", "Accounts", new
-                    {
-                        userId = user.Id,
-                        token = myToken,
-                    }, protocol: HttpContext.Request.Scheme, password);
-
-                    _mailHelper.SendMail(model.Email, "Email confirmation", $"<h1>Email Confirmation</h1>" +
-                        $"To allow the user, " +
-                        $"please click on this link:<br/><br/><a href = \"{tokenLink}\">Confirm Email</a>" +
-                        $"<br/><br/> Please, change your Password! <br /><br />Your old password is:<br/><br/><b>{password}</b>.");
-                    this.ViewBag.Message = "The instructions to allow your user has been sent to email.";
-
-                    this.ModelState.AddModelError(string.Empty, "The user already exists.");
-
-                    //GRADES
-
-                    var Subjects = _subjectRepository.GetAll().Where(s => s.CourseId == student.CourseId).Where(a => a.isActive == true);
-
-                    var Grades = new List<Grade>();
-
-                    if (Subjects != null)
-                    {
-                        foreach (var subject in Subjects)
-                        {
-                            if (student.CourseId == subject.CourseId)
+                            user = new User
                             {
-                                Grades.Add(new Grade
-                                {
-                                    Id = 0,
-                                    CourseId = student.CourseId,
-                                    ClassId = student.ClassId,
-                                    SubjectId = subject.Id,
-                                    TeacherId = subject.TeacherId,
-                                    StudentId = student.Id,
-                                    FinalGrade = -1,
-                                });
+                                FirstName = student.FullName,
+                                Email = student.Email,
+                                UserName = student.Email
+                            };
+
+                            var result = await _userHelper.AddUserAsync(user, password);
+
+                            if (result != IdentityResult.Success)
+                            {
+                                throw new InvalidOperationException("Could not create the user in seeder");
                             }
                         }
 
-                        foreach (var grade in Grades)
+                        var isInRole = await _userHelper.IsUserInRoleAsync(user, "Student");
+
+                        if (!isInRole)
                         {
-                            await _gradeRepository.CreateAsync(grade);
+                            await _userHelper.AddUserToRoleAsync(user, "Student");
                         }
+
+                        var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                        var tokenLink = this.Url.Action("ConfirmEmail", "Accounts", new
+                        {
+                            userId = user.Id,
+                            token = myToken,
+                        }, protocol: HttpContext.Request.Scheme);
+
+                        _mailHelper.SendMail(model.Email, "Email confirmation", $"<h1>Email Confirmation</h1>" +
+                            $"To allow the user, " +
+                            $"please click on this link:<br/><br/><a href=\"{tokenLink}\">Confirm Email</a>" +
+                            $"<br/><br/> Please, change your Password! <br /><br />Your old password is:<br/><br/><b>{password}</b>.");
+                        this.ViewBag.Message = "The instructions to allow your user has been sent to email.";
+
+                        this.ModelState.AddModelError(string.Empty, "The user already exists.");
+
+                        //GRADES
+
+                        var Subjects = _subjectRepository.GetAll().Where(s => s.CourseId == student.CourseId).Where(a => a.isActive == true);
+
+                        var Grades = new List<Grade>();
+
+                        if (Subjects != null)
+                        {
+                            foreach (var subject in Subjects)
+                            {
+                                if (student.CourseId == subject.CourseId)
+                                {
+                                    Grades.Add(new Grade
+                                    {
+                                        Id = 0,
+                                        CourseId = student.CourseId,
+                                        ClassId = student.ClassId,
+                                        SubjectId = subject.Id,
+                                        TeacherId = subject.TeacherId,
+                                        StudentId = student.Id,
+                                        FinalGrade = -1,
+                                    });
+                                }
+                            }
+
+                            foreach (var grade in Grades)
+                            {
+                                await _gradeRepository.CreateAsync(grade);
+                            }
+                        }
+                        return RedirectToAction(nameof(Index));
                     }
-                    return RedirectToAction(nameof(Index));
+                    catch(Exception ex)
+                    {
+                        if (ex.InnerException.Message.Contains("duplicate"))
+                        {
+                            ModelState.AddModelError(string.Empty, "Identification Number, Tax Number, SS Number, NHS Number, Telephone or E-mail already exist!");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }   
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -286,56 +296,68 @@ namespace School.Web.Controllers
 
                     student.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
 
-                    if (!await _studentRepository.ValidationAsync(student.IdentificationNumber, student.TaxNumber, student.SSNumber,
-                    student.NHSNumber, student.Telephone, student.Email))
+                    try
+                    {
                         await _studentRepository.UpdateAsync(student);
 
-                    //USER
+                        //USER
 
-                    var user = await _userHelper.GetUserByEmailAsync(student.Email);
+                        var user = await _userHelper.GetUserByEmailAsync(student.Email);
 
-                    if (user == null)
-                    {
-                        var random = new Random();
-                        var password = random.Next(100000, 999999).ToString();
-
-                        user = new User
+                        if (user == null)
                         {
-                            FirstName = student.FullName,
-                            Email = student.Email,
-                            UserName = student.Email
-                        };
+                            var random = new Random();
+                            var password = random.Next(100000, 999999).ToString();
 
-                        var result = await _userHelper.AddUserAsync(user, password);
+                            user = new User
+                            {
+                                FirstName = student.FullName,
+                                Email = student.Email,
+                                UserName = student.Email
+                            };
 
-                        if (result != IdentityResult.Success)
-                        {
-                            throw new InvalidOperationException("Could not create the user in seeder");
+                            var result = await _userHelper.AddUserAsync(user, password);
+
+                            if (result != IdentityResult.Success)
+                            {
+                                throw new InvalidOperationException("Could not create the user in seeder");
+                            }
+
+                            var isInRole = await _userHelper.IsUserInRoleAsync(user, "Student");
+
+                            if (!isInRole)
+                            {
+                                await _userHelper.AddUserToRoleAsync(user, "Student");
+                            }
+
+                            var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                            var tokenLink = this.Url.Action("ConfirmEmail", "Accounts", new
+                            {
+                                userId = user.Id,
+                                token = myToken,
+                            }, protocol: HttpContext.Request.Scheme);
+
+                            _mailHelper.SendMail(model.Email, "Email confirmation", $"<h1>Email Confirmation</h1>" +
+                                $"To allow the user, " +
+                                $"please click on this link:<br/><br/><a href=\"{tokenLink}\">Confirm Email</a>" +
+                                $"<br/><br/> Please, change your Password! <br /><br />Your old password is:<br/><br/><b>{password}</b>.");
+                            this.ViewBag.Message = "The instructions to allow your user has been sent to email.";
+
+                            this.ModelState.AddModelError(string.Empty, "The user already exists.");
                         }
-
-                        var isInRole = await _userHelper.IsUserInRoleAsync(user, "Student");
-
-                        if (!isInRole)
-                        {
-                            await _userHelper.AddUserToRoleAsync(user, "Student");
-                        }
-
-                        var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-                        var tokenLink = this.Url.Action("ConfirmEmail", "Accounts", new
-                        {
-                            userId = user.Id,
-                            token = myToken,
-                        }, protocol: HttpContext.Request.Scheme, password);
-
-                        _mailHelper.SendMail(model.Email, "Email confirmation", $"<h1>Email Confirmation</h1>" +
-                            $"To allow the user, " +
-                            $"please click on this link:<br/><br/><a href = \"{tokenLink}\">Confirm Email</a>" +
-                            $"<br/><br/> Please, change your Password! <br /><br />Your old password is:<br/><br/><b>{password}</b>.");
-                        this.ViewBag.Message = "The instructions to allow your user has been sent to email.";
-
-                        this.ModelState.AddModelError(string.Empty, "The user already exists.");
+                        return RedirectToAction(nameof(Index));
                     }
-                    return RedirectToAction(nameof(Index));
+                    catch (Exception ex)
+                    {
+                        if (ex.InnerException.Message.Contains("duplicate"))
+                        {
+                            ModelState.AddModelError(string.Empty, "Identification Number, Tax Number, SS Number, NHS Number, Telephone or E-mail already exist!");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -403,12 +425,6 @@ namespace School.Web.Controllers
             {
                 throw;
             }            
-        }
-
-        public async Task<bool> Validate([FromBody] Student student)
-        {
-            return await _studentRepository.ValidationAsync(student.IdentificationNumber, student.TaxNumber, student.SSNumber,
-                    student.NHSNumber, student.Telephone, student.Email);
         }
     }
 }

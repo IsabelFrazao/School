@@ -64,13 +64,13 @@
                                     <div class="col-md-4">
                                         <label asp-for="BeginDate" class="form-label"><b>Begin Date:</b></label>
                                         <span asp-validation-for="BeginDate" class="text-danger"></span>
-                                        <ejs-datetimepicker id="begindate" value="@defaultDate" min="@minDate" format="dd-MM-yyyy" cssClass="e-filled" change="onchange"></ejs-datetimepicker>
+                                        <ejs-datetimepicker id="begindate" value="@defaultDate" min="@minDate" format="yyyy-MM-dd" cssClass="e-filled" change="onchange"></ejs-datetimepicker>
                                     </div>
                                     <div class="col-md-2"></div>
                                     <div class="col-md-4">
                                         <label asp-for="EndDate" class="form-label"><b>End Date:</b></label>
                                         <span asp-validation-for="EndDate" class="text-danger"></span>
-                                        <ejs-datetimepicker id="enddate" format="dd-MM-yyyy" value="@defaultDate" min="@minDate" cssClass="e-filled"></ejs-datetimepicker>
+                                        <ejs-datetimepicker id="enddate" format="yyyy-MM-dd" value="@defaultDate" min="@minDate" cssClass="e-filled"></ejs-datetimepicker>
                                     </div>
                                     <div class="col-md-1"></div>
                                 </div>

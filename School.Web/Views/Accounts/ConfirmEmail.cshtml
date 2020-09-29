@@ -36,12 +36,13 @@
                                 <h6>
                                     Please, change your Password! <br /><br />
                                 </h6>
+                                <input asp-for="UserId" type="hidden"/>
                                 <label asp-for="OldPassword" class="form-label"><b>Old Password:</b></label>
                                 <input asp-for="OldPassword" type="password" class="form-control" id="name" placeholder="Old Password">
                                 <label asp-for="NewPassword" class="form-label"><b>New Password:</b></label>
                                 <input asp-for="NewPassword" type="password" class="form-control" id="name" placeholder="New Password">
                                 <label asp-for="Confirm" class="form-label"><b>Confirm Password:</b></label>
-                                <input type="password" class="form-control" id="name" placeholder="Confirm Password">
+                                <input asp-for="Confirm" type="password" class="form-control" id="name" placeholder="Confirm Password">
                             </div>
                         </div>
                         <!-- ##### About Us Area End ##### -->

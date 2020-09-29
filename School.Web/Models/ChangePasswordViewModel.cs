@@ -13,5 +13,7 @@ namespace School.Web.Models
         [Required]
         [Compare("NewPassword")]
         public string Confirm { get; set; }
+
+        public string UserId { get; set; }
     }
 }

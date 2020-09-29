@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NPOI.OpenXmlFormats.Spreadsheet;
 using School.Web.Data.Entities;
 using School.Web.Data.Repositories;
 using School.Web.Helpers;
@@ -123,57 +122,69 @@ namespace School.Web.Controllers
 
                     teacher.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
 
-                    if (!await _teacherRepository.ValidationAsync(teacher.IdentificationNumber, teacher.TaxNumber, teacher.SSNumber,
-                        teacher.NHSNumber, teacher.Telephone, teacher.Email))
+                    try
+                    {
                         await _teacherRepository.CreateAsync(teacher);
 
-                    //USER
+                        //USER
 
-                    var user = await _userHelper.GetUserByEmailAsync(teacher.Email);
+                        var user = await _userHelper.GetUserByEmailAsync(teacher.Email);
 
-                    var random = new Random();
-                    var password = random.Next(100000, 999999).ToString();
+                        var random = new Random();
+                        var password = random.Next(100000, 999999).ToString();
 
-                    if (user == null)
-                    {
-                        user = new User
+                        if (user == null)
                         {
-                            FirstName = teacher.FullName,
-                            Email = teacher.Email,
-                            UserName = teacher.Email
-                        };
+                            user = new User
+                            {
+                                FirstName = teacher.FullName,
+                                Email = teacher.Email,
+                                UserName = teacher.Email
+                            };
 
-                        var result = await _userHelper.AddUserAsync(user, password);
+                            var result = await _userHelper.AddUserAsync(user, password);
 
-                        if (result != IdentityResult.Success)
-                        {
-                            throw new InvalidOperationException("Could not create the user in seeder");
+                            if (result != IdentityResult.Success)
+                            {
+                                throw new InvalidOperationException("Could not create the user in seeder");
+                            }
                         }
+
+                        var isInRole = await _userHelper.IsUserInRoleAsync(user, "Teacher");
+
+                        if (!isInRole)
+                        {
+                            await _userHelper.AddUserToRoleAsync(user, "Teacher");
+                        }
+
+                        var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                        var tokenLink = this.Url.Action("ConfirmEmail", "Accounts", new
+                        {
+                            userId = user.Id,
+                            token = myToken,
+                        }, protocol: HttpContext.Request.Scheme);
+
+                        _mailHelper.SendMail(model.Email, "Email confirmation", $"<h1>Email Confirmation</h1>" +
+                            $"To allow the user, " +
+                            $"please click on this link:<br/><br/><a href=\"{tokenLink}\">Confirm Email</a>" +
+                            $"<br/><br/> Please, change your Password! <br /><br />Your old password is:<br/><br/><b>{password}</b>.");
+                        this.ViewBag.Message = "The instructions to allow your user has been sent to email.";
+
+                        this.ModelState.AddModelError(string.Empty, "The user already exists.");
+
+                        return RedirectToAction(nameof(Index));
                     }
-
-                    var isInRole = await _userHelper.IsUserInRoleAsync(user, "Teacher");
-
-                    if (!isInRole)
+                    catch (Exception ex)
                     {
-                        await _userHelper.AddUserToRoleAsync(user, "Teacher");
-                    }
-
-                    var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-                    var tokenLink = this.Url.Action("ConfirmEmail", "Accounts", new
-                    {
-                        userId = user.Id,
-                        token = myToken,
-                    }, protocol: HttpContext.Request.Scheme, password);
-
-                    _mailHelper.SendMail(model.Email, "Email confirmation", $"<h1>Email Confirmation</h1>" +
-                        $"To allow the user, " +
-                        $"please click on this link:<br/><br/><a href = \"{tokenLink}\">Confirm Email</a>" +
-                        $"<br/><br/> Please, change your Password! <br /><br />Your old password is:<br/><br/><b>{password}</b>.");
-                    this.ViewBag.Message = "The instructions to allow your user has been sent to email.";
-
-                    this.ModelState.AddModelError(string.Empty, "The user already exists.");
-
-                    return RedirectToAction(nameof(Index));
+                        if (ex.InnerException.Message.Contains("duplicate"))
+                        {
+                            ModelState.AddModelError(string.Empty, "Identification Number, Tax Number, SS Number, NHS Number, Telephone or E-mail already exist!");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -226,56 +237,68 @@ namespace School.Web.Controllers
 
                     teacher.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
 
-                    if (!await _teacherRepository.ValidationAsync(teacher.IdentificationNumber, teacher.TaxNumber, teacher.SSNumber,
-                    teacher.NHSNumber, teacher.Telephone, teacher.Email))
+                    try
+                    {
                         await _teacherRepository.UpdateAsync(teacher);
 
-                    //USER
+                        //USER
 
-                    var user = await _userHelper.GetUserByEmailAsync(teacher.Email);
+                        var user = await _userHelper.GetUserByEmailAsync(teacher.Email);
 
-                    if (user == null)
-                    {
-                        var random = new Random();
-                        var password = random.Next(100000, 999999).ToString();
-
-                        user = new User
+                        if (user == null)
                         {
-                            FirstName = teacher.FullName,
-                            Email = teacher.Email,
-                            UserName = teacher.Email
-                        };
+                            var random = new Random();
+                            var password = random.Next(100000, 999999).ToString();
 
-                        var result = await _userHelper.AddUserAsync(user, password);
+                            user = new User
+                            {
+                                FirstName = teacher.FullName,
+                                Email = teacher.Email,
+                                UserName = teacher.Email
+                            };
 
-                        if (result != IdentityResult.Success)
-                        {
-                            throw new InvalidOperationException("Could not create the user in seeder");
+                            var result = await _userHelper.AddUserAsync(user, password);
+
+                            if (result != IdentityResult.Success)
+                            {
+                                throw new InvalidOperationException("Could not create the user in seeder");
+                            }
+
+                            var isInRole = await _userHelper.IsUserInRoleAsync(user, "Teacher");
+
+                            if (!isInRole)
+                            {
+                                await _userHelper.AddUserToRoleAsync(user, "Teacher");
+                            }
+
+                            var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                            var tokenLink = this.Url.Action("ConfirmEmail", "Accounts", new
+                            {
+                                userId = user.Id,
+                                token = myToken,
+                            }, protocol: HttpContext.Request.Scheme);
+
+                            _mailHelper.SendMail(model.Email, "Email confirmation", $"<h1>Email Confirmation</h1>" +
+                                $"To allow the user, " +
+                                $"please click on this link:<br/><br/><a href = \"{tokenLink}\">Confirm Email</a>" +
+                                $"<br/><br/> Please, change your Password! <br /><br />Your old password is:<br/><br/><b>{password}</b>.");
+                            this.ViewBag.Message = "The instructions to allow your user has been sent to email.";
+
+                            this.ModelState.AddModelError(string.Empty, "The user already exists.");
                         }
-
-                        var isInRole = await _userHelper.IsUserInRoleAsync(user, "Teacher");
-
-                        if (!isInRole)
-                        {
-                            await _userHelper.AddUserToRoleAsync(user, "Teacher");
-                        }
-
-                        var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-                        var tokenLink = this.Url.Action("ConfirmEmail", "Accounts", new
-                        {
-                            userId = user.Id,
-                            token = myToken,
-                        }, protocol: HttpContext.Request.Scheme, password);
-
-                        _mailHelper.SendMail(model.Email, "Email confirmation", $"<h1>Email Confirmation</h1>" +
-                            $"To allow the user, " +
-                            $"please click on this link:<br/><br/><a href = \"{tokenLink}\">Confirm Email</a>" +
-                            $"<br/><br/> Please, change your Password! <br /><br />Your old password is:<br/><br/><b>{password}</b>.");
-                        this.ViewBag.Message = "The instructions to allow your user has been sent to email.";
-
-                        this.ModelState.AddModelError(string.Empty, "The user already exists.");
+                        return RedirectToAction(nameof(Index));
                     }
-                    return RedirectToAction(nameof(Index));
+                    catch (Exception ex)
+                    {
+                        if (ex.InnerException.Message.Contains("duplicate"))
+                        {
+                            ModelState.AddModelError(string.Empty, "Identification Number, Tax Number, SS Number, NHS Number, Telephone or E-mail already exist!");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                        }
+                    }                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {

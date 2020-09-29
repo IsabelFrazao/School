@@ -152,7 +152,7 @@ namespace School.Web.Controllers
                 return NotFound();
             }
 
-            var model = new ChangePasswordViewModel { OldPassword = password };
+            var model = new ChangePasswordViewModel { OldPassword = password, UserId = userId };
 
             return View(model);
         }
@@ -219,13 +219,24 @@ namespace School.Web.Controllers
             {
                 try
                 {
-                    var user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
+                    var user = await _userHelper.GetUserByIdAsync(model.UserId);
+                    
+                    if (user == null)
+                    {
+                        user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
+                    }
+
                     if (user != null)
                     {
                         var result = await _userHelper.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
                         if (result.Succeeded)
                         {
-                            return this.RedirectToAction("ChangeUser");
+                            if (Request.Query.Keys.Contains("ReturnUrl"))
+                            {
+                                return Redirect(Request.Query["ReturnUrl"].First());
+                            }
+
+                            return RedirectToAction("Index", "Home");
                         }
                         else
                         {
