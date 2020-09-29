@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace School.Web.Models
 {
@@ -15,7 +11,7 @@ namespace School.Web.Models
         public string NewPassword { get; set; }
 
         [Required]
-        [Compare("Password")]
+        [Compare("NewPassword")]
         public string Confirm { get; set; }
     }
 }

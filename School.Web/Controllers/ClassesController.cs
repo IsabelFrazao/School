@@ -136,10 +136,17 @@ namespace School.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var classes = _converterHelper.ToClass(model, await _courseRepository.GetByIdAsync(model.CourseId), true);
+                try
+                {
+                    var classes = _converterHelper.ToClass(model, await _courseRepository.GetByIdAsync(model.CourseId), true);
 
-                await _classRepository.CreateAsync(classes);
-                return RedirectToAction(nameof(Index));
+                    await _classRepository.CreateAsync(classes);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }                
             }
             return View(model);
         }
@@ -235,9 +242,16 @@ namespace School.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var classes = await _classRepository.GetByIdAsync(id);
-            await _classRepository.DeleteAsync(classes);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                var classes = await _classRepository.GetByIdAsync(id);
+                await _classRepository.DeleteAsync(classes);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }            
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Remotion.Linq.Utilities;
 using School.Web.Data.Entities;
@@ -46,17 +47,25 @@ namespace School.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _userHelper.LoginAsync(model);
-
-                if (result.Succeeded)
+                try
                 {
-                    if (Request.Query.Keys.Contains("ReturnUrl"))
-                    {
-                        return Redirect(Request.Query["ReturnUrl"].First());
-                    }
+                    var result = await _userHelper.LoginAsync(model);
 
-                    return RedirectToAction("Index", "Home");
+                    if (result.Succeeded)
+                    {
+                        if (Request.Query.Keys.Contains("ReturnUrl"))
+                        {
+                            return Redirect(Request.Query["ReturnUrl"].First());
+                        }
+
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
+
             }
             ModelState.AddModelError(string.Empty, "Failed to Login.");
             return View(model);
@@ -79,38 +88,45 @@ namespace School.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await _userHelper.GetUserByEmailAsync(model.Username);
-
-                if (user == null)
+                try
                 {
-                    user = new User
-                    {
-                        FirstName = model.FirstName,
-                        //LastName = model.LastName,
-                        UserName = model.Username
-                    };
+                    var user = await _userHelper.GetUserByEmailAsync(model.Username);
 
-                    var result = await _userHelper.AddUserAsync(user, model.Password);
-
-                    if (result != IdentityResult.Success)
+                    if (user == null)
                     {
-                        ModelState.AddModelError(string.Empty, "The user couldn´t be created");
+                        user = new User
+                        {
+                            FirstName = model.FirstName,
+                            //LastName = model.LastName,
+                            UserName = model.Username
+                        };
+
+                        var result = await _userHelper.AddUserAsync(user, model.Password);
+
+                        if (result != IdentityResult.Success)
+                        {
+                            ModelState.AddModelError(string.Empty, "The user couldn´t be created");
+                            return View(model);
+                        }
+
+                        var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                        var tokenLink = this.Url.Action("ConfirmEmail", "Accounts", new
+                        {
+                            userId = user.Id,
+                            token = myToken,
+                        }, protocol: HttpContext.Request.Scheme);
+
+                        _mailHelper.SendMail(model.Username, "Email confirmation", $"<h1>Email Confirmation</h1>" +
+                            $"To allow the user, " +
+                            $"please click on this link:<br/><br/><a href = \"{tokenLink}\">Confirm Email</a>");
+                        this.ViewBag.Message = "The instructions to allow your user has been sent to email.";
+
                         return View(model);
                     }
-
-                    var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-                    var tokenLink = this.Url.Action("ConfirmEmail", "Accounts", new
-                    {
-                        userId = user.Id,
-                        token = myToken,
-                    }, protocol: HttpContext.Request.Scheme);
-
-                    _mailHelper.SendMail(model.Username, "Email confirmation", $"<h1>Email Confirmation</h1>" +
-                        $"To allow the user, " +
-                        $"please click on this link:<br/><br/><a href = \"{tokenLink}\">Confirm Email</a>");
-                    this.ViewBag.Message = "The instructions to allow your user has been sent to email.";
-
-                    return View(model);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
                 }
                 this.ModelState.AddModelError(string.Empty, "The user already exists.");
             }
@@ -160,27 +176,33 @@ namespace School.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
-                if (user != null)
+                try
                 {
-
-                    user.FirstName = model.FirstName;
-                    user.LastName = model.LastName;
-
-                    var response = await _userHelper.UpdateUserAsync(user);
-                    if (response.Succeeded)
+                    var user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
+                    if (user != null)
                     {
-                        ViewBag.UserMessage = "User updated!";
+                        user.FirstName = model.FirstName;
+                        user.LastName = model.LastName;
+
+                        var response = await _userHelper.UpdateUserAsync(user);
+                        if (response.Succeeded)
+                        {
+                            ViewBag.UserMessage = "User updated!";
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, response.Errors.FirstOrDefault().Description);
+                        }
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, response.Errors.FirstOrDefault().Description);
+                        ModelState.AddModelError(string.Empty, "User not found.");
                     }
                 }
-                else
+                catch (DbUpdateConcurrencyException)
                 {
-                    ModelState.AddModelError(string.Empty, "User not found.");
-                }
+                    throw;
+                }                
             }
             return this.View(model);
         }
@@ -195,25 +217,31 @@ namespace School.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
-                if (user != null)
+                try
                 {
-                    var result = await _userHelper.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-                    if (result.Succeeded)
+                    var user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
+                    if (user != null)
                     {
-                        return this.RedirectToAction("ChangeUser");
+                        var result = await _userHelper.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+                        if (result.Succeeded)
+                        {
+                            return this.RedirectToAction("ChangeUser");
+                        }
+                        else
+                        {
+                            this.ModelState.AddModelError(string.Empty, result.Errors.FirstOrDefault().Description);
+                        }
                     }
                     else
                     {
-                        this.ModelState.AddModelError(string.Empty, result.Errors.FirstOrDefault().Description);
+                        this.ModelState.AddModelError(string.Empty, "User Not Found!");
                     }
                 }
-                else
+                catch (DbUpdateConcurrencyException)
                 {
-                    this.ModelState.AddModelError(string.Empty, "User Not Found!");
-                }
+                    throw;
+                }                
             }
-
             return View(model);
         }
 
@@ -232,27 +260,33 @@ namespace School.Web.Controllers
         {
             if (this.ModelState.IsValid)
             {
-                var user = await _userHelper.GetUserByEmailAsync(model.Email);
-                if (user == null)
+                try
                 {
-                    ModelState.AddModelError(string.Empty, "The email doesn't correspond to a registered user.");
-                    return this.View(model);
+                    var user = await _userHelper.GetUserByEmailAsync(model.Email);
+                    if (user == null)
+                    {
+                        ModelState.AddModelError(string.Empty, "The email doesn't correspond to a registered user.");
+                        return this.View(model);
+                    }
+
+                    var myToken = await _userHelper.GeneratePasswordResetTokenAsync(user);
+
+                    var link = this.Url.Action(
+                        "ResetPassword",
+                        "Accounts",
+                        new { token = myToken }, protocol: HttpContext.Request.Scheme);
+
+                    _mailHelper.SendMail(model.Email, "School Password Reset", $"<h1>School Password Reset</h1>" +
+                    $"To reset the password click in this link:</br></br>" +
+                    $"<a href = \"{link}\">Reset Password</a>");
+                    this.ViewBag.Message = "The instructions to recover your password has been sent to email.";
+                    return this.View();
                 }
-
-                var myToken = await _userHelper.GeneratePasswordResetTokenAsync(user);
-
-                var link = this.Url.Action(
-                    "ResetPassword",
-                    "Accounts",
-                    new { token = myToken }, protocol: HttpContext.Request.Scheme);
-
-                _mailHelper.SendMail(model.Email, "School Password Reset", $"<h1>School Password Reset</h1>" +
-                $"To reset the password click in this link:</br></br>" +
-                $"<a href = \"{link}\">Reset Password</a>");
-                this.ViewBag.Message = "The instructions to recover your password has been sent to email.";
-                return this.View();
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }               
             }
-
             return this.View(model);
         }
 
@@ -264,22 +298,29 @@ namespace School.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
-            var user = await _userHelper.GetUserByEmailAsync(model.UserName);
-            if (user != null)
+            try
             {
-                var result = await _userHelper.ResetPasswordAsync(user, model.Token, model.Password);
-                if (result.Succeeded)
+                var user = await _userHelper.GetUserByEmailAsync(model.UserName);
+                if (user != null)
                 {
-                    this.ViewBag.Message = "Password reset successful.";
-                    return this.View();
+                    var result = await _userHelper.ResetPasswordAsync(user, model.Token, model.Password);
+                    if (result.Succeeded)
+                    {
+                        this.ViewBag.Message = "Password reset successful.";
+                        return this.View();
+                    }
+
+                    this.ViewBag.Message = "Error while resetting the password.";
+                    return View(model);
                 }
 
-                this.ViewBag.Message = "Error while resetting the password.";
+                this.ViewBag.Message = "User not found.";
                 return View(model);
             }
-
-            this.ViewBag.Message = "User not found.";
-            return View(model);
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
         }
 
         public IActionResult NotAuthorized()
@@ -289,7 +330,9 @@ namespace School.Web.Controllers
 
         public IActionResult Settings()
         {
-            var model = new SettingsViewModel { Schedules = _scheduleRepository.GetAll().Where(a => a.isActive == true),
+            var model = new SettingsViewModel
+            {
+                Schedules = _scheduleRepository.GetAll().Where(a => a.isActive == true),
                 Classrooms = _classroomRepository.GetAll().Where(a => a.isActive == true),
                 Fields = _fieldRepository.GetAll().Where(a => a.isActive == true)
             };
@@ -297,40 +340,38 @@ namespace School.Web.Controllers
             return View(model);
         }
 
-        public async Task<bool> CheckSchedule([FromBody] Schedule model)
-        {
-            if (await _scheduleRepository.GetByIdAsync(model.Id) == null)
-                return false;
-
-            return true;
-        }
-
-
         [HttpPost]
         public async Task AddSchedule([FromBody] Schedule model)
         {
             if (ModelState.IsValid)
             {
-                if (await _scheduleRepository.GetByIdAsync(model.Id) == null)
+                try
                 {
-                    var schedule = new Schedule
+                    if (await _scheduleRepository.GetByIdAsync(model.Id) == null)
                     {
-                        Id = 0,
-                        Shift = model.Shift,
-                        isActive = true
-                    };
+                        var schedule = new Schedule
+                        {
+                            Id = 0,
+                            Shift = model.Shift,
+                            isActive = true
+                        };
 
-                    await _scheduleRepository.CreateAsync(schedule);
+                        await _scheduleRepository.CreateAsync(schedule);
+                    }
+                    else
+                    {
+                        var schedule = await _scheduleRepository.GetByIdAsync(model.Id);
+
+                        schedule.Shift = model.Shift;
+                        schedule.isActive = true;
+
+                        await _scheduleRepository.UpdateAsync(schedule);
+                    }
                 }
-                else
+                catch (DbUpdateConcurrencyException)
                 {
-                    var schedule = await _scheduleRepository.GetByIdAsync(model.Id);
-
-                    schedule.Shift = model.Shift;
-                    schedule.isActive = true;
-
-                    await _scheduleRepository.UpdateAsync(schedule);
-                }
+                    throw;
+                }                
             }
         }
 
@@ -339,26 +380,33 @@ namespace School.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (await _classroomRepository.GetByIdAsync(model.Id) == null)
+                try
                 {
-                    var classroom = new Classroom
+                    if (await _classroomRepository.GetByIdAsync(model.Id) == null)
                     {
-                        Id = 0,
-                        Room = model.Room,
-                        isActive = true
-                    };
+                        var classroom = new Classroom
+                        {
+                            Id = 0,
+                            Room = model.Room,
+                            isActive = true
+                        };
 
-                    await _classroomRepository.CreateAsync(classroom);
+                        await _classroomRepository.CreateAsync(classroom);
+                    }
+                    else
+                    {
+                        var classroom = await _classroomRepository.GetByIdAsync(model.Id);
+
+                        classroom.Room = model.Room;
+                        classroom.isActive = true;
+
+                        await _classroomRepository.UpdateAsync(classroom);
+                    }
                 }
-                else
+                catch (DbUpdateConcurrencyException)
                 {
-                    var classroom = await _classroomRepository.GetByIdAsync(model.Id);
-
-                    classroom.Room = model.Room;
-                    classroom.isActive = true;
-
-                    await _classroomRepository.UpdateAsync(classroom);
-                }
+                    throw;
+                }                
             }
         }
 
@@ -367,26 +415,33 @@ namespace School.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (await _fieldRepository.GetByIdAsync(model.Id) == null)
+                try
                 {
-                    var field = new Field
+                    if (await _fieldRepository.GetByIdAsync(model.Id) == null)
                     {
-                        Id = 0,
-                        Area = model.Area,
-                        isActive = true
-                    };
+                        var field = new Field
+                        {
+                            Id = 0,
+                            Area = model.Area,
+                            isActive = true
+                        };
 
-                    await _fieldRepository.CreateAsync(field);
+                        await _fieldRepository.CreateAsync(field);
+                    }
+                    else
+                    {
+                        var field = await _fieldRepository.GetByIdAsync(model.Id);
+
+                        field.Area = model.Area;
+                        field.isActive = true;
+
+                        await _fieldRepository.UpdateAsync(field);
+                    }
                 }
-                else
+                catch (DbUpdateConcurrencyException)
                 {
-                    var field = await _fieldRepository.GetByIdAsync(model.Id);
-
-                    field.Area = model.Area;
-                    field.isActive = true;
-
-                    await _fieldRepository.UpdateAsync(field);
-                }
+                    throw;
+                }                
             }
         }
 
@@ -395,12 +450,19 @@ namespace School.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (await _scheduleRepository.GetByIdAsync(model.Id) != null)
+                try
                 {
-                    var schedule = await _scheduleRepository.GetByIdAsync(model.Id);
+                    if (await _scheduleRepository.GetByIdAsync(model.Id) != null)
+                    {
+                        var schedule = await _scheduleRepository.GetByIdAsync(model.Id);
 
-                    await _scheduleRepository.DeleteAsync(schedule);
+                        await _scheduleRepository.DeleteAsync(schedule);
+                    }
                 }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }                
             }
         }
 
@@ -409,12 +471,19 @@ namespace School.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (await _classroomRepository.GetByIdAsync(model.Id) != null)
+                try
                 {
-                    var classroom = await _classroomRepository.GetByIdAsync(model.Id);
+                    if (await _classroomRepository.GetByIdAsync(model.Id) != null)
+                    {
+                        var classroom = await _classroomRepository.GetByIdAsync(model.Id);
 
-                    await _classroomRepository.DeleteAsync(classroom);
+                        await _classroomRepository.DeleteAsync(classroom);
+                    }
                 }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }                
             }
         }
 
@@ -423,12 +492,19 @@ namespace School.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (await _fieldRepository.GetByIdAsync(model.Id) != null)
+                try
                 {
-                    var field = await _fieldRepository.GetByIdAsync(model.Id);
+                    if (await _fieldRepository.GetByIdAsync(model.Id) != null)
+                    {
+                        var field = await _fieldRepository.GetByIdAsync(model.Id);
 
-                    await _fieldRepository.DeleteAsync(field);
+                        await _fieldRepository.DeleteAsync(field);
+                    }
                 }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }                
             }
         }
     }

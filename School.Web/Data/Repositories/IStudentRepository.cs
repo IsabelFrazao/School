@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using School.Web.Data.Entities;
-using System;
-using System.Collections.Generic;
+﻿using School.Web.Data.Entities;
 using System.Linq;
 using System.Threading.Tasks;
 

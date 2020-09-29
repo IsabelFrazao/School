@@ -124,9 +124,9 @@
                                     <li><a asp-controller="Courses" asp-action="Index">Courses</a></li>
                                 </ul>
                             </div>
-                            <div class="classynav">
-                                @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin") || (this.User.Identity.IsAuthenticated && this.User.IsInRole("Teacher")) || (this.User.Identity.IsAuthenticated && this.User.IsInRole("Student")))
-                                {
+                            @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin") || (this.User.Identity.IsAuthenticated && this.User.IsInRole("Teacher")) || (this.User.Identity.IsAuthenticated && this.User.IsInRole("Student")))
+                            {
+                                <div class="classynav">
                                     <ul>
                                         <li><a asp-controller="Students" asp-action="Index">Students</a></li>
                                         @if ((this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin")) || (this.User.Identity.IsAuthenticated && this.User.IsInRole("Teacher")))
@@ -146,8 +146,8 @@
                                             <li><a asp-controller="Accounts" asp-action="Settings">Settings</a></li>
                                         }
                                     </ul>
-                                }
-                            </div>
+                                </div>
+                            }
                             <div class="classynav"></div>
                             @*Nav End*@
                         </div>

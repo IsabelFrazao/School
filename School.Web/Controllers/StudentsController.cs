@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using School.Web.Data.Entities;
 using School.Web.Data.Repositories;
@@ -11,8 +10,6 @@ using Syncfusion.EJ2.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Mime;
 using System.Threading.Tasks;
 
 namespace School.Web.Controllers
@@ -50,9 +47,16 @@ namespace School.Web.Controllers
         }
 
         // GET: StudentsController
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View(_studentRepository.GetAll().Where(a => a.isActive == true));
+            if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Student"))
+            { 
+                var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
+
+                return View(_studentRepository.GetAll().Where(a => a.isActive == true).Where(u => u.Email == user.Email)); 
+            }
+            else
+                return View(_studentRepository.GetAll().Where(a => a.isActive == true));
         }
 
         // GET: StudentsController/Details/5
@@ -68,17 +72,17 @@ namespace School.Web.Controllers
             student.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);// ????
 
             var model = _converterHelper.ToStudentViewModel(student, await _courseRepository.GetByIdAsync(student.CourseId),
-                _courseRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true), 
+                _courseRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true),
                 await _classRepository.GetByIdAsync(student.ClassId), _classRepository.GetAll().Where(a => a.isActive == true));
 
             model.Schedule = await _scheduleRepository.GetByIdAsync(student.ScheduleId);
 
             model.Grades = _gradeRepository.GetAll().Where(a => a.isActive == true)
                 .Where(g => g.StudentId == model.Id)
-                .Include(g => g.Course).Where(a => a.isActive == true)
-                .Include(g => g.Class).Where(a => a.isActive == true)
+                .Include(g => g.Course)
+                .Include(g => g.Class)
                 .Include(g => g.Subject).Where(a => a.isActive == true)
-                .Include(g => g.Teacher).Where(a => a.isActive == true)
+                .Include(g => g.Teacher)
                 .Where(g => g.FinalGrade >= 0);
 
             if (student == null)
@@ -95,14 +99,16 @@ namespace School.Web.Controllers
         {
             ViewBag.idCount = (_studentRepository.GetAll().Count() + 1).ToString();
 
-            var model = new StudentViewModel { Courses = _courseRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true).ToList(), 
+            var model = new StudentViewModel
+            {
+                Courses = _courseRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true).ToList(),
                 Classes = _classRepository.GetAll().Where(a => a.isActive == true).ToList(),
-            Schedules = _scheduleRepository.GetAll().Where(a => a.isActive == true).ToList()
+                Schedules = _scheduleRepository.GetAll().Where(a => a.isActive == true).ToList()
             };
 
             model.SchoolYears = new List<string>();
 
-            foreach(var course in model.Courses)
+            foreach (var course in model.Courses)
             {
                 model.SchoolYears.Add(course.SchoolYear);
             }
@@ -119,96 +125,106 @@ namespace School.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                if (model.ImageFile != null)
+                try
                 {
-                    path = await _imageHelper.UploadImageAsync(model.ImageFile, "Students");
-                }
-
-                var student = _converterHelper.ToStudent(model, path, await _courseRepository.GetByIdAsync(model.CourseId),
-                    await _classRepository.GetByIdAsync(model.ClassId), true);
-
-                student.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
-
-                if (!await _studentRepository.ValidationAsync(student.IdentificationNumber, student.TaxNumber, student.SSNumber,
-                    student.NHSNumber, student.Telephone, student.Email))
-                    await _studentRepository.CreateAsync(student);
-
-                //USER
-
-                var user = await _userHelper.GetUserByEmailAsync(student.Email);
-
-                var random = new Random();
-                var password = random.Next(100000, 999999).ToString();
-
-                if (user == null)
-                {
-                    user = new User
+                    if (model.ImageFile != null)
                     {
-                        FirstName = student.FullName,
-                        Email = student.Email,
-                        UserName = student.Email
-                    };
-
-                    var result = await _userHelper.AddUserAsync(user, password);
-
-                    if (result != IdentityResult.Success)
-                    {
-                        throw new InvalidOperationException("Could not create the user in seeder");
+                        path = await _imageHelper.UploadImageAsync(model.ImageFile, "Students");
                     }
-                }
 
-                var isInRole = await _userHelper.IsUserInRoleAsync(user, "Student");
+                    var student = _converterHelper.ToStudent(model, path, await _courseRepository.GetByIdAsync(model.CourseId),
+                        await _classRepository.GetByIdAsync(model.ClassId), true);
 
-                if (!isInRole)
-                {
-                    await _userHelper.AddUserToRoleAsync(user, "Student");
-                }
+                    student.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
 
-                var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-                var tokenLink = this.Url.Action("ConfirmEmail", "Accounts", new
-                {
-                    userId = user.Id,
-                    token = myToken,
-                }, protocol: HttpContext.Request.Scheme, password);
-
-                _mailHelper.SendMail(model.Email, "Email confirmation", $"<h1>Email Confirmation</h1>" +
-                    $"To allow the user, " +
-                    $"please click on this link:<br/><br/><a href = \"{tokenLink}\">Confirm Email</a>" +
-                    $"<br/><br/> Please, change your Password! <br /><br />Your old password is:<br/><br/><b>{password}</b>.");
-                this.ViewBag.Message = "The instructions to allow your user has been sent to email.";
-
-                this.ModelState.AddModelError(string.Empty, "The user already exists.");
-
-                //GRADES
-
-                var Subjects = _subjectRepository.GetAll().Where(s => s.CourseId == student.CourseId).Where(a => a.isActive == true);
-
-                var Grades = new List<Grade>();
-
-                if (Subjects != null)
-                {
-                    foreach (var subject in Subjects)
+                    if (!await _studentRepository.ValidationAsync(student.IdentificationNumber, student.TaxNumber, student.SSNumber,
+                        student.NHSNumber, student.Telephone, student.Email))
                     {
-                        if (student.CourseId == subject.CourseId)
+                        await _studentRepository.CreateAsync(student);
+                    }
+
+                    //USER
+
+                    var user = await _userHelper.GetUserByEmailAsync(student.Email);
+
+                    var random = new Random();
+                    var password = random.Next(100000, 999999).ToString();
+
+                    if (user == null)
+                    {
+                        user = new User
                         {
-                            Grades.Add(new Grade {
-                                Id = 0,
-                                CourseId = student.CourseId,
-                                ClassId = student.ClassId,
-                                SubjectId = subject.Id,
-                                TeacherId = subject.TeacherId,
-                                StudentId = student.Id,
-                                FinalGrade = -1,
-                            });                            
+                            FirstName = student.FullName,
+                            Email = student.Email,
+                            UserName = student.Email
+                        };
+
+                        var result = await _userHelper.AddUserAsync(user, password);
+
+                        if (result != IdentityResult.Success)
+                        {
+                            throw new InvalidOperationException("Could not create the user in seeder");
                         }
                     }
 
-                    foreach (var grade in Grades)
+                    var isInRole = await _userHelper.IsUserInRoleAsync(user, "Student");
+
+                    if (!isInRole)
                     {
-                        await _gradeRepository.CreateAsync(grade);
+                        await _userHelper.AddUserToRoleAsync(user, "Student");
                     }
+
+                    var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                    var tokenLink = this.Url.Action("ConfirmEmail", "Accounts", new
+                    {
+                        userId = user.Id,
+                        token = myToken,
+                    }, protocol: HttpContext.Request.Scheme, password);
+
+                    _mailHelper.SendMail(model.Email, "Email confirmation", $"<h1>Email Confirmation</h1>" +
+                        $"To allow the user, " +
+                        $"please click on this link:<br/><br/><a href = \"{tokenLink}\">Confirm Email</a>" +
+                        $"<br/><br/> Please, change your Password! <br /><br />Your old password is:<br/><br/><b>{password}</b>.");
+                    this.ViewBag.Message = "The instructions to allow your user has been sent to email.";
+
+                    this.ModelState.AddModelError(string.Empty, "The user already exists.");
+
+                    //GRADES
+
+                    var Subjects = _subjectRepository.GetAll().Where(s => s.CourseId == student.CourseId).Where(a => a.isActive == true);
+
+                    var Grades = new List<Grade>();
+
+                    if (Subjects != null)
+                    {
+                        foreach (var subject in Subjects)
+                        {
+                            if (student.CourseId == subject.CourseId)
+                            {
+                                Grades.Add(new Grade
+                                {
+                                    Id = 0,
+                                    CourseId = student.CourseId,
+                                    ClassId = student.ClassId,
+                                    SubjectId = subject.Id,
+                                    TeacherId = subject.TeacherId,
+                                    StudentId = student.Id,
+                                    FinalGrade = -1,
+                                });
+                            }
+                        }
+
+                        foreach (var grade in Grades)
+                        {
+                            await _gradeRepository.CreateAsync(grade);
+                        }
+                    }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }         
             }
             return View(model);
         }
@@ -230,7 +246,7 @@ namespace School.Web.Controllers
             }
 
             var model = _converterHelper.ToStudentViewModel(student, await _courseRepository.GetByIdAsync(student.CourseId),
-                _courseRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true), 
+                _courseRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true),
                 await _classRepository.GetByIdAsync(student.ClassId), _classRepository.GetAll().Where(a => a.isActive == true));
 
             model.Schedules = _scheduleRepository.GetAll().Where(a => a.isActive == true);
@@ -270,7 +286,55 @@ namespace School.Web.Controllers
 
                     student.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
 
-                    await _studentRepository.UpdateAsync(student);
+                    if (!await _studentRepository.ValidationAsync(student.IdentificationNumber, student.TaxNumber, student.SSNumber,
+                    student.NHSNumber, student.Telephone, student.Email))
+                        await _studentRepository.UpdateAsync(student);
+
+                    //USER
+
+                    var user = await _userHelper.GetUserByEmailAsync(student.Email);
+
+                    if (user == null)
+                    {
+                        var random = new Random();
+                        var password = random.Next(100000, 999999).ToString();
+
+                        user = new User
+                        {
+                            FirstName = student.FullName,
+                            Email = student.Email,
+                            UserName = student.Email
+                        };
+
+                        var result = await _userHelper.AddUserAsync(user, password);
+
+                        if (result != IdentityResult.Success)
+                        {
+                            throw new InvalidOperationException("Could not create the user in seeder");
+                        }
+
+                        var isInRole = await _userHelper.IsUserInRoleAsync(user, "Student");
+
+                        if (!isInRole)
+                        {
+                            await _userHelper.AddUserToRoleAsync(user, "Student");
+                        }
+
+                        var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                        var tokenLink = this.Url.Action("ConfirmEmail", "Accounts", new
+                        {
+                            userId = user.Id,
+                            token = myToken,
+                        }, protocol: HttpContext.Request.Scheme, password);
+
+                        _mailHelper.SendMail(model.Email, "Email confirmation", $"<h1>Email Confirmation</h1>" +
+                            $"To allow the user, " +
+                            $"please click on this link:<br/><br/><a href = \"{tokenLink}\">Confirm Email</a>" +
+                            $"<br/><br/> Please, change your Password! <br /><br />Your old password is:<br/><br/><b>{password}</b>.");
+                        this.ViewBag.Message = "The instructions to allow your user has been sent to email.";
+
+                        this.ModelState.AddModelError(string.Empty, "The user already exists.");
+                    }
                     return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
@@ -300,17 +364,17 @@ namespace School.Web.Controllers
             var student = await _studentRepository.GetByIdAsync(id.Value);
 
             var model = _converterHelper.ToStudentViewModel(student, await _courseRepository.GetByIdAsync(student.CourseId),
-                _courseRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true), 
+                _courseRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true),
                 await _classRepository.GetByIdAsync(student.ClassId), _classRepository.GetAll().Where(a => a.isActive == true));
 
             model.Schedule = await _scheduleRepository.GetByIdAsync(student.ScheduleId);
 
             model.Grades = _gradeRepository.GetAll().Where(a => a.isActive == true)
                 .Where(g => g.StudentId == model.Id)
-                .Include(g => g.Course).Where(a => a.isActive == true)
-                .Include(g => g.Class).Where(a => a.isActive == true)
+                .Include(g => g.Course)
+                .Include(g => g.Class)
                 .Include(g => g.Subject).Where(a => a.isActive == true)
-                .Include(g => g.Teacher).Where(a => a.isActive == true)
+                .Include(g => g.Teacher)
                 .Where(g => g.FinalGrade >= 0);
 
             if (student == null)
@@ -326,12 +390,22 @@ namespace School.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var student = await _studentRepository.GetByIdAsync(id);            
-            await _studentRepository.DeleteAsync(student);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                var student = await _studentRepository.GetByIdAsync(id);
+                await _studentRepository.DeleteAsync(student);
+                var user = await _userHelper.GetUserByEmailAsync(student.Email);
+                user.isActive = false;
+                await _userHelper.UpdateUserAsync(user);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }            
         }
 
-        public async Task<bool> Validate([FromBody]Student student)
+        public async Task<bool> Validate([FromBody] Student student)
         {
             return await _studentRepository.ValidationAsync(student.IdentificationNumber, student.TaxNumber, student.SSNumber,
                     student.NHSNumber, student.Telephone, student.Email);

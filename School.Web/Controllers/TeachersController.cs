@@ -38,9 +38,16 @@ namespace School.Web.Controllers
         }
 
         // GET: TeachersController
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View(_teacherRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true));
+            if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Teacher"))
+            {
+                var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
+
+                return View(_teacherRepository.GetAll().Where(a => a.isActive == true).Where(u => u.Email == user.Email));
+            }
+            else
+                return View(_teacherRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true));
         }
 
         // GET: TeachersController/Details/5
@@ -55,15 +62,15 @@ namespace School.Web.Controllers
 
             var model = _converterHelper.ToTeacherViewModel(teacher, _subjectRepository.GetAll().Where(c => c.TeacherId == id.Value).Where(a => a.isActive == true));
 
-            if(model.Subjects != null)
+            if (model.Subjects != null)
             {
                 foreach (var subject in model.Subjects)
                 {
                     model.Courses = _courseRepository.GetAll().Where(c => c.Id == subject.CourseId).Where(a => a.isActive == true);
                 }
-            }            
+            }
 
-            if(model.Courses != null)
+            if (model.Courses != null)
             {
                 foreach (var course in model.Courses)
                 {
@@ -85,8 +92,10 @@ namespace School.Web.Controllers
         {
             ViewBag.idCount = (_teacherRepository.GetAll().Count() + 1).ToString();
 
-            var model = new TeacherViewModel { Courses = _courseRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true), 
-                Classes = _classRepository.GetAll().Where(a => a.isActive == true), 
+            var model = new TeacherViewModel
+            {
+                Courses = _courseRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true),
+                Classes = _classRepository.GetAll().Where(a => a.isActive == true),
                 Subjects = _subjectRepository.GetAll().Where(a => a.isActive == true)
             };
 
@@ -103,64 +112,73 @@ namespace School.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                if (model.ImageFile != null)
+                try
                 {
-                    path = await _imageHelper.UploadImageAsync(model.ImageFile, "Teachers");
-                }
-
-                var teacher = _converterHelper.ToTeacher(model, path, true);
-
-                teacher.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
-
-                await _teacherRepository.CreateAsync(teacher);
-
-                //USER
-
-                var user = await _userHelper.GetUserByEmailAsync(teacher.Email);
-
-                var random = new Random();
-                var password = random.Next(100000, 999999).ToString();
-
-                if (user == null)
-                {
-                    user = new User
+                    if (model.ImageFile != null)
                     {
-                        FirstName = teacher.FullName,
-                        Email = teacher.Email,
-                        UserName = teacher.Email
-                    };                    
-
-                    var result = await _userHelper.AddUserAsync(user, password);
-
-                    if (result != IdentityResult.Success)
-                    {
-                        throw new InvalidOperationException("Could not create the user in seeder");
+                        path = await _imageHelper.UploadImageAsync(model.ImageFile, "Teachers");
                     }
+
+                    var teacher = _converterHelper.ToTeacher(model, path, true);
+
+                    teacher.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
+
+                    if (!await _teacherRepository.ValidationAsync(teacher.IdentificationNumber, teacher.TaxNumber, teacher.SSNumber,
+                        teacher.NHSNumber, teacher.Telephone, teacher.Email))
+                        await _teacherRepository.CreateAsync(teacher);
+
+                    //USER
+
+                    var user = await _userHelper.GetUserByEmailAsync(teacher.Email);
+
+                    var random = new Random();
+                    var password = random.Next(100000, 999999).ToString();
+
+                    if (user == null)
+                    {
+                        user = new User
+                        {
+                            FirstName = teacher.FullName,
+                            Email = teacher.Email,
+                            UserName = teacher.Email
+                        };
+
+                        var result = await _userHelper.AddUserAsync(user, password);
+
+                        if (result != IdentityResult.Success)
+                        {
+                            throw new InvalidOperationException("Could not create the user in seeder");
+                        }
+                    }
+
+                    var isInRole = await _userHelper.IsUserInRoleAsync(user, "Teacher");
+
+                    if (!isInRole)
+                    {
+                        await _userHelper.AddUserToRoleAsync(user, "Teacher");
+                    }
+
+                    var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                    var tokenLink = this.Url.Action("ConfirmEmail", "Accounts", new
+                    {
+                        userId = user.Id,
+                        token = myToken,
+                    }, protocol: HttpContext.Request.Scheme, password);
+
+                    _mailHelper.SendMail(model.Email, "Email confirmation", $"<h1>Email Confirmation</h1>" +
+                        $"To allow the user, " +
+                        $"please click on this link:<br/><br/><a href = \"{tokenLink}\">Confirm Email</a>" +
+                        $"<br/><br/> Please, change your Password! <br /><br />Your old password is:<br/><br/><b>{password}</b>.");
+                    this.ViewBag.Message = "The instructions to allow your user has been sent to email.";
+
+                    this.ModelState.AddModelError(string.Empty, "The user already exists.");
+
+                    return RedirectToAction(nameof(Index));
                 }
-
-                var isInRole = await _userHelper.IsUserInRoleAsync(user, "Teacher");
-
-                if (!isInRole)
+                catch (DbUpdateConcurrencyException)
                 {
-                    await _userHelper.AddUserToRoleAsync(user, "Teacher");
+                    throw;
                 }
-
-                var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-                var tokenLink = this.Url.Action("ConfirmEmail", "Accounts", new
-                {
-                    userId = user.Id,
-                    token = myToken,
-                }, protocol: HttpContext.Request.Scheme, password);
-
-                _mailHelper.SendMail(model.Email, "Email confirmation", $"<h1>Email Confirmation</h1>" +
-                    $"To allow the user, " +
-                    $"please click on this link:<br/><br/><a href = \"{tokenLink}\">Confirm Email</a>" +
-                    $"<br/><br/> Please, change your Password! <br /><br />Your old password is:<br/><br/><b>{password}</b>.");
-                this.ViewBag.Message = "The instructions to allow your user has been sent to email.";
-
-                this.ModelState.AddModelError(string.Empty, "The user already exists.");
-
-                return RedirectToAction(nameof(Index));
             }
             return View(model);
         }
@@ -208,7 +226,55 @@ namespace School.Web.Controllers
 
                     teacher.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
 
-                    await _teacherRepository.UpdateAsync(teacher);
+                    if (!await _teacherRepository.ValidationAsync(teacher.IdentificationNumber, teacher.TaxNumber, teacher.SSNumber,
+                    teacher.NHSNumber, teacher.Telephone, teacher.Email))
+                        await _teacherRepository.UpdateAsync(teacher);
+
+                    //USER
+
+                    var user = await _userHelper.GetUserByEmailAsync(teacher.Email);
+
+                    if (user == null)
+                    {
+                        var random = new Random();
+                        var password = random.Next(100000, 999999).ToString();
+
+                        user = new User
+                        {
+                            FirstName = teacher.FullName,
+                            Email = teacher.Email,
+                            UserName = teacher.Email
+                        };
+
+                        var result = await _userHelper.AddUserAsync(user, password);
+
+                        if (result != IdentityResult.Success)
+                        {
+                            throw new InvalidOperationException("Could not create the user in seeder");
+                        }
+
+                        var isInRole = await _userHelper.IsUserInRoleAsync(user, "Teacher");
+
+                        if (!isInRole)
+                        {
+                            await _userHelper.AddUserToRoleAsync(user, "Teacher");
+                        }
+
+                        var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                        var tokenLink = this.Url.Action("ConfirmEmail", "Accounts", new
+                        {
+                            userId = user.Id,
+                            token = myToken,
+                        }, protocol: HttpContext.Request.Scheme, password);
+
+                        _mailHelper.SendMail(model.Email, "Email confirmation", $"<h1>Email Confirmation</h1>" +
+                            $"To allow the user, " +
+                            $"please click on this link:<br/><br/><a href = \"{tokenLink}\">Confirm Email</a>" +
+                            $"<br/><br/> Please, change your Password! <br /><br />Your old password is:<br/><br/><b>{password}</b>.");
+                        this.ViewBag.Message = "The instructions to allow your user has been sent to email.";
+
+                        this.ModelState.AddModelError(string.Empty, "The user already exists.");
+                    }
                     return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
@@ -239,15 +305,15 @@ namespace School.Web.Controllers
 
             var model = _converterHelper.ToTeacherViewModel(teacher, _subjectRepository.GetAll().Where(a => a.isActive == true));
 
-            if(model.Subjects != null)
+            if (model.Subjects != null)
             {
                 foreach (var subject in model.Subjects)
                 {
                     model.Courses = _courseRepository.GetAll().Where(c => c.Id == subject.CourseId).Where(a => a.isActive == true);
                 }
-            }            
+            }
 
-            if(model.Courses != null)
+            if (model.Courses != null)
             {
                 foreach (var course in model.Courses)
                 {
@@ -268,9 +334,19 @@ namespace School.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var teacher = await _teacherRepository.GetByIdAsync(id);
-            await _teacherRepository.DeleteAsync(teacher);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                var teacher = await _teacherRepository.GetByIdAsync(id);
+                await _teacherRepository.DeleteAsync(teacher);
+                var user = await _userHelper.GetUserByEmailAsync(teacher.Email);
+                user.isActive = false;
+                await _userHelper.UpdateUserAsync(user);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }            
         }
     }
 }

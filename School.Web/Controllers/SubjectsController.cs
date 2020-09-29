@@ -137,46 +137,53 @@ namespace School.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var iefpsubject = await _iefpSubjectRepository.GetByIdAsync(model.Id);
-
-                var subject = _converterHelper.ConvertToSubject(iefpsubject, model.CourseId, await _courseRepository.GetByIdAsync(model.CourseId),
-                model.TeacherId, await _teacherRepository.GetByIdAsync(model.TeacherId), model.Credits, true);
-
-                if (!await _subjectRepository.ExistsCodeAsync(subject.Code) && subject.isActive == true)
-                    await _subjectRepository.CreateAsync(subject);
-
-                //GRADES
-
-                var Students = _studentRepository.GetAll().Where(s => s.CourseId == subject.CourseId).Where(a => a.isActive == true);
-
-                var Grades = new List<Grade>();
-
-                if (Students != null)
+                try
                 {
-                    foreach (var student in Students)
+                    var iefpsubject = await _iefpSubjectRepository.GetByIdAsync(model.Id);
+
+                    var subject = _converterHelper.ConvertToSubject(iefpsubject, model.CourseId, await _courseRepository.GetByIdAsync(model.CourseId),
+                    model.TeacherId, await _teacherRepository.GetByIdAsync(model.TeacherId), model.Credits, true);
+
+                    if (!await _subjectRepository.ExistsCodeAsync(subject.Code) && subject.isActive == true)
+                        await _subjectRepository.CreateAsync(subject);
+
+                    //GRADES
+
+                    var Students = _studentRepository.GetAll().Where(s => s.CourseId == subject.CourseId).Where(a => a.isActive == true);
+
+                    var Grades = new List<Grade>();
+
+                    if (Students != null)
                     {
-                        if (student.CourseId == subject.CourseId)
+                        foreach (var student in Students)
                         {
-                            Grades.Add(new Grade
+                            if (student.CourseId == subject.CourseId)
                             {
-                                Id = 0,
-                                CourseId = student.CourseId,
-                                ClassId = student.ClassId,
-                                SubjectId = subject.Id,
-                                TeacherId = subject.TeacherId,
-                                StudentId = student.Id,
-                                FinalGrade = -1,
-                            });
+                                Grades.Add(new Grade
+                                {
+                                    Id = 0,
+                                    CourseId = student.CourseId,
+                                    ClassId = student.ClassId,
+                                    SubjectId = subject.Id,
+                                    TeacherId = subject.TeacherId,
+                                    StudentId = student.Id,
+                                    FinalGrade = -1,
+                                });
+                            }
                         }
-                    }
 
-                    foreach (var grade in Grades)
-                    {
-                        await _gradeRepository.CreateAsync(grade);
-                    }
+                        foreach (var grade in Grades)
+                        {
+                            await _gradeRepository.CreateAsync(grade);
+                        }
 
+                    }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }                
             }
             return View(model);
         }
@@ -349,15 +356,6 @@ namespace School.Web.Controllers
             }
             return this.Content(sb.ToString());
         }
-
-        //public IActionResult Download()
-        //{
-        //    string Files = "wwwroot/UploadExcel/CoreProgramm_ExcelImport.xlsx";
-        //    byte[] fileBytes = System.IO.File.ReadAllBytes(Files);
-        //    System.IO.File.WriteAllBytes(Files, fileBytes);
-        //    MemoryStream ms = new MemoryStream(fileBytes);
-        //    return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, "employee.xlsx");
-        //}
     }
 }
 

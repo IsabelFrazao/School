@@ -42,12 +42,10 @@ namespace School.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("NotFound");
             }
 
-            var course = await _courseRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
-
-            //course.Coordinator = await _teacherRepository.GetByIdAsync(course.CoordinatorId);
+            var course = await _courseRepository.GetByIdAsync(id.Value);
 
             var model = _converterHelper.ToCourseViewModel(course, await _teacherRepository.GetByIdAsync(course.CoordinatorId),
                  _teacherRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true), 
@@ -56,11 +54,9 @@ namespace School.Web.Controllers
 
             model.Field = await _fieldRepository.GetByIdAsync(course.FieldId);
 
-            //model.Classes = _classRepository.GetAll().Where(e => e.CourseId == id.Value);
-
             if (course == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("NotFound");
             }
 
             return View(model);
@@ -75,11 +71,7 @@ namespace School.Web.Controllers
                 Teachers = _teacherRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true).ToList(),
                 Subjects = _subjectRepository.GetAll().Where(a => a.isActive == true).ToList(),
                 Fields = _fieldRepository.GetAll().Where(a => a.isActive == true).ToList()
-                //.Where(e => e.Field == "Áudiovisuais e Produção dos Media" || e.Field == "Ciências Informáticas" ||
-                //e.Field == "Eletrónica e Automação").ToList()
             };
-
-            //model.IEFPSubjects = _iefpSubjectRepository.GetAll().Where(e => e.Field == "Áudiovisuais e Produção dos Media" || e.Field == "Ciências Informáticas" || e.Field == "Eletrónica e Automação");//Filter by Field
 
             return View(model);
         }
@@ -91,13 +83,20 @@ namespace School.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                model.Coordinator = await _teacherRepository.GetByIdAsync(model.CoordinatorId);
+                try
+                {
+                    model.Coordinator = await _teacherRepository.GetByIdAsync(model.CoordinatorId);
 
-                var course = _converterHelper.ToCourse(model, true);
+                    var course = _converterHelper.ToCourse(model, true);
 
-                await _courseRepository.CreateAsync(course);
+                    await _courseRepository.CreateAsync(course);
 
-                return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index));
+                }
+                catch(DbUpdateConcurrencyException)
+                {
+                    throw;
+                }                
             }
             return View(model);
         }
@@ -113,8 +112,6 @@ namespace School.Web.Controllers
 
             var course = await _courseRepository.GetByIdAsync(id.Value);
 
-            //course.Coordinator = await _teacherRepository.GetByIdAsync(course.CoordinatorId);
-
             if (course == null)
             {
                 return NotFound();
@@ -128,10 +125,6 @@ namespace School.Web.Controllers
             model.Fields = _fieldRepository.GetAll().Where(a => a.isActive == true).ToList();
 
             model.Field = await _fieldRepository.GetByIdAsync(course.FieldId);
-
-            //model.Classes = _classRepository.GetAll().Where(e => e.CourseId == id.Value);
-
-            //model.Teachers = _teacherRepository.GetAll();
 
             return View(model);
         }
@@ -151,7 +144,7 @@ namespace School.Web.Controllers
                 {
                     if (!await _courseRepository.ExistsAsync(course.Id))
                     {
-                        return NotFound();
+                        return new NotFoundViewResult("NotFound");
                     }
                     else
                     {
@@ -168,10 +161,10 @@ namespace School.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("NotFound");
             }
 
-            var course = await _courseRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
+            var course = await _courseRepository.GetByIdAsync(id.Value);
 
             var model = _converterHelper.ToCourseViewModel(course, await _teacherRepository.GetByIdAsync(course.CoordinatorId),
                  _teacherRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true), 
@@ -182,7 +175,7 @@ namespace School.Web.Controllers
 
             if (course == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("NotFound");
             }
 
             return View(model);
@@ -193,9 +186,16 @@ namespace School.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var course = await _courseRepository.GetByIdAsync(id);
-            await _courseRepository.DeleteAsync(course);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                var course = await _courseRepository.GetByIdAsync(id);
+                await _courseRepository.DeleteAsync(course);
+                return RedirectToAction(nameof(Index));
+            }
+            catch(DbUpdateConcurrencyException)
+            {
+                throw;
+            }
         }
     }
 }
