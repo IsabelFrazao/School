@@ -42,7 +42,7 @@ namespace School.Web.Data
 
         [Display(Name = "Identification Number")]
         [Required(ErrorMessage = "Field {0} is mandatory")]
-        [StringLength(30, ErrorMessage = "Field {0} must have between {2} and {1} characters", MinimumLength = 9)]
+        [StringLength(30, ErrorMessage = "Field {0} must have between {2} and {1} characters", MinimumLength = 14)]
         public string IdentificationNumber { get; set; }
 
         [Display(Name = "Tax Number")]

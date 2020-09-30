@@ -78,6 +78,10 @@ namespace School.Web.Controllers
             return View(subject);
         }
 
+        /// <summary>
+        /// Returns the Index View containing the IEFPSubjects to be converted and created as Subjects 
+        /// </summary>
+        /// <returns></returns>
         [Authorize(Roles = "Admin")]
         public IActionResult CreateIndex()
         {
@@ -244,12 +248,19 @@ namespace School.Web.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Returns the View for the Upload Excel File Option
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Upload()
         {
             return View();
         }
 
-        //Reads the Excel File, Displays it onto a Table and saves in IEFPSubjects Table
+        /// <summary>
+        /// Reads the Excel File, Displays it onto a Table and saves in IEFPSubjects Table
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Import()
         {

@@ -101,7 +101,6 @@ namespace School.Web.Controllers
             return View(model);
         }
 
-
         // POST: TeachersController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -178,7 +177,7 @@ namespace School.Web.Controllers
                     {
                         if (ex.InnerException.Message.Contains("duplicate"))
                         {
-                            ModelState.AddModelError(string.Empty, "Identification Number, Tax Number, SS Number, NHS Number, Telephone or E-mail already exist!");
+                            ModelState.AddModelError(string.Empty, "Identification Number, Tax Number, SS Number, NHS Number, Telephone or E-mail already exists!");
                         }
                         else
                         {
@@ -292,7 +291,7 @@ namespace School.Web.Controllers
                     {
                         if (ex.InnerException.Message.Contains("duplicate"))
                         {
-                            ModelState.AddModelError(string.Empty, "Identification Number, Tax Number, SS Number, NHS Number, Telephone or E-mail already exist!");
+                            ModelState.AddModelError(string.Empty, "Identification Number, Tax Number, SS Number, NHS Number, Telephone or E-mail already exists!");
                         }
                         else
                         {

@@ -31,6 +31,10 @@ namespace School.Web.Controllers
             _mailHelper = mailHelper;
         }
 
+        /// <summary>
+        /// Returns the Login View
+        /// </summary>
+        /// <returns>View</returns>
         public IActionResult Login()
         {
             if (this.User.Identity.IsAuthenticated)
@@ -41,6 +45,11 @@ namespace School.Web.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Saves the Login data
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
@@ -69,6 +78,10 @@ namespace School.Web.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Returns the Logout View
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Logout()
         {
             await _userHelper.LogOutAsync();
@@ -76,11 +89,20 @@ namespace School.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        /// <summary>
+        /// Returns the Register New User View
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Register()
         {
             return View();
         }
 
+        /// <summary>
+        /// Saves the Register New User data
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Register(RegisterNewUserViewModel model)
         {
@@ -131,6 +153,13 @@ namespace School.Web.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Returns the View after E-mail confirmation
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="token"></param>
+        /// <param name="password"></param>
+        /// <returns>View</returns>
         public async Task<IActionResult> ConfirmEmail(string userId, string token, string password)
         {
             if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
@@ -155,6 +184,10 @@ namespace School.Web.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Returns the Change User View
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> ChangeUser()
         {
             var user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
@@ -169,6 +202,11 @@ namespace School.Web.Controllers
             return this.View(model);
         }
 
+        /// <summary>
+        /// Change Properties of the User
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>View</returns>
         [HttpPost]
         public async Task<IActionResult> ChangeUser(ChangeUserViewModel model)
         {
@@ -205,11 +243,20 @@ namespace School.Web.Controllers
             return this.View(model);
         }
 
+        /// <summary>
+        /// Returns the Change Password View
+        /// </summary>
+        /// <returns></returns>
         public IActionResult ChangePassword()
         {
             return View();
         }
 
+        /// <summary>
+        /// Saves the Change Password data
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
@@ -254,16 +301,20 @@ namespace School.Web.Controllers
             return View(model);
         }
 
-        public IActionResult Users()
-        {
-            return View();
-        }
-
+        /// <summary>
+        /// Returns the Recover Password View
+        /// </summary>
+        /// <returns></returns>
         public IActionResult RecoverPassword()
         {
             return View();
         }
 
+        /// <summary>
+        /// Saves the Recover Password data
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> RecoverPassword(RecoverPasswordViewModel model)
         {
@@ -299,11 +350,21 @@ namespace School.Web.Controllers
             return this.View(model);
         }
 
+        /// <summary>
+        /// Returns the Reset Password View
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
         public IActionResult ResetPassword(string token)
         {
             return View();
         }
 
+        /// <summary>
+        /// Saves the Reset Password data
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
@@ -332,11 +393,19 @@ namespace School.Web.Controllers
             }
         }
 
+        /// <summary>
+        /// Returns the Not Authorized View
+        /// </summary>
+        /// <returns></returns>
         public IActionResult NotAuthorized()
         {
             return View();
         }
 
+        /// <summary>
+        /// Returns the Settings View
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Settings()
         {
             var model = new SettingsViewModel
@@ -349,6 +418,11 @@ namespace School.Web.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Gets the data from the Front-End Ajax and adds or updates an item
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task AddSchedule([FromBody] Schedule model)
         {
@@ -384,6 +458,11 @@ namespace School.Web.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets the data from the Front-End Ajax and adds or updates an item
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task AddClassroom([FromBody] Classroom model)
         {
@@ -419,6 +498,11 @@ namespace School.Web.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets the data from the Front-End Ajax and adds or updates an item
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task AddField([FromBody] Field model)
         {
@@ -454,6 +538,11 @@ namespace School.Web.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets the data from the Front-End Ajax and deletes an item
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpDelete]
         public async Task DeleteSchedule([FromBody] Schedule model)
         {
@@ -475,6 +564,11 @@ namespace School.Web.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets the data from the Front-End Ajax and deletes an item
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpDelete]
         public async Task DeleteClassroom([FromBody] Classroom model)
         {
@@ -496,6 +590,11 @@ namespace School.Web.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets the data from the Front-End Ajax and deletes an item
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpDelete]
         public async Task DeleteField([FromBody] Field model)
         {
