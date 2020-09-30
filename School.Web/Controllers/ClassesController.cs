@@ -61,45 +61,6 @@ namespace School.Web.Controllers
 
             model.Teachers = _classRepository.GetTeachers(model, _teacherRepository.GetAll().Where(a => a.isActive == true), model.Subjects).ToList();
 
-            //model.Teachers = new List<Teacher>();
-
-            //IEnumerable<Teacher> Teachers = _teacherRepository.GetAll();
-
-            //var Subjects = new List<Subject>(model.Subjects);
-
-            //int rep = 0;
-
-            //foreach (var subject in Subjects)
-            //{
-            //    foreach(var teacher in Teachers)
-            //    {
-            //        if(teacher.Id == subject.TeacherId && teacher.Id != rep)
-            //        {
-            //            model.Teachers.Add(new Teacher //FAZER MÉTODO DE CONVERSÃO PARA TEACHER
-            //            {
-            //                Id = teacher.Id,
-            //                PhotoUrl = teacher.PhotoUrl,
-            //                FullName = teacher.FullName,
-            //                Gender = teacher.Gender,
-            //                DateOfBirth = teacher.DateOfBirth,
-            //                Address = teacher.Address,
-            //                ZipCode = teacher.ZipCode,
-            //                City = teacher.City,
-            //                IdentificationNumber = teacher.IdentificationNumber,
-            //                TaxNumber = teacher.TaxNumber,
-            //                SSNumber = teacher.SSNumber,
-            //                NHSNumber = teacher.NHSNumber,
-            //                MaritalStatus = teacher.MaritalStatus,
-            //                Nationality = teacher.Nationality,
-            //                Telephone = teacher.Telephone,
-            //                Email = teacher.Email
-            //            });
-
-            //            rep = teacher.Id;
-            //        }
-            //    }                
-            //}
-
             var students = _studentRepository.GetAll().Where(e => e.ClassId == id.Value).Where(a => a.isActive == true);
             model.Students = students;
 

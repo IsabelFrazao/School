@@ -99,12 +99,10 @@
         var coordinatorValidator = document.getElementById('coordinatorValidator');
 
         if (field.properties.value == 0) {
-            //alert("Must Select a Coordinator");
             fieldValidator.innerText = "Field Area is mandatory";
             event.preventDefault();
         }
         if (coordinator.properties.value == 0) {
-            //alert("Must Select a Coordinator");
             coordinatorValidator.innerText = "Field Coordinator is mandatory";
             event.preventDefault();            
         }        

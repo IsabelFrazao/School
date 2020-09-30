@@ -81,17 +81,14 @@
         var classroomValidator = document.getElementById('classroomValidator');
 
         if (course.properties.value == 0) {
-            //alert("Must Select a Coordinator");
             courseValidator.innerText = "Field Course is mandatory";
             event.preventDefault();
         }
         if (schedule.properties.value == 0) {
-            //alert("Must Select a Coordinator");
             scheduleValidator.innerText = "Field Schedule is mandatory";
             event.preventDefault();
         }
         if (classroom.properties.value == 0) {
-            //alert("Must Select a Coordinator");
             classroomValidator.innerText = "Field Classroom is mandatory";
             event.preventDefault();
         }

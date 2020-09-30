@@ -14,6 +14,13 @@ namespace School.Web.Data.Repositories
         {
         }
 
+        /// <summary>
+        /// Gets an IEnumerable of the Teachers of the Subjects that are in the Class
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="teachers"></param>
+        /// <param name="subjects"></param>
+        /// <returns></returns>
         public IEnumerable<Teacher> GetTeachers(ClassViewModel model, IEnumerable<Teacher> teachers, IEnumerable<Subject> subjects)
         {
             model.Teachers = new List<Teacher>();
