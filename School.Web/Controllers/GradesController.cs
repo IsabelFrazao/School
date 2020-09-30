@@ -67,34 +67,6 @@ namespace School.Web.Controllers
                     throw;
                 }                
             }
-        }
-       
-        //    // GET: GradesController/Delete/5
-        //    public async Task<IActionResult> Delete(int? id)
-        //    {
-        //        if (id == null)
-        //        {
-        //            return NotFound();
-        //        }
-
-        //        var grade = await _gradeRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
-
-        //        if (grade == null)
-        //        {
-        //            return NotFound();
-        //        }
-
-        //        return View(grade);
-        //    }
-
-        //    // POST: GradesController/Delete/5
-        //    [HttpPost, ActionName("Delete")]
-        //    [ValidateAntiForgeryToken]
-        //    public async Task<IActionResult> DeleteConfirmed(int id)
-        //    {
-        //        var grade = await _gradeRepository.GetByIdAsync(id);
-        //        await _gradeRepository.DeleteAsync(grade);
-        //        return RedirectToAction(nameof(Index));
-        //    }
+        }       
     }
 }

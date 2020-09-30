@@ -50,7 +50,7 @@ namespace School.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("ClassNotFound");
             }
 
             var classes = await _classRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
@@ -108,7 +108,7 @@ namespace School.Web.Controllers
 
             if (classes == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("ClassNotFound");
             }
 
             return View(model);
@@ -157,13 +157,13 @@ namespace School.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("ClassNotFound");
             }
 
             var classes = await _classRepository.GetByIdAsync(id.Value);
             if (classes == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("ClassNotFound");
             }
 
             var model = _converterHelper.ToClassViewModel(classes, await _courseRepository.GetByIdAsync(classes.CourseId), _studentRepository.GetAll().Where(e => e.ClassId == id.Value).Where(a => a.isActive == true), _subjectRepository.GetAll().Where(e => e.CourseId == classes.CourseId).Where(a => a.isActive == true));
@@ -197,7 +197,7 @@ namespace School.Web.Controllers
                 {
                     if (!await _classRepository.ExistsAsync(model.Id))
                     {
-                        return NotFound();
+                        return new NotFoundViewResult("ClassNotFound");
                     }
                     else
                     {
@@ -214,7 +214,7 @@ namespace School.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("ClassNotFound");
             }
 
             var classes = await _classRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
@@ -231,7 +231,7 @@ namespace School.Web.Controllers
 
             if (classes == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("ClassNotFound");
             }
 
             return View(model);

@@ -64,7 +64,7 @@ namespace School.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("StudentNotFound");
             }
 
             var student = await _studentRepository.GetByIdAsync(id.Value);
@@ -87,7 +87,7 @@ namespace School.Web.Controllers
 
             if (student == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("StudentNotFound");
             }
 
             return View(model);
@@ -245,14 +245,14 @@ namespace School.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("StudentNotFound");
             }
 
             var student = await _studentRepository.GetByIdAsync(id.Value);
 
             if (student == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("StudentNotFound");
             }
 
             var model = _converterHelper.ToStudentViewModel(student, await _courseRepository.GetByIdAsync(student.CourseId),
@@ -363,7 +363,7 @@ namespace School.Web.Controllers
                 {
                     if (!await _studentRepository.ExistsAsync(model.Id))
                     {
-                        return NotFound();
+                        return new NotFoundViewResult("StudentNotFound");
                     }
                     else
                     {
@@ -380,7 +380,7 @@ namespace School.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("StudentNotFound");
             }
 
             var student = await _studentRepository.GetByIdAsync(id.Value);
@@ -401,7 +401,7 @@ namespace School.Web.Controllers
 
             if (student == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("StudentNotFound");
             }
 
             return View(model);

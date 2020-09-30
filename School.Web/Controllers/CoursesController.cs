@@ -42,7 +42,7 @@ namespace School.Web.Controllers
         {
             if (id == null)
             {
-                return new NotFoundViewResult("NotFound");
+                return new NotFoundViewResult("CourseNotFound");
             }
 
             var course = await _courseRepository.GetByIdAsync(id.Value);
@@ -56,7 +56,7 @@ namespace School.Web.Controllers
 
             if (course == null)
             {
-                return new NotFoundViewResult("NotFound");
+                return new NotFoundViewResult("CourseNotFound");
             }
 
             return View(model);
@@ -107,14 +107,14 @@ namespace School.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("CourseNotFound");
             }
 
             var course = await _courseRepository.GetByIdAsync(id.Value);
 
             if (course == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("CourseNotFound");
             }
 
             var model = _converterHelper.ToCourseViewModel(course, await _teacherRepository.GetByIdAsync(course.CoordinatorId),
@@ -132,19 +132,21 @@ namespace School.Web.Controllers
         // POST: CoursesController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(CourseViewModel course)
+        public async Task<IActionResult> Edit(CourseViewModel model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await _courseRepository.UpdateAsync(course);
+                    await _courseRepository.UpdateAsync(model);
+
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!await _courseRepository.ExistsAsync(course.Id))
+                    if (!await _courseRepository.ExistsAsync(model.Id))
                     {
-                        return new NotFoundViewResult("NotFound");
+                        return new NotFoundViewResult("CourseNotFound");
                     }
                     else
                     {
@@ -152,7 +154,7 @@ namespace School.Web.Controllers
                     }
                 }
             }
-            return View(course);
+            return View(model);
         }
 
         [Authorize(Roles = "Admin")]
@@ -161,7 +163,7 @@ namespace School.Web.Controllers
         {
             if (id == null)
             {
-                return new NotFoundViewResult("NotFound");
+                return new NotFoundViewResult("CourseNotFound");
             }
 
             var course = await _courseRepository.GetByIdAsync(id.Value);
@@ -175,7 +177,7 @@ namespace School.Web.Controllers
 
             if (course == null)
             {
-                return new NotFoundViewResult("NotFound");
+                return new NotFoundViewResult("CourseNotFound");
             }
 
             return View(model);

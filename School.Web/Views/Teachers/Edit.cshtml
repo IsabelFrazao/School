@@ -82,7 +82,7 @@
                                 }
                                 <label asp-for="DateOfBirth" class="form-label"><b>Date of Birth:</b></label>
                                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
-                                <ejs-datetimepicker id="datetimepicker" value="@defaultDate" min="@minDate" max="@maxDate" format="dd-MM-yyyy" cssClass="e-filled"></ejs-datetimepicker>
+                                <ejs-datetimepicker ejs-for="DateOfBirth" id="datetimepicker" value="@Model.DateOfBirth" min="@minDate" max="@maxDate" format="dd-MM-yyyy" cssClass="e-filled"></ejs-datetimepicker>
                                 <div style="height:3px;"><h6></h6></div>
                                 <label asp-for="Address" class="form-label"><b>Address:</b></label>
                                 <span asp-validation-for="Address" class="text-danger"></span>

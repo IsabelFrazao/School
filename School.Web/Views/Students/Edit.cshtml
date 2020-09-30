@@ -22,7 +22,7 @@
         </div>
         <section class="contact-area">
             <div class="contact-content">
-                <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                <form asp-action="Edit" method="post" enctype="multipart/form-data" onsubmit="validation()">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="row">
                         <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="400ms">
@@ -81,7 +81,7 @@
                                 }
                                 <label asp-for="DateOfBirth" class="form-label"><b>Date of Birth:</b></label>
                                 <span asp-validation-for="DateOfBirth" class="text-danger"></span>
-                                <ejs-datetimepicker id="datetimepicker" value="@defaultDate" min="@minDate" max="@maxDate" format="dd-MM-yyyy" cssClass="e-filled"></ejs-datetimepicker>
+                                <ejs-datetimepicker ejs-for="DateOfBirth" id="datetimepicker" value="@defaultDate" min="@minDate" max="@maxDate" format="dd-MM-yyyy" cssClass="e-filled"></ejs-datetimepicker>
                                 <div style="height:3px;"><h6></h6></div>
                                 <label asp-for="Address" class="form-label"><b>Address:</b></label>
                                 <span asp-validation-for="Address" class="text-danger"></span>
@@ -172,22 +172,22 @@
                             <br />
                             <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms">
                                 <label asp-for="CourseId" class="form-label"><b>Course:</b></label>
-                                <span asp-validation-for="CourseId" class="text-danger"></span>
+                                <label id="courseValidator" class="text-danger"></label>
                                 <ejs-dropdownlist id="courses" ejs-for="CourseId" dataSource="Model.Courses" cssClass="e-filled" placeholder="@Model.Course.Name" index="2" popupHeight="230px" change="valueChange">
                                     <e-dropdownlist-fields text="Name" value="Id"></e-dropdownlist-fields>
                                 </ejs-dropdownlist>
                                 <label class="form-label"><b>Schedule:</b></label>
-                                <span asp-validation-for="ScheduleId" class="text-danger"></span>
+                                <label id="scheduleValidator" class="text-danger"></label>
                                 <ejs-dropdownlist id="schedules" ejs-for="ScheduleId" dataSource="Model.Schedules" cssClass="e-filled" placeholder="@Model.Schedule.Shift" index="2" popupHeight="230px" change="valueChange">
                                     <e-dropdownlist-fields text="Shift" value="Id"></e-dropdownlist-fields>
                                 </ejs-dropdownlist>
                                 <label asp-for="ClassId" class="form-label"><b>Class:</b></label>
-                                <span asp-validation-for="ClassId" class="text-danger"></span>
+                                <label id="classValidator" class="text-danger"></label>
                                 <ejs-dropdownlist id="classes" ejs-for="ClassId" dataSource="Model.Classes" cssClass="e-filled" placeholder="@Model.Class.Name" index="2" popupHeight="230px" change="valueChange">
                                     <e-dropdownlist-fields text="Name" value="Id"></e-dropdownlist-fields>
                                 </ejs-dropdownlist>
                                 <label asp-for="SchoolYear" class="form-label"><b>School Year:</b></label>
-                                <span asp-validation-for="SchoolYear" class="text-danger"></span>
+                                <label id="schoolyearValidator" class="text-danger"></label>
                                 <ejs-dropdownlist id="schoolyears" ejs-for="SchoolYear" dataSource="Model.SchoolYears" cssClass="e-filled" placeholder="@Model.SchoolYear" index="2" popupHeight="230px" change="valueChange">
                                     <e-dropdownlist-fields text="SchoolYear"></e-dropdownlist-fields>
                                 </ejs-dropdownlist>
@@ -206,6 +206,43 @@
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<script>
+    function validation() {
+        var course = document.getElementById('courses').ej2_instances[0];
+        var courseValidator = document.getElementById('courseValidator');
+
+        var schedule = document.getElementById('schedules').ej2_instances[0];
+        var scheduleValidator = document.getElementById('scheduleValidator');
+
+        var classes = document.getElementById('classes').ej2_instances[0];
+        var classValidator = document.getElementById('classValidator');
+
+        var schoolyear = document.getElementById('schoolyears').ej2_instances[0];
+        var schoolyearValidator = document.getElementById('schoolyearValidator');
+
+        if (course.properties.value == 0) {
+            //alert("Must Select a Coordinator");
+            courseValidator.innerText = "Field Course is mandatory";
+            event.preventDefault();
+        }
+        if (schedule.properties.value == 0) {
+            //alert("Must Select a Coordinator");
+            scheduleValidator.innerText = "Field Schedule is mandatory";
+            event.preventDefault();
+        }
+        if (classes.properties.value == 0) {
+            //alert("Must Select a Coordinator");
+            classValidator.innerText = "Field Class is mandatory";
+            event.preventDefault();
+        }
+        if (schoolyear.properties.value == null) {
+            //alert("Must Select a Coordinator");
+            schoolyearValidator.innerText = "Field School Year is mandatory";
+            event.preventDefault();
+        }
+    }
+</script>
 
 <script>
     var previewimg = function (event) {

@@ -23,7 +23,7 @@
         </div>
         <section class="contact-area">
             <div class="contact-content">
-                <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                <form asp-action="Edit" method="post" enctype="multipart/form-data" onsubmit="validation()">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="row">
                         <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
@@ -45,12 +45,12 @@
                                 <label asp-for="Field" class="form-label"><b>Field:</b></label>
                                 <input asp-for="Field" type="text" class="form-control" id="field" readonly="readonly">
                                 <label asp-for="CourseId" class="form-label"><b>Course:</b></label>
-                                <span asp-validation-for="CourseId" class="text-danger"></span>
+                                <label id="courseValidator" class="text-danger"></label>
                                 <ejs-dropdownlist id="courses" ejs-for="CourseId" dataSource="Model.Courses" cssClass="e-filled" placeholder="Select a Course" index="2" popupHeight="230px" change="valueChange">
                                     <e-dropdownlist-fields text="Name" value="Id"></e-dropdownlist-fields>
                                 </ejs-dropdownlist>
                                 <label asp-for="TeacherId" class="form-label"><b>Teacher:</b></label>
-                                <span asp-validation-for="TeacherId" class="text-danger"></span>
+                                <label id="teacherValidator" class="text-danger"></label>
                                 <ejs-dropdownlist id="teachers" ejs-for="TeacherId" dataSource="Model.Teachers" cssClass="e-filled" placeholder="Select a Teacher" index="2" popupHeight="230px" change="valueChange">
                                     <e-dropdownlist-fields text="FullName" value="Id"></e-dropdownlist-fields>
                                 </ejs-dropdownlist>
@@ -75,7 +75,7 @@
                                 <label asp-for="Duration" class="form-label"><b>Duration:</b></label>
                                 <input asp-for="Duration" type="text" class="form-control" id="duration" readonly="readonly">
                                 <label asp-for="Credits" class="form-label"><b>Credits:</b></label>
-                                <span asp-validation-for="Credits" class="text-danger"></span>
+                                <label id="creditsValidator" class="text-danger"></label>
                                 <input asp-for="Credits" type="text" class="form-control" id="credits" placeholder="Credits">
                                 <label asp-for="QNQLevel" class="form-label"><b>QNQLevel:</b></label>
                                 <input asp-for="QNQLevel" type="text" class="form-control" id="qnqlevel" readonly="readonly">
@@ -92,3 +92,37 @@
         </section>
     </div>
 </section>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<script>
+    function validation() {
+        var course = document.getElementById('courses').ej2_instances[0];
+        var courseValidator = document.getElementById('courseValidator');
+
+        var teacher = document.getElementById('teachers').ej2_instances[0];
+        var teacherValidator = document.getElementById('teacherValidator');
+
+        var credits = document.getElementById('credits').ej2_instances[0];
+        var creditsValidator = document.getElementById('creditsValidator');
+        debugger
+
+        if (course.properties.value == 0) {
+            //alert("Must Select a Coordinator");
+            courseValidator.innerText = "Field Course is mandatory";
+            event.preventDefault();
+        }
+        if (teacher.properties.value == 0) {
+            //alert("Must Select a Coordinator");
+            teacherValidator.innerText = "Field Teacher is mandatory";
+            event.preventDefault();
+        }
+        if (credits.value == "No Selection") {
+            //alert("Must Select a Coordinator");
+            creditsValidator.innerText = "Field Credits is mandatory";
+            event.preventDefault();
+        }
+    }
+</script>

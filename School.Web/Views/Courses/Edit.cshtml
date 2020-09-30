@@ -22,7 +22,7 @@
         </div>
         <section class="contact-area">
             <div class="contact-content">
-                <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                <form asp-action="Edit" method="post" enctype="multipart/form-data" onsubmit="validation()">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="row">
                         <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
@@ -38,8 +38,8 @@
                             <br />
                             <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:650px;">
                                 <label class="form-label"><b>Area:</b></label>
-                                <span asp-validation-for="FieldId" class="text-danger"></span>
-                                <ejs-dropdownlist id="areas" ejs-for="FieldId" dataSource="Model.Fields" cssClass="e-filled" placeholder="@Model.Field.Area" popupHeight="230px" change="valueChange">
+                                <label id="fieldValidator" class="text-danger"></label>
+                                <ejs-dropdownlist id="areas" ejs-for="FieldId" dataSource="Model.Fields" cssClass="e-filled" placeholder="@Model.Field" popupHeight="230px" change="valueChange">
                                     <e-dropdownlist-fields text="Area" value="Id"></e-dropdownlist-fields>
                                 </ejs-dropdownlist>
                                 <label asp-for="Name" class="form-label"><b><br />Name:</b></label>
@@ -49,9 +49,9 @@
                                 <span asp-validation-for="Description" class="text-danger"></span>
                                 <input asp-for="Description" type="text" class="form-control" id="description" placeholder="Description">
                                 <label class="form-label"><b>Coordinator:</b></label>
-                                <span asp-validation-for="CoordinatorId" class="text-danger"></span>
+                                <label id="coordinatorValidator" class="text-danger"></label>
                                 <ejs-dropdownlist id="coordinator" ejs-for="CoordinatorId" dataSource="Model.Teachers" cssClass="e-filled" placeholder="@Model.Coordinator" popupHeight="230px" change="valueChange">
-                                    <e-dropdownlist-fields text="Name" value="Id"></e-dropdownlist-fields>
+                                    <e-dropdownlist-fields text="FullName" value="Id"></e-dropdownlist-fields>
                                 </ejs-dropdownlist>
                                 @{
                                     var minDate = DateTime.Now.Date;
@@ -63,13 +63,13 @@
                                     <div class="col-md-4">
                                         <label asp-for="BeginDate" class="form-label"><b>Begin Date:</b></label>
                                         <span asp-validation-for="BeginDate" class="text-danger"></span>
-                                        <ejs-datetimepicker id="begindate" value="@defaultDate" min="@minDate" format="dd-MM-yyyy" cssClass="e-filled" change="onchange"></ejs-datetimepicker>
+                                        <ejs-datetimepicker ejs-for="BeginDate" id="begindate" value="Model.BeginDate" min="@minDate" format="yyyy-MM-dd" cssClass="e-filled" change="onchange"></ejs-datetimepicker>
                                     </div>
                                     <div class="col-md-2"></div>
                                     <div class="col-md-4">
                                         <label asp-for="EndDate" class="form-label"><b>End Date:</b></label>
                                         <span asp-validation-for="EndDate" class="text-danger"></span>
-                                        <ejs-datetimepicker id="enddate" format="dd-MM-yyyy" value="@defaultDate" min="@minDate" cssClass="e-filled"></ejs-datetimepicker>
+                                        <ejs-datetimepicker ejs-for="EndDate" id="enddate" format="yyyy-MM-dd" value="Model.EndDate" min="@minDate" cssClass="e-filled"></ejs-datetimepicker>
                                     </div>
                                     <div class="col-md-1"></div>
                                 </div>
@@ -89,6 +89,27 @@
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+
+<script>
+    function validation() {
+        var field = document.getElementById('fields').ej2_instances[0];
+        var fieldValidator = document.getElementById('fieldValidator');
+
+        var coordinator = document.getElementById('coordinator').ej2_instances[0];
+        var coordinatorValidator = document.getElementById('coordinatorValidator');
+
+        if (field.properties.value == 0) {
+            //alert("Must Select a Coordinator");
+            fieldValidator.innerText = "Field Area is mandatory";
+            event.preventDefault();
+        }
+        if (coordinator.properties.value == 0) {
+            //alert("Must Select a Coordinator");
+            coordinatorValidator.innerText = "Field Coordinator is mandatory";
+            event.preventDefault();
+        }
+    }
+</script>
 
 <style>
     #begindate {

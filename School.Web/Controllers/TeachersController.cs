@@ -54,7 +54,7 @@ namespace School.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("TeacherNotFound");
             }
 
             var teacher = await _teacherRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
@@ -79,7 +79,7 @@ namespace School.Web.Controllers
 
             if (teacher == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("TeacherNotFound");
             }
 
             return View(model);
@@ -200,14 +200,14 @@ namespace School.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("TeacherNotFound");
             }
 
             var teacher = await _teacherRepository.GetByIdAsync(id.Value);
 
             if (teacher == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("TeacherNotFound");
             }
 
             var model = _converterHelper.ToTeacherViewModel(teacher, _subjectRepository.GetAll().Where(c => c.TeacherId == id.Value).Where(a => a.isActive == true));
@@ -304,7 +304,7 @@ namespace School.Web.Controllers
                 {
                     if (!await _teacherRepository.ExistsAsync(model.Id))
                     {
-                        return NotFound();
+                        return new NotFoundViewResult("TeacherNotFound");
                     }
                     else
                     {
@@ -321,7 +321,7 @@ namespace School.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("TeacherNotFound");
             }
 
             var teacher = await _teacherRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
@@ -346,7 +346,7 @@ namespace School.Web.Controllers
 
             if (teacher == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("TeacherNotFound");
             }
 
             return View(model);

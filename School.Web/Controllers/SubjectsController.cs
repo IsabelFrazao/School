@@ -15,6 +15,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace School.Web.Controllers
 {
@@ -61,7 +62,7 @@ namespace School.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("SubjectNotFound");
             }
 
             var subject = await _subjectRepository.GetByIdAsync(id.Value);//Value pq pode vir nulo
@@ -71,7 +72,7 @@ namespace School.Web.Controllers
 
             if (subject == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("SubjectNotFound");
             }
 
             return View(subject);
@@ -111,7 +112,7 @@ namespace School.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("SubjectNotFound");
             }
 
             var iefpsubject = await _iefpSubjectRepository.GetByIdAsync(id.Value);
@@ -121,10 +122,10 @@ namespace School.Web.Controllers
 
             if (subject == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("SubjectNotFound");
             }
 
-            var model = _converterHelper.ToSubjectViewModel(subject, _courseRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true), 
+            var model = _converterHelper.ToSubjectViewModel(subject, _courseRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true),
                 _teacherRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true));
 
             return View(model);
@@ -176,14 +177,13 @@ namespace School.Web.Controllers
                         {
                             await _gradeRepository.CreateAsync(grade);
                         }
-
                     }
                     return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
-                }                
+                }
             }
             return View(model);
         }
@@ -193,20 +193,20 @@ namespace School.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("SubjectNotFound");
             }
 
             var subject = await _subjectRepository.GetByIdAsync(id.Value);
 
             if (subject == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("SubjectNotFound");
             }
 
             subject.Course = await _courseRepository.GetByIdAsync(subject.CourseId);
             subject.Teacher = await _teacherRepository.GetByIdAsync(subject.TeacherId);
 
-            var model = _converterHelper.ToSubjectViewModel(subject, _courseRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true), 
+            var model = _converterHelper.ToSubjectViewModel(subject, _courseRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true),
                 _teacherRepository.GetAll().Where(c => c.Id > 1).Where(a => a.isActive == true));
 
             return View(model);
@@ -233,7 +233,7 @@ namespace School.Web.Controllers
                 {
                     if (!await _subjectRepository.ExistsAsync(model.Id))
                     {
-                        return NotFound();
+                        return new NotFoundViewResult("SubjectNotFound");
                     }
                     else
                     {
@@ -249,112 +249,120 @@ namespace School.Web.Controllers
             return View();
         }
 
+        //Reads the Excel File, Displays it onto a Table and saves in IEFPSubjects Table
         [HttpPost]
         public async Task<IActionResult> Import()
         {
-            IFormFile file = Request.Form.Files[0];
-            string folderName = "UploadExcel";
-            string webRootPath = _hostingEnvironment.WebRootPath;
-            string newPath = Path.Combine(webRootPath, folderName);
-            StringBuilder sb = new StringBuilder();
-            if (!Directory.Exists(newPath))
+            try
             {
-                Directory.CreateDirectory(newPath);
-            }
-            if (file.Length > 0)
-            {
-                string sFileExtension = Path.GetExtension(file.FileName).ToLower();
-                ISheet sheet;
-                string fullPath = Path.Combine(newPath, file.FileName);
-                using (var stream = new FileStream(fullPath, FileMode.Create))
+                IFormFile file = Request.Form.Files[0];
+                string folderName = "UploadExcel";
+                string webRootPath = _hostingEnvironment.WebRootPath;
+                string newPath = Path.Combine(webRootPath, folderName);
+                StringBuilder sb = new StringBuilder();
+                if (!Directory.Exists(newPath))
                 {
-                    file.CopyTo(stream);
-                    stream.Position = 0;
-                    if (sFileExtension == ".xls")
-                    {
-                        HSSFWorkbook hssfwb = new HSSFWorkbook(stream); //This will read the Excel 97-2000 formats  
-                        sheet = hssfwb.GetSheetAt(0); //get first sheet from workbook  
-                    }
-                    else
-                    {
-                        XSSFWorkbook hssfwb = new XSSFWorkbook(stream); //This will read 2007 Excel format  
-                        sheet = hssfwb.GetSheetAt(0); //get first sheet from workbook
-                    }
-                    IRow headerRow = sheet.GetRow(0);//Get Header Row
-                    if (headerRow == null)
-                    {
-                        int rowNumber = 0;
-
-                        foreach (IRow r in sheet)
-                        {
-                            rowNumber++;
-
-                            if (r.Cells[0].ToString() == "Código\nUFCD")
-                            {
-                                headerRow = sheet.GetRow(rowNumber + 1);
-                                break;
-                            }
-                        }
-                    }
-                    int cellCount = headerRow.LastCellNum;
-                    sb.Append("<div class='panel-body'><table class='table table-hover table-responsive table-striped' style='width:100%; height:400px' id='MyTable'><tr>");
-                    for (int j = 0; j < cellCount; j++)
-                    {
-                        NPOI.SS.UserModel.ICell cell = headerRow.GetCell(j);
-                        if (cell == null || string.IsNullOrWhiteSpace(cell.ToString()))
-                        {
-                            continue;
-                        }
-                        sb.Append("<th>" + cell.ToString() + "</th>");
-                    }
-                    sb.Append("</tr>");
-                    sb.AppendLine("<tr>");
-                    for (int i = (sheet.FirstRowNum + 1); i <= sheet.LastRowNum; i++) //Read Excel File
-                    {
-                        IRow row = sheet.GetRow(i);
-                        if (row == null)
-                        {
-                            continue;
-                        }
-
-                        if (row.Cells.All(d => d.CellType == CellType.Blank))
-                        {
-                            continue;
-                        }
-
-                        for (int j = row.FirstCellNum; j < cellCount; j++)
-                        {
-                            if (row.GetCell(j) != null)
-                            {
-                                sb.Append("<td>" + row.GetCell(j).ToString() + "</td>");
-                            }
-                        }
-
-                        var iefpsubject = new IEFPSubject
-                        {
-                            Code = row.GetCell(0).ToString(),
-                            Name = row.GetCell(1).ToString(),
-                            Duration = row.GetCell(2).ToString(),
-                            ReferenceCode = row.GetCell(3).ToString(),
-                            FieldCode = row.GetCell(4).ToString(),
-                            Field = row.GetCell(5).ToString(),
-                            Reference = row.GetCell(6).ToString(),
-                            QNQLevel = row.GetCell(7).ToString(),
-                            QEQLevel = row.GetCell(8).ToString(),
-                            Component = row.GetCell(9).ToString()
-                        };
-
-                        if (!await _iefpSubjectRepository.ExistsCodeAsync(iefpsubject.Code))
-                        {
-                            await _iefpSubjectRepository.CreateAsync(iefpsubject);
-                        }
-
-                        sb.AppendLine("</tr>");
-                    }
-                    sb.Append("</table></div>");
+                    Directory.CreateDirectory(newPath);
                 }
+                if (file.Length > 0)
+                {
+                    string sFileExtension = Path.GetExtension(file.FileName).ToLower();
+                    ISheet sheet;
+                    string fullPath = Path.Combine(newPath, file.FileName);
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                        stream.Position = 0;
+                        if (sFileExtension == ".xls")
+                        {
+                            HSSFWorkbook hssfwb = new HSSFWorkbook(stream); //This will read the Excel 97-2000 formats  
+                            sheet = hssfwb.GetSheetAt(0); //get first sheet from workbook  
+                        }
+                        else
+                        {
+                            XSSFWorkbook hssfwb = new XSSFWorkbook(stream); //This will read 2007 Excel format  
+                            sheet = hssfwb.GetSheetAt(0); //get first sheet from workbook
+                        }
+                        IRow headerRow = sheet.GetRow(0);//Get Header Row
+                        if (headerRow == null)
+                        {
+                            int rowNumber = 0;
+
+                            foreach (IRow r in sheet)
+                            {
+                                rowNumber++;
+
+                                if (r.Cells[0].ToString() == "Código\nUFCD")
+                                {
+                                    headerRow = sheet.GetRow(rowNumber + 1);
+                                    break;
+                                }
+                            }
+                        }
+                        int cellCount = headerRow.LastCellNum;
+                        sb.Append("<div class='panel-body'><table class='table table-hover table-responsive table-striped' style='width:100%; height:400px' id='MyTable'><tr>");
+                        for (int j = 0; j < cellCount; j++)
+                        {
+                            NPOI.SS.UserModel.ICell cell = headerRow.GetCell(j);
+                            if (cell == null || string.IsNullOrWhiteSpace(cell.ToString()))
+                            {
+                                continue;
+                            }
+                            sb.Append("<th>" + cell.ToString() + "</th>");
+                        }
+                        sb.Append("</tr>");
+                        sb.AppendLine("<tr>");
+                        for (int i = (sheet.FirstRowNum + 1); i <= sheet.LastRowNum; i++) //Read Excel File
+                        {
+                            IRow row = sheet.GetRow(i);
+                            if (row == null)
+                            {
+                                continue;
+                            }
+
+                            if (row.Cells.All(d => d.CellType == CellType.Blank))
+                            {
+                                continue;
+                            }
+
+                            for (int j = row.FirstCellNum; j < cellCount; j++)
+                            {
+                                if (row.GetCell(j) != null)
+                                {
+                                    sb.Append("<td>" + row.GetCell(j).ToString() + "</td>");
+                                }
+                            }
+
+                            var iefpsubject = new IEFPSubject
+                            {
+                                Code = row.GetCell(0).ToString(),
+                                Name = row.GetCell(1).ToString(),
+                                Duration = row.GetCell(2).ToString(),
+                                ReferenceCode = row.GetCell(3).ToString(),
+                                FieldCode = row.GetCell(4).ToString(),
+                                Field = row.GetCell(5).ToString(),
+                                Reference = row.GetCell(6).ToString(),
+                                QNQLevel = row.GetCell(7).ToString(),
+                                QEQLevel = row.GetCell(8).ToString(),
+                                Component = row.GetCell(9).ToString()
+                            };
+
+                            if (!await _iefpSubjectRepository.ExistsCodeAsync(iefpsubject.Code))
+                            {
+                                await _iefpSubjectRepository.CreateAsync(iefpsubject);
+                            }
+
+                            sb.AppendLine("</tr>");
+                        }
+                        sb.Append("</table></div>");
+                    }
+                }
+                return this.Content(sb.ToString());
             }
-            return this.Content(sb.ToString());
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
         }
     }
 }

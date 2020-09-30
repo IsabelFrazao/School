@@ -23,7 +23,7 @@
         </div>
         <section class="contact-area">
             <div class="contact-content">
-                <form asp-action="Create" method="post" enctype="multipart/form-data">
+                <form asp-action="Create" method="post" enctype="multipart/form-data" onsubmit="validation()">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="row">
                         <div class="col-12 wow fadeInUp" data-wow-delay="500ms">
@@ -39,7 +39,7 @@
                             <br />
                             <div class="contact-form-area wow fadeInUp" data-wow-delay="500ms" style="height:450px;">
                                 <label class="form-label"><b>Course:</b></label>
-                                <span asp-validation-for="Course" class="text-danger"></span>
+                                <label id="courseValidator" class="text-danger"></label>
                                 <ejs-dropdownlist id="courses" ejs-for="CourseId" dataSource="Model.Courses" cssClass="e-filled" placeholder="Select a Course" popupHeight="230px" change="valueChange">
                                     <e-dropdownlist-fields text="Name" value="Id"></e-dropdownlist-fields>
                                 </ejs-dropdownlist>
@@ -47,12 +47,12 @@
                                 <span asp-validation-for="Name" class="text-danger"></span>
                                 <input asp-for="Name" type="text" class="form-control" id="name" placeholder="Name">
                                 <label asp-for="ScheduleId" class="form-label"><b>Schedule:</b></label>
-                                <span asp-validation-for="ScheduleId" class="text-danger"></span>
+                                <label id="scheduleValidator" class="text-danger"></label>
                                 <ejs-dropdownlist id="schedules" ejs-for="ScheduleId" dataSource="Model.Schedules" cssClass="e-filled" placeholder="Select a Schedule" popupHeight="230px" change="valueChange">
                                     <e-dropdownlist-fields text="Shift" value="Id"></e-dropdownlist-fields>
                                 </ejs-dropdownlist>
                                 <label asp-for="ClassroomId" class="form-label"><b><br />Classroom:</b></label>
-                                <span asp-validation-for="ClassroomId" class="text-danger"></span>
+                                <label id="classroomValidator" class="text-danger"></label>
                                 <ejs-dropdownlist id="classrooms" ejs-for="ClassroomId" dataSource="Model.Classrooms" cssClass="e-filled" placeholder="Select a Classroom" popupHeight="230px" change="valueChange">
                                     <e-dropdownlist-fields text="Room" value="Id"></e-dropdownlist-fields>
                                 </ejs-dropdownlist>
@@ -71,3 +71,32 @@
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<script>
+    function validation() {
+        var course = document.getElementById('courses').ej2_instances[0];
+        var courseValidator = document.getElementById('courseValidator');
+
+        var schedule = document.getElementById('schedules').ej2_instances[0];
+        var scheduleValidator = document.getElementById('scheduleValidator');
+
+        var classroom = document.getElementById('classrooms').ej2_instances[0];
+        var classroomValidator = document.getElementById('classroomValidator');
+
+        if (course.properties.value == 0) {
+            //alert("Must Select a Coordinator");
+            courseValidator.innerText = "Field Course is mandatory";
+            event.preventDefault();
+        }
+        if (schedule.properties.value == 0) {
+            //alert("Must Select a Coordinator");
+            scheduleValidator.innerText = "Field Schedule is mandatory";
+            event.preventDefault();
+        }
+        if (classroom.properties.value == 0) {
+            //alert("Must Select a Coordinator");
+            classroomValidator.innerText = "Field Classroom is mandatory";
+            event.preventDefault();
+        }
+    }
+</script>

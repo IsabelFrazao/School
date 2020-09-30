@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Remotion.Linq.Utilities;
 using School.Web.Data.Entities;
 using School.Web.Data.Repositories;
 using School.Web.Helpers;
@@ -65,7 +64,6 @@ namespace School.Web.Controllers
                 {
                     throw;
                 }
-
             }
             ModelState.AddModelError(string.Empty, "Failed to Login.");
             return View(model);
@@ -202,7 +200,7 @@ namespace School.Web.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
-                }                
+                }
             }
             return this.View(model);
         }
@@ -220,7 +218,7 @@ namespace School.Web.Controllers
                 try
                 {
                     var user = await _userHelper.GetUserByIdAsync(model.UserId);
-                    
+
                     if (user == null)
                     {
                         user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
@@ -251,7 +249,7 @@ namespace School.Web.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
-                }                
+                }
             }
             return View(model);
         }
@@ -296,7 +294,7 @@ namespace School.Web.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
-                }               
+                }
             }
             return this.View(model);
         }
@@ -382,7 +380,7 @@ namespace School.Web.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
-                }                
+                }
             }
         }
 
@@ -417,7 +415,7 @@ namespace School.Web.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
-                }                
+                }
             }
         }
 
@@ -452,7 +450,7 @@ namespace School.Web.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
-                }                
+                }
             }
         }
 
@@ -473,7 +471,7 @@ namespace School.Web.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
-                }                
+                }
             }
         }
 
@@ -494,7 +492,7 @@ namespace School.Web.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
-                }                
+                }
             }
         }
 
@@ -515,7 +513,7 @@ namespace School.Web.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     throw;
-                }                
+                }
             }
         }
     }
