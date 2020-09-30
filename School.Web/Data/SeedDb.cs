@@ -56,14 +56,6 @@ namespace School.Web.Data
                 await _userHelper.AddUserToRoleAsync(user, "Admin");
             }
 
-            //if(!_context.Students.Any())
-            //{
-            //    this.AddStudents("Isabel");
-            //    this.AddStudents("José");
-            //    this.AddStudents("António");
-            //    await _context.SaveChangesAsync();
-            //}
-
             if (!_context.Fields.Any())
             {
                 this.AddFields("Áudiovisuais e Produção dos Media");
@@ -131,13 +123,6 @@ namespace School.Web.Data
             });
         }
 
-        //private void AddStudents(string name)
-        //{
-        //    _context.Students.Add(new Student
-        //    {
-        //        FullName = "Isabel Frazão",
-        //    });
-        //}
         private void AddTeachers(string name)
         {
             _context.Teachers.Add(new Teacher
